@@ -449,7 +449,42 @@ Framework is in active development. Contribution guidelines coming in v2.5+.
 
 ## License
 
-Apache 2.0
+**AGET Framework (This Template)**: Apache License 2.0
+
+This template and all framework code (`.aget/` structure, patterns, protocols) are licensed under the Apache License 2.0. This ensures:
+
+- **Patent protection** for all adopters
+- **Freedom to fork**, modify, and redistribute
+- **Enterprise-safe** licensing for production use
+
+See [LICENSE](LICENSE) for full terms.
+
+**Your Agent Instance**: Your Choice
+
+When you create an agent from this template, **you choose the license** for your specific instance:
+
+- Keep it Apache 2.0 (recommended for public/shared agents)
+- Make it private (all rights reserved)
+- Choose MIT, GPL, or any other license
+
+**The framework is open commons. What you build with it is yours.**
+
+### Why Apache 2.0?
+
+AGET is production infrastructure for agent configuration and lifecycle management. Apache 2.0 provides:
+
+1. **Patent Grant**: Contributors can't patent their contributions and sue adopters
+2. **Patent Retaliation**: If someone sues for patent infringement, they lose their license
+3. **Ecosystem Immunity**: The standard stays free even as it becomes valuable
+4. **Enterprise Adoption**: Legal teams approve Apache 2.0 more readily than other licenses
+
+This follows the precedent of Kubernetes, Android, Swift, and other infrastructure projects.
+
+### Upgrading Existing Agents
+
+If you created an agent from an earlier MIT-licensed template, no action is required. Your agent remains valid under MIT (grandfathered).
+
+To upgrade to Apache 2.0 for patent protection benefits, see the upgrade guide in the [AGET Framework documentation](https://github.com/aget-framework).
 
 ---
 
