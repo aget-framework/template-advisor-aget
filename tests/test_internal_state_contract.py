@@ -21,31 +21,31 @@ class TestInternalStateDirectories:
 
     def test_sessions_directory_exists(self):
         """Session history directory must exist."""
-        sessions_dir = Path(".aget/sessions")
+        sessions_dir = Path(__file__).parent.parent / ".aget/sessions"
         assert sessions_dir.exists(), ".aget/sessions/ directory must exist"
         assert sessions_dir.is_dir(), ".aget/sessions/ must be a directory"
 
     def test_client_progress_directory_exists(self):
         """Client progress tracking directory must exist."""
-        progress_dir = Path(".aget/client_progress")
+        progress_dir = Path(__file__).parent.parent / ".aget/client_progress"
         assert progress_dir.exists(), ".aget/client_progress/ directory must exist"
         assert progress_dir.is_dir(), ".aget/client_progress/ must be a directory"
 
     def test_commitments_directory_exists(self):
         """Commitment tracking directory must exist."""
-        commitments_dir = Path(".aget/commitments")
+        commitments_dir = Path(__file__).parent.parent / ".aget/commitments"
         assert commitments_dir.exists(), ".aget/commitments/ directory must exist"
         assert commitments_dir.is_dir(), ".aget/commitments/ must be a directory"
 
     def test_context_directory_exists(self):
         """Client context directory must exist."""
-        context_dir = Path(".aget/context")
+        context_dir = Path(__file__).parent.parent / ".aget/context"
         assert context_dir.exists(), ".aget/context/ directory must exist"
         assert context_dir.is_dir(), ".aget/context/ must be a directory"
 
     def test_learning_history_directory_exists(self):
         """Learning history directory must exist."""
-        learning_dir = Path(".aget/learning_history")
+        learning_dir = Path(__file__).parent.parent / ".aget/learning_history"
         assert learning_dir.exists(), ".aget/learning_history/ directory must exist"
         assert learning_dir.is_dir(), ".aget/learning_history/ must be a directory"
 
@@ -55,7 +55,7 @@ class TestInternalStateDocumentation:
 
     def test_sessions_readme_exists(self):
         """Sessions directory must have README with format documentation."""
-        readme = Path(".aget/sessions/README.md")
+        readme = Path(__file__).parent.parent / ".aget/sessions/README.md"
         assert readme.exists(), ".aget/sessions/README.md must exist"
         assert readme.is_file(), ".aget/sessions/README.md must be a file"
 
@@ -66,7 +66,7 @@ class TestInternalStateDocumentation:
 
     def test_client_progress_readme_exists(self):
         """Client progress directory must have README."""
-        readme = Path(".aget/client_progress/README.md")
+        readme = Path(__file__).parent.parent / ".aget/client_progress/README.md"
         assert readme.exists(), ".aget/client_progress/README.md must exist"
         assert readme.is_file(), ".aget/client_progress/README.md must be a file"
 
@@ -76,7 +76,7 @@ class TestInternalStateDocumentation:
 
     def test_commitments_readme_exists(self):
         """Commitments directory must have README."""
-        readme = Path(".aget/commitments/README.md")
+        readme = Path(__file__).parent.parent / ".aget/commitments/README.md"
         assert readme.exists(), ".aget/commitments/README.md must exist"
         assert readme.is_file(), ".aget/commitments/README.md must be a file"
 
@@ -86,7 +86,7 @@ class TestInternalStateDocumentation:
 
     def test_context_readme_exists(self):
         """Context directory must have README."""
-        readme = Path(".aget/context/README.md")
+        readme = Path(__file__).parent.parent / ".aget/context/README.md"
         assert readme.exists(), ".aget/context/README.md must exist"
         assert readme.is_file(), ".aget/context/README.md must be a file"
 
@@ -95,7 +95,7 @@ class TestInternalStateDocumentation:
 
     def test_learning_history_readme_exists(self):
         """Learning history directory must have README."""
-        readme = Path(".aget/learning_history/README.md")
+        readme = Path(__file__).parent.parent / ".aget/learning_history/README.md"
         assert readme.exists(), ".aget/learning_history/README.md must exist"
         assert readme.is_file(), ".aget/learning_history/README.md must be a file"
 
@@ -109,7 +109,7 @@ class TestInternalStateFeatureDeclaration:
     @pytest.fixture
     def version_config(self):
         """Load version.json."""
-        version_file = Path(".aget/version.json")
+        version_file = Path(__file__).parent.parent / ".aget/version.json"
         assert version_file.exists(), ".aget/version.json must exist"
 
         with open(version_file) as f:
@@ -262,7 +262,7 @@ class TestProtocolDocumentation:
 
     def test_agents_md_exists(self):
         """AGENTS.md must exist."""
-        agents_md = Path("AGENTS.md")
+        agents_md = Path(__file__).parent.parent / "AGENTS.md"
         assert agents_md.exists(), "AGENTS.md must exist"
 
     def test_internal_state_section_exists(self):

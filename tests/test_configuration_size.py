@@ -14,7 +14,7 @@ from pathlib import Path
 
 def test_agents_md_size_under_limit():
     """AGENTS.md must be under 40,000 characters for Claude Code compatibility."""
-    agents_file = Path("AGENTS.md")
+    agents_file = Path(__file__).parent.parent / "AGENTS.md"
 
     assert agents_file.exists(), "AGENTS.md not found"
 
@@ -28,7 +28,7 @@ def test_agents_md_size_under_limit():
 
 def test_agents_md_reasonable_size():
     """AGENTS.md should ideally be under 30,000 characters for buffer."""
-    agents_file = Path("AGENTS.md")
+    agents_file = Path(__file__).parent.parent / "AGENTS.md"
 
     if not agents_file.exists():
         pytest.skip("AGENTS.md not found")
@@ -47,10 +47,10 @@ def test_agents_md_reasonable_size():
 
 def test_documentation_exists_for_overflow():
     """.aget/docs/ directory should exist for detailed documentation."""
-    docs_dir = Path(".aget/docs")
+    docs_dir = Path(__file__).parent.parent / ".aget/docs"
 
     # If AGENTS.md is large, docs directory should exist for overflow
-    agents_file = Path("AGENTS.md")
+    agents_file = Path(__file__).parent.parent / "AGENTS.md"
     if agents_file.exists() and agents_file.stat().st_size > 25000:
         assert docs_dir.exists(), \
             ".aget/docs/ directory should exist for detailed documentation " \
