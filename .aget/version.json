@@ -1,6 +1,7 @@
 {
-  "aget_version": "2.7.0",
+  "aget_version": "2.8.0",
   "created": "2025-10-10",
+  "migrated_to_v2.8.0": "2025-11-08",
   "migrated_to_v2.7.0": "2025-10-13",
   "migrated_to_v2.6.0": "2025-10-11",
   "template": "advisor",

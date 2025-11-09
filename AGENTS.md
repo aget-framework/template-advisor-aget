@@ -9,7 +9,7 @@ Works with Claude Code, Cursor, Aider, Windsurf, and other CLI coding agents.
 
 ## Project Context
 
-**template-advisor-aget** - Advisory Agent Template v2.7.0
+**template-advisor-aget** - Advisory Agent Template v2.8.0
 
 ### Purpose
 Template for creating read-only advisory agents with persona differentiation (teacher, mentor, consultant, guru, coach). Portfolio governance support with scoped write permissions respecting portfolio boundaries (.aget/** only). Enforces advisory boundaries through contract tests and capability declarations.
@@ -26,11 +26,11 @@ Template for creating read-only advisory agents with persona differentiation (te
 - **Advisory focus**: Guidance, analysis, recommendations only
 - **Persona-based**: Five distinct advisory styles
 - **Hybrid enforcement**: Declarations + contract tests
-- **Portfolio-aware**: Respects portfolio boundaries in scoped writes (v2.7.0)
+- **Portfolio-aware**: Respects portfolio boundaries in scoped writes (v2.8.0)
 
 ---
 
-## Portfolio Configuration (v2.7.0)
+## Portfolio Configuration (v2.8.0)
 
 **Purpose**: Organize advisor agents by sensitivity level for appropriate handling and governance.
 
