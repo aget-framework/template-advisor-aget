@@ -5,6 +5,38 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2025-11-08 - "Planning & Infrastructure"
+
+### Added
+- **Planning Framework v1.0**:
+  - Decision tree for choosing planning approach
+  - 5 templates: Enhancement, Gate, Project, Checkpoint, Critique
+  - Integration with L274 (OKR), L275 (Multi-Gate), L42 (Gate Discipline)
+
+- **Enhancement Filing Protocol**:
+  - Systematic protocol for filing framework improvements
+  - 5-section structure (Problem, Context, Solution, Benefits, Estimate)
+  - Generalizability criterion (3+ agents benefit)
+
+- **GitHub Tooling Improvements**:
+  - Interactive issue filing (`make issue`)
+  - Type taxonomy error handling
+  - --learning flag for automatic learning document creation
+
+### Changed
+- Feature 10: Framework artifact consolidation to .aget/docs/releases/
+- Naming conventions: Prefix meanings (private-/public-/my-) formalized
+
+### Documentation
+- Planning Guide v1.0 (comprehensive planning decision support)
+- Enhancement Filing Protocol v1.0
+- Naming Prefix Convention v1.0
+- Planning Protocol Examples (14 examples)
+
+### Compatibility
+- Fully backward compatible with v2.7
+- New planning templates optional (existing approaches still work)
+
 ## [2.7.0] - 2025-10-13 - "Portfolio Governance"
 
 ### Added
