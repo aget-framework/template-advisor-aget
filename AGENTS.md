@@ -214,10 +214,10 @@ Result: 2 minutes to correct solution
 **The Boundary:**
 ```
 INTERNAL STATE (CAN write):      EXTERNAL SYSTEMS (CANNOT write):
-.aget/sessions/                  ./src/** (user's code)
-.aget/commitments/               ./docs/** (user's docs)
-.aget/client_progress/           ./data/** (user's data)
-.aget/context/                   /** (everything else)
+sessions/                  ./src/** (user's code)
+workspace/commitments/               ./docs/** (user's docs)
+workspace/client_progress/           ./data/** (user's data)
+workspace/context/                   /** (everything else)
 .aget/learning_history/
 ```
 
@@ -232,7 +232,7 @@ Advisors track five types of internal state:
 #### 1. Session History (Required - All Personas)
 **Purpose**: Continuity across conversations
 
-**Location**: `.aget/sessions/SESSION_YYYY-MM-DD_HH-MM.md`
+**Location**: `sessions/SESSION_YYYY-MM-DD_HH-MM.md`
 
 **Format**:
 ```yaml
@@ -270,7 +270,7 @@ exchanges: 12
 #### 2. Client Progress (Coach/Teacher: High Need)
 **Purpose**: Track development over time
 
-**Location**: `.aget/client_progress/{client_id}.yaml`
+**Location**: `workspace/client_progress/{client_id}.yaml`
 
 **Format**:
 ```yaml
@@ -301,7 +301,7 @@ concepts_learned:  # (teacher only)
 #### 3. Commitments (Coach/Mentor: High Need)
 **Purpose**: Accountability and follow-up
 
-**Location**: `.aget/commitments/active.yaml`, `.aget/commitments/completed.yaml`
+**Location**: `workspace/commitments/active.yaml`, `workspace/commitments/completed.yaml`
 
 **Format**:
 ```yaml
@@ -324,7 +324,7 @@ commitments:
 #### 4. Client Context (All Personas)
 **Purpose**: Personalization and relevance
 
-**Location**: `.aget/context/{client_id}.yaml`
+**Location**: `workspace/context/{client_id}.yaml`
 
 **Format**:
 ```yaml
@@ -409,8 +409,8 @@ When user says "wake up":
 3. Display agent context + capabilities
 
 **Enhanced with internal state:**
-4. Use Glob to find session files: `.aget/sessions/SESSION_*.md`
-5. Use Glob to check for commitments: `.aget/commitments/active.yaml`
+4. Use Glob to find session files: `sessions/SESSION_*.md`
+5. Use Glob to check for commitments: `workspace/commitments/active.yaml`
 6. Use Read to load commitment/progress data if files exist
 7. Parse data silently, present formatted summary only
 
@@ -421,7 +421,7 @@ When user says "wake up":
 **Implementation (quieter than bash ls):**
 ```python
 # Step 1: Check for sessions
-Glob: .aget/sessions/SESSION_*.md
+Glob: sessions/SESSION_*.md
 IF files found:
     Parse most recent filename for date
     Display: "Last session: {date} ({days} ago)"
@@ -429,9 +429,9 @@ ELSE:
     Display: "First session"
 
 # Step 2: Check for commitments
-Glob: .aget/commitments/active.yaml
+Glob: workspace/commitments/active.yaml
 IF file exists:
-    Read: .aget/commitments/active.yaml  # MUST READ FIRST
+    Read: workspace/commitments/active.yaml  # MUST READ FIRST
     Parse YAML → Extract actual commitments
     Display: Real data from file
 ELSE:
@@ -440,9 +440,9 @@ ELSE:
     # DO NOT show "2 pending" without reading file
 
 # Step 3: Check for progress
-Glob: .aget/client_progress/*.yaml
+Glob: workspace/client_progress/*.yaml
 IF files found:
-    Read: .aget/client_progress/{client_id}.yaml  # MUST READ FIRST
+    Read: workspace/client_progress/{client_id}.yaml  # MUST READ FIRST
     Parse YAML → Extract actual progress
     Display: Real data from file
 ELSE:
@@ -520,9 +520,9 @@ When user says "study up" or "study":
 **Fallback sequence** (if smart tooling unavailable):
 1. Read `.aget/version.json` → Extract version, role, domain, persona
 2. Read AGENTS.md sections → Focus: Project Context, Advisory Protocols, Persona Configuration
-3. Read most recent session → `ls -t .aget/sessions/*.md 2>/dev/null | head -1`
-4. Read active commitments → `cat .aget/commitments/active.yaml 2>/dev/null`
-5. Read client progress → `cat .aget/client_progress/*.yaml 2>/dev/null | head -1`
+3. Read most recent session → `ls -t sessions/*.md 2>/dev/null | head -1`
+4. Read active commitments → `cat workspace/commitments/active.yaml 2>/dev/null`
+5. Read client progress → `cat workspace/client_progress/*.yaml 2>/dev/null | head -1`
 6. Check git status → Identify modified files in `.aget/`
 7. **Internal state check** → Verify `.aget/` write scope active, scan for pending actions
 8. Synthesize and present context
@@ -541,8 +541,8 @@ Ready for advisory session.
 ```
 
 **Enhanced for advisor roles**:
-- Checks `.aget/commitments/` for active obligations
-- Reviews `.aget/client_progress/` for longitudinal tracking
+- Checks `workspace/commitments/` for active obligations
+- Reviews `workspace/client_progress/` for longitudinal tracking
 - Validates internal state write permissions are active
 - Flags overdue commitments or pending follow-ups
 
@@ -578,15 +578,15 @@ When user says "wind down":
 **Step 1: Write Internal State** (automatic)
 ```python
 # ✅ ALLOWED - Write session file
-Write: .aget/sessions/SESSION_{date}_{time}.md
+Write: sessions/SESSION_{date}_{time}.md
 content: session_summary_with_yaml_frontmatter
 
 # ✅ ALLOWED - Update progress (if applicable)
-Edit: .aget/client_progress/{client_id}.yaml
+Edit: workspace/client_progress/{client_id}.yaml
 # Update focus_areas, confidence_levels
 
 # ✅ ALLOWED - Log commitments (if made)
-Edit: .aget/commitments/active.yaml
+Edit: workspace/commitments/active.yaml
 # Add new commitments from session
 ```
 
@@ -603,7 +603,7 @@ Commitments: {commitments}
 
 **Step 3: Show Completion**
 ```
-✅ Session saved to .aget/sessions/SESSION_2025-10-10_14-00.md
+✅ Session saved to sessions/SESSION_2025-10-10_14-00.md
 ✅ Updated commitment tracking (1 new commitment)
 ✅ Progress tracked (+1 confidence in strategic thinking)
 
@@ -623,7 +623,7 @@ No git commit needed (advisory mode).
 
 **Anti-Patterns**: Don't ask permission for `.aget/` writes (you have permission), don't attempt git commits (advisory role), don't write to external docs (present plans for user to save).
 
-**Contract Tests**: Verify `.aget/sessions/` exists, session creation works, scoped write permissions enforced.
+**Contract Tests**: Verify `sessions/` exists, session creation works, scoped write permissions enforced.
 
 **See examples**: `.aget/docs/examples/INTERNAL_STATE_EXAMPLES.md`
 **Specifications**: ADVISOR_INTERNAL_STATE_SPEC.md, ADVISOR_SCOPED_WRITES_SPEC.md
@@ -776,6 +776,62 @@ my-{domain}-advisor-aget/
 ├── workspace/                # Private workspace for analysis
 └── README.md                 # Public-facing documentation
 ```
+
+---
+
+## .aget/ Boundary (CRITICAL)
+
+**The Boundary Test**: If you clone this agent to a different domain/company, should this knowledge come with it?
+- **YES** → `.aget/` (framework patterns, portable)
+- **NO** → Root (domain data, project-specific)
+
+### What Belongs in .aget/
+
+✅ **Permitted:**
+- `evolution/L###.md` - Process learnings (HOW to approach problems)
+- `checkpoints/` - Session state snapshots (<50KB)
+- `context/session.json` - Minimal context (IDs only, <1KB)
+- `specs/` - Agent capability specs (not domain specs)
+- `tools/` - Helper scripts for agent operations
+- `docs/` - Framework protocols and specifications
+- `intelligence/` - Framework patterns (e.g., ambiguity_corpus.yaml)
+
+❌ **Forbidden:**
+- Domain case data (cases/, claims/, policies/, contracts/)
+- Domain knowledge bases (knowledge/vendor_profiles/)
+- Client work products (workspace/client_progress/, workspace/deliverables/)
+- Work history (sessions/ - belongs at root)
+- Domain decisions (workspace/decisions/, workspace/commitments/)
+- Domain examples (workspace/examples/)
+
+### Correct Location Examples
+
+**Wrong:**
+```
+.aget/cases/john_doe/analysis.md           # ❌ Personal case data
+.aget/knowledge/vendors/acme.md             # ❌ Domain reference
+.aget/sessions/SESSION_2025-11-10.md        # ❌ Work history
+```
+
+**Right:**
+```
+cases/john_doe/analysis.md                  # ✅ At root
+knowledge/vendors/acme.md                   # ✅ At root
+sessions/SESSION_2025-11-10.md              # ✅ At root
+.aget/evolution/L###_case_analysis_patterns.md  # ✅ Process learning
+.aget/checkpoints/session_state.md          # ✅ Session continuity
+```
+
+### Why This Matters
+
+1. **Privacy**: Personal data must not be in framework directory
+2. **Deletability**: User can delete `.aget/` without losing domain data
+3. **Portability**: Framework patterns transfer across domains
+4. **Integrity**: Domain and framework remain cleanly separated
+
+**Full specification**: See `.aget/docs/ADVISOR_SCOPED_WRITES_SPEC.md`
+
+**Validation**: See L285_advisor_aget_boundary_violations.md for detailed guidance
 
 ---
 
@@ -956,7 +1012,7 @@ When upgrading advisor agent to new AGET version:
 
 ## Example Configurations
 
-See `.aget/examples/` for complete persona configurations:
+See `workspace/examples/` for complete persona configurations:
 - `persona_teacher.json` - Instruction-focused advisory
 - `persona_mentor.json` - Growth-focused guidance
 - `persona_consultant.json` - Professional analysis and recommendations
