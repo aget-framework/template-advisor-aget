@@ -767,8 +767,12 @@ my-{domain}-advisor-aget/
 │   ├── docs/                 # Domain-specific documentation
 │   ├── evolution/            # Learning and decision tracking
 │   └── checkpoints/          # State snapshots
+├── .memory/                  # Advisor memory (Layer 4 - v2.9+)
+│   ├── clients/              # Client relationship state
+│   └── engagements/          # Engagement tracking
 ├── AGENTS.md                 # This file (agent configuration)
 ├── CLAUDE.md                 # Symlink to AGENTS.md
+├── sessions/                 # Session logs (at root, v2.9 standard)
 ├── tests/
 │   ├── test_identity_contract.py
 │   ├── test_wake_contract.py
@@ -832,6 +836,90 @@ sessions/SESSION_2025-11-10.md              # ✅ At root
 **Full specification**: See `.aget/docs/ADVISOR_SCOPED_WRITES_SPEC.md`
 
 **Validation**: See L285_advisor_aget_boundary_violations.md for detailed guidance
+
+---
+
+## .memory/ Directory (Layer 4 - Advisors Only)
+
+**Purpose**: Store advisor-specific relationship state, client context, and engagement tracking.
+
+**Layer**: 4 (Memory) - Advisor instance state, not portable across domains/clients
+
+**Applies to**: Advisor agents only (this template creates advisors with .memory/ by default)
+
+### The .memory/ Boundary Test
+
+**Question**: Does this represent ongoing relationship state with a specific client/engagement?
+- **YES** → `.memory/` (client context, engagement tracking)
+- **NO** → `.aget/` (framework) or `sessions/` (work product)
+
+### What Belongs in .memory/
+
+✅ **Client relationship state:**
+- Client background, preferences, goals
+- Interaction history, key insights
+- Session continuity notes
+
+✅ **Engagement tracking:**
+- Project scope, objectives, milestones
+- Progress tracking, status updates
+- Engagement-specific artifacts
+
+✅ **Advisory context:**
+- Client-specific patterns observed
+- Tailored recommendations history
+- Relationship dynamics notes
+
+### What Does NOT Belong in .memory/
+
+❌ **Framework knowledge** → `.aget/` instead
+- Process learnings, methodology patterns
+- Agent capabilities, specifications
+
+❌ **Work product** → `sessions/` or `workspace/` instead
+- Individual session logs
+- Analysis deliverables
+- Strategic recommendations
+
+❌ **Domain knowledge** → `knowledge/` at root instead
+- Industry best practices
+- Reference materials
+- General expertise
+
+### Structure Example
+
+```
+.memory/
+├── clients/
+│   └── alice_smith/
+│       ├── context.yaml     # Background, preferences, goals
+│       ├── history.md       # Interaction summary
+│       └── notes/           # Session-specific observations
+└── engagements/
+    └── leadership_transition_2025/
+        ├── brief.yaml       # Scope, objectives
+        ├── progress.md      # Status, milestones
+        └── artifacts/       # Deliverables
+```
+
+### Usage Guidelines
+
+**When to create client directory**:
+- After first substantive session with new client
+- When relationship becomes ongoing (≥2 sessions)
+
+**When to create engagement directory**:
+- For defined projects with scope and timeline
+- When tracking milestones and deliverables
+
+**Privacy considerations**:
+- Never commit sensitive PII (use placeholders in examples)
+- Client data stays with advisor instance
+- Respect client confidentiality boundaries
+
+**Full documentation**: See `.memory/README.md` for complete usage guide
+
+**Validation**: Layer 4 violations detected by `validate_fleet_standards.py`
 
 ---
 

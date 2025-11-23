@@ -5,6 +5,44 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2025-11-23 - "Information Storage Standardization"
+
+### Added
+- **Layer 4 (.memory/) for Advisors**:
+  - `.memory/` directory for advisor relationship state (Layer 4)
+  - `.memory/clients/` for client context and relationship tracking
+  - `.memory/engagements/` for engagement scope and progress tracking
+  - `.memory/README.md` with comprehensive usage guidelines
+
+- **Contract Tests (6 new tests)**:
+  - `test_memory_directory_exists()` - Validates .memory/ structure
+  - `test_memory_clients_directory_exists()` - Validates clients/ subdirectory
+  - `test_memory_engagements_directory_exists()` - Validates engagements/ subdirectory
+  - `test_sessions_at_root()` - Validates sessions/ location (not .aget/sessions/)
+  - `test_agents_md_documents_memory()` - Validates .memory/ documentation
+  - `test_memory_readme_exists()` - Validates usage guide presence
+
+### Changed
+- **AGENTS.md Updates**:
+  - Added `.memory/` to Directory Structure (Layer 4 documentation)
+  - Added `.memory/ Directory (Layer 4 - Advisors Only)` section
+  - Documented .memory/ boundary rules and usage guidelines
+  - Added `sessions/` to directory structure (v2.9 standard location)
+  - Size: 31,854 → 34,719 characters (+2,865 bytes)
+
+### Migration Notes
+- **New instances**: .memory/ structure included by default
+- **Existing instances**: Add .memory/ during v2.9 migration
+  - Create `.memory/clients/` and `.memory/engagements/` directories
+  - Add `.memory/README.md` from template
+  - Update AGENTS.md with Layer 4 documentation
+  - Run contract tests to validate compliance
+
+### Related
+- **Fleet Migration**: Part of v2.9 Final Release (Information Storage Standardization)
+- **Specification**: 5-layer architecture (Framework, Agent Type, Instance, Memory, Domain)
+- **Validation**: `validate_fleet_standards.py` checks Layer 4 compliance
+
 ## [2.8.0] - 2025-11-08 - "Planning & Infrastructure"
 
 ### Added
