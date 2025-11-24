@@ -4,7 +4,7 @@
 
 Transform any domain into an AI advisor that provides expert guidance without modifying systems. Supports 5 distinct personas: teacher, mentor, consultant, guru, and coach.
 
-**Current Version**: v2.7.0 "Portfolio Governance"
+**Current Version**: v2.9.0 "Portfolio Governance"
 
 ---
 
@@ -396,8 +396,8 @@ Advisor template is part of the AGET template family:
 **Template**: [template-advisor-aget](https://github.com/aget-framework/template-advisor-aget)
 **Hub** (issues): [aget-aget](https://github.com/aget-framework/aget)
 
-**Version**: v2.7.0 "Portfolio Governance"
-- **New in v2.7.0**: Portfolio governance system, organizational memory patterns, learning discovery framework
+**Version**: v2.9.0 "Portfolio Governance"
+- **New in v2.9.0**: Portfolio governance system, organizational memory patterns, learning discovery framework
 - **v2.6.0**: Configuration size management (40k limit), framework positioning, contract test validation
 - **v2.5.0**: Contract testing for advisor boundaries, persona differentiation framework, read-only enforcement validation, advisory protocol standards
 
