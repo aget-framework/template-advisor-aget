@@ -8,11 +8,21 @@ v2.5.0: Global read-only (boolean values)
 v2.6.0: Scoped write permissions (string "scoped" with write_scope section)
 
 Part of AGET framework advisor template validation.
+
+v2.10.0: Added template context detection - instance-only tests skipped on templates
 """
 
 import pytest
 import json
 from pathlib import Path
+from conftest import is_template_context
+
+
+# Skip reason for instance-only tests (memory layer tests)
+SKIP_TEMPLATE = pytest.mark.skipif(
+    is_template_context(),
+    reason="Instance-only test: .memory/ directory is created at instantiation"
+)
 
 
 def test_instance_type_is_aget():
@@ -268,6 +278,7 @@ def test_scoped_write_maintains_external_readonly():
                     f"External path '{path}' must be in forbidden_paths (or use '*' wildcard)"
 
 
+@SKIP_TEMPLATE
 def test_memory_directory_exists():
     """Advisor agents must have .memory/ directory for Layer 4 relationship state (v2.9+)."""
     memory_dir = Path(".memory")
@@ -276,6 +287,7 @@ def test_memory_directory_exists():
     assert memory_dir.is_dir(), ".memory/ must be a directory"
 
 
+@SKIP_TEMPLATE
 def test_memory_clients_directory_exists():
     """Advisor agents must have .memory/clients/ for client relationship tracking (v2.9+)."""
     clients_dir = Path(".memory/clients")
@@ -284,6 +296,7 @@ def test_memory_clients_directory_exists():
     assert clients_dir.is_dir(), ".memory/clients/ must be a directory"
 
 
+@SKIP_TEMPLATE
 def test_memory_engagements_directory_exists():
     """Advisor agents must have .memory/engagements/ for engagement tracking (v2.9+)."""
     engagements_dir = Path(".memory/engagements")
@@ -308,6 +321,7 @@ def test_sessions_at_root():
             "Sessions must be in sessions/ at root, not .aget/sessions/ (v2.9 standard)"
 
 
+@SKIP_TEMPLATE
 def test_agents_md_documents_memory():
     """AGENTS.md must document .memory/ usage for advisors (v2.9+)."""
     agents_md = Path("AGENTS.md")
@@ -321,6 +335,7 @@ def test_agents_md_documents_memory():
             "AGENTS.md must document .memory/clients/ and .memory/engagements/ subdirectories"
 
 
+@SKIP_TEMPLATE
 def test_memory_readme_exists():
     """Advisor agents must have .memory/README.md with usage guidelines (v2.9+)."""
     memory_readme = Path(".memory/README.md")
