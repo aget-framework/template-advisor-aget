@@ -1,9 +1,11 @@
 {
-  "aget_version": "2.9.0",
+  "aget_version": "2.10.0",
   "created": "2025-10-10",
+  "updated": "2025-12-13",
   "migrated_to_v2.8.0": "2025-11-08",
   "migrated_to_v2.7.0": "2025-10-13",
   "migrated_to_v2.6.0": "2025-10-11",
+  "migrated_to_v2.10.0": "2025-12-13",
   "template": "advisor",
   "tier": "specialized",
   "agent_name": "template-advisor-aget",

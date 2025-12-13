@@ -5,6 +5,32 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2025-12-13 - "Capability Composition Architecture"
+
+### Added
+- **Capability Composition Architecture compatibility**
+  - Framework now supports `capabilities[]` array in version.json
+  - Agents can compose multiple capabilities onto base templates
+  - See L330 (Capability Composition Architecture) for details
+
+- **Theoretical Grounding Protocol** (L332)
+  - Specifications should include `theoretical_basis:` sections
+  - Maps AGET concepts to established theory (BDI, Actor Model, Cybernetics)
+
+### Changed
+- Version bump for v2.10.0 framework alignment
+
+### Coming in v2.11.0
+- CAPABILITY_SPEC_v1.0.yaml (formal capability schema)
+- TEMPLATE_MANIFEST_SPEC_v1.0.yaml (composition declaration)
+- capability-domain-knowledge implementation
+- capability-structured-outputs implementation
+
+### Notes
+- **No structural changes required** for v2.10.0 compatibility
+- Templates remain valid bases for capability composition
+- v2.10.0 = Architecture defined | v2.11.0 = Architecture implemented
+
 ## [2.9.0] - 2025-11-23 - "Information Storage Standardization"
 
 ### Added
