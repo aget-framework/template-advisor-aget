@@ -5,17 +5,28 @@ These tests verify that advisor agents correctly implement internal state manage
 per ADVISOR_INTERNAL_STATE_SPEC.md and ADVISOR_SCOPED_WRITES_SPEC.md.
 
 Tests:
-1. Internal state directories exist
-2. README files document formats
+1. Internal state directories exist (instance-only)
+2. README files document formats (instance-only)
 3. version.json declares internal state features
 4. Scoped write permissions configured correctly
+
+v2.10.0: Added template context detection - instance-only tests are skipped on templates
 """
 
 import json
 from pathlib import Path
 import pytest
+from conftest import is_template_context
 
 
+# Skip reason for instance-only tests
+SKIP_TEMPLATE = pytest.mark.skipif(
+    is_template_context(),
+    reason="Instance-only test: internal state directories are created at instantiation"
+)
+
+
+@SKIP_TEMPLATE
 class TestInternalStateDirectories:
     """Verify required directory structure exists."""
 
@@ -50,6 +61,7 @@ class TestInternalStateDirectories:
         assert learning_dir.is_dir(), ".aget/learning_history/ must be a directory"
 
 
+@SKIP_TEMPLATE
 class TestInternalStateDocumentation:
     """Verify each directory has format documentation."""
 
@@ -257,6 +269,7 @@ class TestInstanceTypeConsistency:
         assert "advisor" in roles, "roles must include 'advisor'"
 
 
+@SKIP_TEMPLATE
 class TestProtocolDocumentation:
     """Verify AGENTS.md documents internal state protocols."""
 

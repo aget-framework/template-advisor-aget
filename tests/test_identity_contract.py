@@ -47,8 +47,8 @@ def test_identity_no_conflation_with_directory_name():
         # agent_name might not exist in templates, check first
         if "agent_name" in data:
             agent_name = data["agent_name"]
-            # Get directory name
-            repo_dir = Path.cwd().name
+            # Get directory name using __file__ for CI compatibility (cwd may be 'tmp')
+            repo_dir = Path(__file__).parent.parent.name
             assert agent_name == repo_dir, \
                 f"Identity conflation detected: agent_name='{agent_name}' but directory='{repo_dir}'"
 
