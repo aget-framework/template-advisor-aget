@@ -72,7 +72,7 @@ class TestAGETBasics(unittest.TestCase):
 
     def test_data_integrity_if_json_exists(self):
         """If JSON files exist in .aget, they must be valid"""
-        aget_dir = Path(__file__).parent.parent / ".aget")
+        aget_dir = Path(__file__).parent.parent / ".aget"
         if aget_dir.exists():
             json_files = list(aget_dir.glob("*.json"))
             for json_file in json_files:
