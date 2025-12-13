@@ -27,7 +27,7 @@ SKIP_TEMPLATE = pytest.mark.skipif(
 
 def test_instance_type_is_aget():
     """Advisor agents must be read-only (instance_type == 'aget')."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -41,7 +41,7 @@ def test_instance_type_is_aget():
 
 def test_role_includes_advisor():
     """Advisor agents must include 'advisor' in roles array."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -59,7 +59,7 @@ def test_role_includes_advisor():
 
 def test_persona_declared():
     """Advisor agents must declare a persona."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -76,7 +76,7 @@ def test_persona_declared():
 
 def test_advisory_capabilities_read_only():
     """Advisor agents must declare read_only capability as true or 'scoped'."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -100,7 +100,7 @@ def test_advisory_capabilities_read_only():
 
 def test_no_action_capabilities():
     """Advisor agents must not have unrestricted action capabilities."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -127,7 +127,7 @@ def test_no_action_capabilities():
 
 def test_persona_is_valid():
     """If persona declared (not null), must be from allowed set."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -158,7 +158,7 @@ def test_persona_is_valid():
 
 def test_supported_personas_list():
     """Advisory capabilities must list all 5 supported personas."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -187,7 +187,7 @@ def test_supported_personas_list():
 
 def test_write_scope_declared_if_scoped():
     """Advisors with 'scoped' permissions must declare write_scope section (v2.6.0+)."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -221,7 +221,7 @@ def test_write_scope_declared_if_scoped():
 
 def test_write_scope_paths_valid():
     """Write scope allowed_paths must be internal (.aget/* only) (v2.6.0+)."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -247,7 +247,7 @@ def test_write_scope_paths_valid():
 
 def test_scoped_write_maintains_external_readonly():
     """Scoped writes must explicitly forbid external file modification (v2.6.0+)."""
-    version_file = Path(__file__).parent.parent / ".aget/version.json")
+    version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
@@ -307,8 +307,8 @@ def test_memory_engagements_directory_exists():
 
 def test_sessions_at_root():
     """Sessions must be at root (sessions/), not in .aget/sessions/ (v2.9 standard)."""
-    sessions_root = Path("sessions")
-    sessions_aget = Path(__file__).parent.parent / ".aget/sessions")
+    sessions_root = Path(__file__).parent.parent / "sessions"
+    sessions_aget = Path(__file__).parent.parent / ".aget/sessions"
     
     # sessions/ at root is recommended (not strictly required for new templates)
     # This is more of a migration check, templates start fresh

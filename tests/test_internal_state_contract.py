@@ -167,7 +167,7 @@ class TestScopedWritePermissions:
     @pytest.fixture
     def version_config(self):
         """Load version.json."""
-        with open(".aget/version.json") as f:
+        with open(Path(__file__).parent.parent / ".aget/version.json") as f:
             return json.load(f)
 
     def test_advisory_capabilities_present(self, version_config):
@@ -250,7 +250,7 @@ class TestInstanceTypeConsistency:
     @pytest.fixture
     def version_config(self):
         """Load version.json."""
-        with open(".aget/version.json") as f:
+        with open(Path(__file__).parent.parent / ".aget/version.json") as f:
             return json.load(f)
 
     def test_instance_type_is_aget(self, version_config):
@@ -324,7 +324,7 @@ class TestBoundaryEnforcement:
     @pytest.fixture
     def version_config(self):
         """Load version.json."""
-        with open(".aget/version.json") as f:
+        with open(Path(__file__).parent.parent / ".aget/version.json") as f:
             return json.load(f)
 
     def test_cannot_execute(self, version_config):
