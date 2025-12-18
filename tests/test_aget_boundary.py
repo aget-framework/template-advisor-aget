@@ -3,12 +3,24 @@ Contract test: Verify .aget/ boundary compliance
 
 Ensures no domain-specific directories exist in .aget/
 See: L285_advisor_aget_boundary_violations.md
+
+v2.10.0: Added SKIP_TEMPLATE - these are instance-only tests
+         Templates may have example/demo content in .aget/
 """
 
 import pytest
 from pathlib import Path
+from conftest import is_template_context
 
 
+# Skip reason for instance-only tests (boundary validation)
+SKIP_TEMPLATE = pytest.mark.skipif(
+    is_template_context(),
+    reason="Instance-only test: templates may have example domain content in .aget/"
+)
+
+
+@SKIP_TEMPLATE
 def test_no_domain_directories_in_aget():
     """
     Verify no domain-specific directories in .aget/
@@ -55,6 +67,7 @@ def test_no_domain_directories_in_aget():
         )
 
 
+@SKIP_TEMPLATE
 def test_aget_directory_is_lean():
     """
     Verify .aget/ directory stays lean (not bloated with domain data)
@@ -85,6 +98,7 @@ def test_aget_directory_is_lean():
         )
 
 
+@SKIP_TEMPLATE
 def test_sessions_at_root():
     """
     Verify sessions/ is at root, not in .aget/
