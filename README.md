@@ -394,7 +394,7 @@ Advisor template is part of the AGET template family:
 
 **Organization**: [aget-framework](https://github.com/aget-framework)
 **Template**: [template-advisor-aget](https://github.com/aget-framework/template-advisor-aget)
-**Hub** (issues): [aget-aget](https://github.com/aget-framework/aget)
+**Hub** (issues): [aget](https://github.com/aget-framework/aget)
 
 **Version**: v2.9.0 "Portfolio Governance"
 - **New in v2.9.0**: Portfolio governance system, organizational memory patterns, learning discovery framework
