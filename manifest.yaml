@@ -1,0 +1,36 @@
+apiVersion: aget.framework/v1
+kind: TemplateManifest
+
+metadata:
+  name: template-advisor-aget
+  version: 1.0.0
+  agent_type: Advisor
+  created: "2025-12-25"
+  author: private-aget-framework-AGET
+  status: active
+  description: Advisor template for domain expertise and guidance
+
+composition:
+  base_template: advisor
+  capabilities:
+    - name: memory-management
+      version: ">=1.0.0"
+    - name: domain-knowledge
+      version: ">=1.0.0"
+      config:
+        domain: advisory
+    - name: structured-outputs
+      version: ">=1.0.0"
+      config:
+        formats:
+          - markdown
+          - reports
+    - name: collaboration
+      version: ">=1.0.0"
+  composition_rules:
+    conflict_resolution: error
+
+validation:
+  dag_validated: true
+  conflicts_checked: true
+  last_validated: "2025-12-25"
