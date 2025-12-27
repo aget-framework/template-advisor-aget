@@ -1,112 +1,34 @@
 {
-  "aget_version": "2.12.0",
+  "aget_version": "3.0.0-beta.1",
+  "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2025-12-24",
-  "migrated_to_v2.8.0": "2025-11-08",
-  "migrated_to_v2.7.0": "2025-10-13",
-  "migrated_to_v2.6.0": "2025-10-11",
-  "migrated_to_v2.10.0": "2025-12-13",
+  "updated": "2025-12-27",
   "template": "advisor",
-  "tier": "specialized",
   "agent_name": "template-advisor-aget",
-  "instance_type": "aget",
+  "instance_type": "template",
   "domain": "advisory-template",
   "portfolio": null,
-  "roles": [
-    "advisor"
+  "managed_by": "none",
+  "intelligence_enabled": true,
+  "collaboration_enabled": true,
+  "capabilities": [
+    "capability-governance-balanced",
+    "capability-session-protocols",
+    "capability-evolution-tracking",
+    "capability-recommendation",
+    "capability-analysis",
+    "capability-teaching",
+    "capability-persona-modes"
   ],
-  "persona": null,
-  "features": {
-    "internal_state_enabled": true,
-    "session_persistence": true,
-    "progress_tracking": true,
-    "commitment_tracking": true,
-    "scoped_write_permissions": true
-  },
   "advisory_capabilities": {
     "read_only": "scoped",
     "can_write_internal_state": true,
     "can_execute": false,
-    "can_modify_files": "scoped",
-    "can_create_files": "scoped",
     "can_recommend": true,
     "can_analyze": true,
     "can_critique": true,
-    "write_scope": {
-      "enforcement": "strict",
-      "allowed_paths": [
-        ".aget/sessions/**",
-        ".aget/client_progress/**",
-        ".aget/commitments/**",
-        ".aget/context/**",
-        ".aget/learning_history/**",
-        ".aget/checkpoints/**",
-        ".aget/evolution/**"
-      ],
-      "forbidden_paths": [
-        "src/",
-        "tests/",
-        "workspace/",
-        "products/",
-        "data/",
-        "docs/",
-        "AGENTS.md",
-        "CLAUDE.md",
-        "README.md",
-        "version.json",
-        "*"
-      ],
-      "rationale": "Advisory with internal state: Advisors maintain session continuity and progress tracking (.aget/**) while not modifying external systems (user's code/docs)"
-    },
-    "supported_personas": [
-      "teacher",
-      "mentor",
-      "consultant",
-      "guru",
-      "coach"
-    ],
-    "persona_traits": {
-      "teacher": {
-        "focus": "instruction",
-        "style": "structured_learning",
-        "communication": "didactic",
-        "examples": "comprehensive",
-        "verification": "quiz_and_check"
-      },
-      "mentor": {
-        "focus": "growth",
-        "style": "guided_discovery",
-        "communication": "supportive",
-        "examples": "context_driven",
-        "verification": "reflective_questions"
-      },
-      "consultant": {
-        "focus": "solutions",
-        "style": "professional_analysis",
-        "communication": "formal",
-        "examples": "options_with_tradeoffs",
-        "verification": "requirements_validation"
-      },
-      "guru": {
-        "focus": "expertise",
-        "style": "deep_knowledge",
-        "communication": "authoritative",
-        "examples": "best_practices",
-        "verification": "principle_based"
-      },
-      "coach": {
-        "focus": "performance",
-        "style": "iterative_feedback",
-        "communication": "encouraging",
-        "examples": "incremental_improvement",
-        "verification": "practice_based"
-      }
-    }
+    "supported_personas": ["teacher", "mentor", "consultant", "guru", "coach"]
   },
-  "aget_group": null,
-  "managed_by": "none",
-  "intelligence_enabled": true,
-  "collaboration_enabled": true,
   "patterns": {
     "session": "1.1.0",
     "housekeeping": "1.0.0",
@@ -117,23 +39,8 @@
     "specification": "1.1.0",
     "versioning": "1.0.0"
   },
-  "compatibility": {
-    "backwards_compatible": false,
-    "breaking_changes": [
-      "CLAUDE.md must be symlink to AGENTS.md",
-      "Pattern versioning system required",
-      "Session metadata schema v1.0",
-      "Naming convention: -aget (read-only) required for advisors",
-      "aget_group field required for portfolio agents",
-      "Contract tests required for wake and identity protocols",
-      "Advisor role requires instance_type: aget (read-only enforcement)",
-      "Persona must be one of: teacher, mentor, consultant, guru, coach",
-      "Portfolio field required for multi-portfolio deployments (v2.7.0)"
-    ],
-    "deprecated": []
-  },
-  "notes": "v2.7.0 Advisor Template - Portfolio governance support with persona-specific advisory modes. Scoped write permissions respect portfolio boundaries (.aget/** only). Multi-portfolio classification (EXAMPLE/WORKCO/Main). Based on L95, L114, L118, D11, L147, ADVISOR_MODE_PROTOCOL_v1.0.",
   "migration_history": [
-    "v2.10.0 -> v2.11.0: 2025-12-24 (Memory Architecture + L352 Traceability + Version Migration)"
+    "v2.10.0 -> v2.11.0: 2025-12-24 (Memory Architecture + L352 Traceability)",
+    "v2.12.0 -> v3.0.0-beta.1: 2025-12-27 (5D Composition Architecture)"
   ]
 }

@@ -1,0 +1,27 @@
+# D5: CONTEXT - Relationships Configuration
+# Template: template-advisor-aget
+# Version: 3.0.0
+
+relationships:
+  supervisor:
+    reference: null  # Template
+    type: null
+
+  clients:
+    - type: User
+      interaction: Primary advisory relationship
+      modality: guidance, recommendations, teaching
+
+  peers:
+    - type: Developer
+      interaction: Provide technical guidance
+    - type: Spec_Engineer
+      interaction: Requirements consultation
+    - type: Worker
+      interaction: Task guidance
+
+  subordinates: []  # Advisors guide, don't supervise
+
+  external:
+    - type: User
+      interaction: Primary client relationship

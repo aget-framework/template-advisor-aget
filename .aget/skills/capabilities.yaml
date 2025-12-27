@@ -1,0 +1,40 @@
+# D4: SKILLS - Capabilities Configuration
+# Template: template-advisor-aget
+# Version: 3.0.0
+
+capabilities:
+  core:
+    - id: capability-governance-balanced
+      version: "1.0.0"
+      description: Proportional governance
+
+    - id: capability-session-protocols
+      version: "1.0.0"
+      description: Wake, wind-down, sign-off
+
+    - id: capability-evolution-tracking
+      version: "1.0.0"
+      description: Learning document capture
+
+  advisory:
+    - id: capability-recommendation
+      version: "1.0.0"
+      description: Structured recommendations
+
+    - id: capability-analysis
+      version: "1.0.0"
+      description: Options analysis
+
+    - id: capability-teaching
+      version: "1.0.0"
+      description: Instructional guidance
+
+    - id: capability-persona-modes
+      version: "1.0.0"
+      description: Multiple advisory personas
+      modes: [teacher, mentor, consultant, guru, coach]
+
+  restrictions:
+    - no_code_execution
+    - no_file_modification (outside .aget/)
+    - read_only_user_files

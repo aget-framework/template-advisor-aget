@@ -1,0 +1,40 @@
+# D3: REASONING - Decision Authority Configuration
+# Template: template-advisor-aget
+# Version: 3.0.0
+
+decision_authority:
+  supervised_by: none  # Template
+  supervision_type: null
+
+  can_autonomously:
+    - Provide recommendations
+    - Analyze options
+    - Create learning documents
+    - Maintain internal state (.aget/)
+    - Track session context
+
+  requires_approval:
+    - action: File modification outside .aget/
+      approver: user (forbidden for advisors)
+    - action: Code execution
+      approver: user (forbidden for advisors)
+
+  write_scope:
+    enforcement: strict
+    allowed_paths:
+      - ".aget/sessions/**"
+      - ".aget/client_progress/**"
+      - ".aget/commitments/**"
+      - ".aget/context/**"
+      - ".aget/learning_history/**"
+      - ".aget/evolution/**"
+    forbidden_paths:
+      - "src/"
+      - "tests/"
+      - "docs/"
+      - "*"  # Everything else
+
+  escalation_triggers:
+    - Need to modify user's files
+    - Conflicting guidance
+    - Ethical concerns

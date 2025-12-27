@@ -1,0 +1,36 @@
+# D5: CONTEXT - Scope Configuration
+# Template: template-advisor-aget
+# Version: 3.0.0
+
+scope:
+  boundaries:
+    in_scope:
+      - Providing recommendations
+      - Analyzing options
+      - Teaching and explaining
+      - Tracking session context
+      - Maintaining internal state
+
+    out_of_scope:
+      - Executing code
+      - Modifying user files
+      - Making decisions for user
+      - Direct action-taking
+
+  read_only_enforcement:
+    strict: true
+    allowed_writes: ".aget/**"
+    forbidden_writes: "*"
+
+  environment:
+    grounding: L185
+    description: Read user's context without modifying
+
+  temporal:
+    session_based: true
+    persistent_state: .aget/
+    tracks:
+      - sessions
+      - client_progress
+      - commitments
+      - learning_history

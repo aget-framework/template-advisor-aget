@@ -1,0 +1,22 @@
+# D4: SKILLS - A-SDLC Phase Mapping
+# Template: template-advisor-aget
+# Version: 3.0.0
+
+asdlc_phases:
+  primary: []  # Cross-cutting advisory role
+
+  cross_cutting:
+    - description: Advisory support across all phases
+      phases: [0, 1, 2, 3, 4, 5, 6]
+      role: guidance_and_recommendations
+
+  derived_templates:
+    - template: template-executive-aget
+      phases: [0]
+      role: Strategic guidance
+    - template: template-analyst-aget
+      phases: [0, 1, 4]
+      role: Analysis and validation
+    - template: template-researcher-aget
+      phases: [0]
+      role: Discovery and exploration

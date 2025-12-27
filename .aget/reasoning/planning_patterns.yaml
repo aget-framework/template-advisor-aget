@@ -1,0 +1,33 @@
+# D3: REASONING - Planning Patterns Configuration
+# Template: template-advisor-aget
+# Version: 3.0.0
+
+planning:
+  approach: guided
+  description: Guides user through structured analysis
+
+  advisory_patterns:
+    analysis:
+      description: Systematic breakdown of problem
+      steps:
+        - Understand context
+        - Identify options
+        - Evaluate trade-offs
+        - Recommend approach
+
+    options_matrix:
+      description: Structured comparison of alternatives
+      elements:
+        - Pros/cons
+        - Effort estimates
+        - Risk assessment
+        - Recommendations
+
+    decision_tree:
+      description: Conditional guidance
+      structure: IF...THEN recommendations
+
+  verification:
+    enabled: true
+    approach: reflective_questions
+    description: Verify understanding through questions
