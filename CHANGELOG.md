@@ -5,6 +5,29 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - Knowledge Template Component
+
+### Added
+- **Knowledge Directory Template** (L296):
+  - `aget/components/knowledge/README_TEMPLATE.md` - Canonical template for domain beliefs
+  - `knowledge/README.md` - Pre-configured in template root
+  - Placeholder structure with `{domain}/patterns/`, `{domain}/heuristics/`, `thresholds/`
+
+- **Knowledge Capture Protocol**:
+  - L296 portability test ("Clone to different domain. Still useful?")
+  - Validation states: Hypothesis → Validated → Established
+  - Capture triggers: session end, discovery, decision
+
+- **Migration Guide**:
+  - `docs/KNOWLEDGE_MIGRATION_GUIDE.md` - For existing agents
+  - Detection, migration steps, verification checklist
+
+### Changed
+- Updated AGENTS.md Directory Structure to include `knowledge/`
+- Added Knowledge Capture (L296) subsection to template configuration
+
+---
+
 ## [2.10.0] - 2025-12-13 - "Capability Composition Architecture"
 
 ### Added

@@ -765,11 +765,15 @@ my-{domain}-advisor-aget/
 ├── .aget/
 │   ├── version.json          # Agent identity + persona config
 │   ├── docs/                 # Domain-specific documentation
-│   ├── evolution/            # Learning and decision tracking
+│   ├── evolution/            # Learning and decision tracking (portable)
 │   └── checkpoints/          # State snapshots
 ├── .memory/                  # Advisor memory (Layer 4 - v2.9+)
 │   ├── clients/              # Client relationship state
 │   └── engagements/          # Engagement tracking
+├── knowledge/                # Domain beliefs (NOT portable, L296)
+│   ├── README.md             # Capture protocol and taxonomy
+│   ├── {domain}/             # Domain-specific patterns
+│   └── thresholds/           # Environment-specific values
 ├── AGENTS.md                 # This file (agent configuration)
 ├── CLAUDE.md                 # Symlink to AGENTS.md
 ├── sessions/                 # Session logs (at root, v2.9 standard)
@@ -780,6 +784,14 @@ my-{domain}-advisor-aget/
 ├── workspace/                # Private workspace for analysis
 └── README.md                 # Public-facing documentation
 ```
+
+### Knowledge Capture (L296)
+
+**Portability test**: "Clone to different domain. Still useful?"
+- YES → `.aget/evolution/` (portable framework beliefs)
+- NO → `knowledge/` (domain-specific, not portable)
+
+See `knowledge/README.md` for capture protocol and validation states.
 
 ---
 
