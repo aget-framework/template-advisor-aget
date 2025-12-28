@@ -1,0 +1,20 @@
+# Memory Inheritance Configuration
+# Per AGET_MEMORY_SPEC v1.2.0
+
+inheritance:
+  # What this agent inherits from fleet
+  from_fleet:
+    patterns: true
+    governance_defaults: true
+    vocabulary: true
+
+  # What this agent passes to derived agents
+  to_derived:
+    - governance/CHARTER.md
+    - governance/MISSION.md
+    - .aget/evolution/L*.md
+
+  # Inheritance override rules
+  overrides:
+    allow_governance_override: false
+    allow_capability_extension: true

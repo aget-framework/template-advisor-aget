@@ -1,0 +1,28 @@
+# Context Retrieval Configuration
+# Per AGET_MEMORY_SPEC v1.2.0 CAP-MEMORY-001-06
+
+retrieval:
+  # Wake-up context loading
+  wake_up:
+    priority_order:
+      - ".aget/version.json"
+      - ".aget/identity.json"
+      - "governance/CHARTER.md"
+      - "planning/PROJECT_PLAN*.md"
+      - ".aget/evolution/L*.md"
+    max_files: 10
+
+  # Step-back KB review
+  step_back:
+    check_directories:
+      - "inherited/"
+      - "planning/"
+      - ".aget/evolution/"
+      - "governance/"
+    precedent_count: 3
+
+  # Token budget (approximate)
+  token_budget:
+    wake_up: 4000
+    step_back: 8000
+    max_context: 100000

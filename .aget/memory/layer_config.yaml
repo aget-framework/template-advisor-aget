@@ -1,0 +1,40 @@
+# Memory Layer Configuration
+# Per AGET_MEMORY_SPEC v1.2.0 CAP-MEMORY-007
+
+layers:
+  working_memory:
+    type: ephemeral
+    description: "Active context window (LLM context)"
+
+  session_memory:
+    type: session
+    location: "sessions/"
+    description: "Session artifacts, handoffs"
+
+  project_memory:
+    type: project
+    locations:
+      - "governance/"
+      - "planning/"
+      - "knowledge/"
+    description: "KB structure, planning, decisions"
+
+  agent_memory:
+    type: agent
+    locations:
+      - ".aget/"
+      - ".aget/evolution/"
+    description: "Identity, patterns, learnings"
+
+  fleet_memory:
+    type: fleet
+    location: "inherited/"
+    description: "Fleet-shared knowledge"
+    optional: true
+
+  context_optimization:
+    type: meta
+    description: "Selective loading rules"
+
+# Note: User content goes in VISIBLE directories (governance/, planning/, etc.)
+# This file configures memory BEHAVIOR, not content storage
