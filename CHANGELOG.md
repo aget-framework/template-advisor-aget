@@ -5,6 +5,28 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2025-12-28 - "5D Composition Architecture"
+
+### Added
+- **5D Directory Structure**: Organized agent composition
+  - `.aget/persona/` - Identity and behavioral characteristics
+  - `.aget/memory/` - Session handoffs and persistent state
+  - `.aget/reasoning/` - Decision frameworks and policies
+  - `.aget/skills/` - Patterns, SOPs, and automation scripts
+  - `.aget/context/` - Environmental and domain information
+- **v3.0 Contract Tests**: Updated test suite with SKIP_TEMPLATE_V2 pattern
+
+### Changed
+- `template` field replaces `roles` array
+- `instance_type` field: `template` for templates, `aget`/`AGET` for instances
+- `archetype` field: high-level classification
+- Manifest version: 3.0
+
+### Migration
+- See `docs/FLEET_MIGRATION_GUIDE.md` in aget-framework/aget
+
+---
+
 ## [Unreleased] - Knowledge Template Component
 
 ### Added

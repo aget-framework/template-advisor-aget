@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.0.0-beta.1",
+  "aget_version": "3.0.0",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2025-12-27",
+  "updated": "2025-12-28",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -41,6 +41,7 @@
   },
   "migration_history": [
     "v2.10.0 -> v2.11.0: 2025-12-24 (Memory Architecture + L352 Traceability)",
-    "v2.12.0 -> v3.0.0-beta.1: 2025-12-27 (5D Composition Architecture)"
+    "v2.12.0 -> v3.0.0-beta.1: 2025-12-27 (5D Composition Architecture)",
+    "v3.0.0-beta.1 -> v3.0.0: 2025-12-28 (Official Release)"
   ]
 }
