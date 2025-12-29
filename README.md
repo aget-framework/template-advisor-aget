@@ -462,7 +462,7 @@ See [.aget/docs/CREATING_ADVISOR_AGENTS.md](.aget/docs/CREATING_ADVISOR_AGENTS.m
 
 ## Contributing
 
-Framework is in active development. Contribution guidelines coming in v2.5+.
+Contributions welcome! See the [hub repo](https://github.com/aget-framework/aget) for issues and coordination.
 
 ---
 
