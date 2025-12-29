@@ -396,16 +396,35 @@ Advisor template is part of the AGET template family:
 **Template**: [template-advisor-aget](https://github.com/aget-framework/template-advisor-aget)
 **Hub** (issues): [aget](https://github.com/aget-framework/aget)
 
-**Version**: v2.9.0 "Portfolio Governance"
-- **New in v2.9.0**: Portfolio governance system, organizational memory patterns, learning discovery framework
-- **v2.6.0**: Configuration size management (40k limit), framework positioning, contract test validation
-- **v2.5.0**: Contract testing for advisor boundaries, persona differentiation framework, read-only enforcement validation, advisory protocol standards
+**Version**: v3.0.0 "5D Composition Architecture"
+- **New in v3.0.0**: 5D Composition Architecture, manifest v3 schema, persona dimension
+- **v2.12.0**: Capability composition system, template manifests
+- **v2.9.0**: Portfolio governance system, organizational memory patterns
 
-**Framework Learnings**:
-- L95: Advisor Role Enforcement Requirements
-- L114: Requirements Before Solutions (Advisor Mode)
-- L118: Advisor Role Clarity in Multi-Agent Sessions
-- D11: Terminology Disambiguation (Supervisor/Coordinator/Advisor)
+---
+
+## Specification
+
+| Attribute | Value |
+|-----------|-------|
+| **Governed By** | [AGET_TEMPLATE_SPEC v3.1](https://github.com/aget-framework/aget/blob/main/specs/AGET_TEMPLATE_SPEC.md) |
+| **Foundation** | [WORKER_TEMPLATE_SPEC v1.0](https://github.com/aget-framework/aget/blob/main/specs/WORKER_TEMPLATE_SPEC_v1.0.yaml) |
+| **Archetype** | Advisor |
+| **Manifest Version** | 3.0 |
+| **Contract Tests** | 165 tests |
+
+### Key Capabilities
+
+| ID | Capability | Pattern |
+|----|------------|---------|
+| CAP-001 | Wake Protocol | event-driven |
+| CAP-009 | Wind Down Protocol | event-driven |
+| CAP-019 | Read-Only Mode | optional |
+| CAP-ADV | Persona System | ubiquitous |
+
+Validate compliance: `pytest tests/ -v`
+
+See: [Full specification](https://github.com/aget-framework/aget/tree/main/specs)
 
 ---
 
