@@ -25,6 +25,12 @@ SKIP_TEMPLATE = pytest.mark.skipif(
     reason="Instance-only test: internal state directories are created at instantiation"
 )
 
+# Skip reason for v2.x-specific tests (features, advisory_capabilities, roles)
+SKIP_TEMPLATE_V2 = pytest.mark.skipif(
+    is_template_context(),
+    reason="v2.x instance test: v3.0 templates use capabilities list instead of features/advisory_capabilities"
+)
+
 
 @SKIP_TEMPLATE
 class TestInternalStateDirectories:
@@ -115,8 +121,9 @@ class TestInternalStateDocumentation:
         assert "mastery_level" in content, "README must document mastery tracking format"
 
 
+@SKIP_TEMPLATE_V2
 class TestInternalStateFeatureDeclaration:
-    """Verify version.json declares internal state capabilities."""
+    """Verify version.json declares internal state capabilities (v2.x instances only)."""
 
     @pytest.fixture
     def version_config(self):
@@ -161,8 +168,9 @@ class TestInternalStateFeatureDeclaration:
             "scoped_write_permissions must be true"
 
 
+@SKIP_TEMPLATE_V2
 class TestScopedWritePermissions:
-    """Verify scoped write permissions are configured correctly."""
+    """Verify scoped write permissions are configured correctly (v2.x instances only)."""
 
     @pytest.fixture
     def version_config(self):
@@ -244,8 +252,9 @@ class TestScopedWritePermissions:
             "can_write_internal_state must be true"
 
 
+@SKIP_TEMPLATE_V2
 class TestInstanceTypeConsistency:
-    """Verify instance_type is consistent with advisor role."""
+    """Verify instance_type is consistent with advisor role (v2.x instances only)."""
 
     @pytest.fixture
     def version_config(self):
@@ -318,8 +327,9 @@ class TestProtocolDocumentation:
             "AGENTS.md must document scoped write permissions"
 
 
+@SKIP_TEMPLATE_V2
 class TestBoundaryEnforcement:
-    """Verify capability boundary declarations."""
+    """Verify capability boundary declarations (v2.x instances only)."""
 
     @pytest.fixture
     def version_config(self):

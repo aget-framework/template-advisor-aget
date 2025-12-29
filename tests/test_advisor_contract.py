@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""v2.5/v2.6 Advisor Contract Tests
+"""v2.5/v2.6/v3.0 Advisor Contract Tests
 
 Tests that advisor agents maintain read-only boundaries and proper persona configuration.
 Enforces hybrid enforcement model: declarations + automated validation.
 
 v2.5.0: Global read-only (boolean values)
 v2.6.0: Scoped write permissions (string "scoped" with write_scope section)
+v3.0.0: Template-based architecture with capabilities list
 
 Part of AGET framework advisor template validation.
 
 v2.10.0: Added template context detection - instance-only tests skipped on templates
+v3.0.0-beta: Added v3.0 schema compatibility for templates
 """
 
 import pytest
@@ -24,9 +26,19 @@ SKIP_TEMPLATE = pytest.mark.skipif(
     reason="Instance-only test: .memory/ directory is created at instantiation"
 )
 
+# Skip reason for v2.x-specific tests
+SKIP_TEMPLATE_V2 = pytest.mark.skipif(
+    is_template_context(),
+    reason="v2.x instance test: v3.0 templates use template field instead of persona/roles"
+)
 
-def test_instance_type_is_aget():
-    """Advisor agents must be read-only (instance_type == 'aget')."""
+
+def test_instance_type_valid():
+    """Advisor agents/templates must have valid instance_type.
+
+    v2.x: instance_type == 'aget'
+    v3.0: instance_type == 'template' with template field
+    """
     version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
@@ -35,8 +47,19 @@ def test_instance_type_is_aget():
         assert "instance_type" in data, "version.json missing instance_type field"
 
         instance_type = data["instance_type"]
-        assert instance_type == "aget", \
-            f"Advisor agents must be read-only: instance_type must be 'aget', got '{instance_type}'"
+        manifest_version = data.get("manifest_version", "2.0")
+
+        # v3.0 templates use instance_type: "template"
+        if manifest_version.startswith("3."):
+            assert instance_type == "template", \
+                f"v3.0 templates must have instance_type='template', got '{instance_type}'"
+            assert "template" in data, "v3.0 templates must have 'template' field"
+            assert data["template"] == "advisor", \
+                f"Expected template='advisor', got '{data.get('template')}'"
+        else:
+            # v2.x instances
+            assert instance_type == "aget", \
+                f"v2.x advisors must have instance_type='aget', got '{instance_type}'"
 
 
 def test_role_includes_advisor():
@@ -57,21 +80,26 @@ def test_role_includes_advisor():
                 f"Advisor agents must include 'advisor' in roles, got: {roles}"
 
 
-def test_persona_declared():
-    """Advisor agents must declare a persona."""
+def test_persona_or_template_declared():
+    """Advisor agents must declare a persona (v2.x) or template (v3.0)."""
     version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
     with open(version_file) as f:
         data = json.load(f)
+        manifest_version = data.get("manifest_version", "2.0")
 
-        # Persona can be null in template, but field must exist
-        assert "persona" in data, "version.json missing persona field"
-
-        # If not null, must be string
-        persona = data["persona"]
-        if persona is not None:
-            assert isinstance(persona, str), f"persona must be string or null, got {type(persona)}"
+        # v3.0 uses template field instead of persona
+        if manifest_version.startswith("3."):
+            assert "template" in data, "v3.0 requires 'template' field"
+            template = data["template"]
+            assert template == "advisor", f"Expected template='advisor', got '{template}'"
+        else:
+            # v2.x uses persona field
+            assert "persona" in data, "version.json missing persona field"
+            persona = data["persona"]
+            if persona is not None:
+                assert isinstance(persona, str), f"persona must be string or null, got {type(persona)}"
 
 
 def test_advisory_capabilities_read_only():
@@ -185,8 +213,13 @@ def test_supported_personas_list():
 
 # --- v2.6.0+ Scoped Write Permission Tests ---
 
+@SKIP_TEMPLATE_V2
 def test_write_scope_declared_if_scoped():
-    """Advisors with 'scoped' permissions must declare write_scope section (v2.6.0+)."""
+    """Advisors with 'scoped' permissions must declare write_scope section (v2.6.0+ instances).
+
+    Note: v3.0 templates may not have complete write_scope configuration.
+    Full write_scope is configured at instantiation time.
+    """
     version_file = Path(__file__).parent.parent / ".aget/version.json"
     assert version_file.exists(), "version.json not found"
 
