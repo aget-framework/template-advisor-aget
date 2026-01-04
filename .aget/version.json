@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.0.0",
+  "aget_version": "3.0.1",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2025-12-28",
+  "updated": "2026-01-04",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -27,7 +27,13 @@
     "can_recommend": true,
     "can_analyze": true,
     "can_critique": true,
-    "supported_personas": ["teacher", "mentor", "consultant", "guru", "coach"]
+    "supported_personas": [
+      "teacher",
+      "mentor",
+      "consultant",
+      "guru",
+      "coach"
+    ]
   },
   "patterns": {
     "session": "1.1.0",
