@@ -5,6 +5,26 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-01-04 - "Session Protocol Enhancements"
+
+### Added
+- **Complete Session Lifecycle Scripts**:
+  - `wake_up.py`: Session initialization (R-WAKE-001 to R-WAKE-007)
+  - `aget_housekeeping_protocol.py`: Mid-session sanity checks (R-SANITY-001 to R-SANITY-007)
+  - `wind_down.py`: Session close with sanity gate (R-WIND-001 to R-WIND-006)
+- **Cross-CLI Automation**: All scripts support `--json` output for Claude Code, Codex, Cursor
+
+### Changed
+- Version references updated across all files (manifest.yaml, identity.json, AGENTS.md)
+- Scripts implement L038 (Agent-Agnostic) and L021 (Verify-Before-Modify)
+- Pattern versions: session 1.2.0, housekeeping 1.1.0
+
+### Notes
+- Part of AGET v3.1.0 coordinated release
+- See aget-framework/aget CHANGELOG for full framework changes
+
+---
+
 ## [3.0.0] - 2025-12-28 - "5D Composition Architecture"
 
 ### Added
