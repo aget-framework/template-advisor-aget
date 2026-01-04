@@ -154,5 +154,5 @@ A: Client decision. Typical retention: active + 1 year post-engagement.
 
 ---
 
-**Layer 4 Introduction**: v2.9.0 (2025-11-23)
+**Layer 4 Introduction**: v3.1.0 (2025-11-23)
 **Related**: See AGENTS.md for complete 5-layer architecture

@@ -4,7 +4,7 @@
 
 Transform any domain into an AI advisor that provides expert guidance without modifying systems. Supports 5 distinct personas: teacher, mentor, consultant, guru, and coach.
 
-**Current Version**: v2.9.0 "Portfolio Governance"
+**Current Version**: v3.1.0 "Portfolio Governance"
 
 ---
 
@@ -396,10 +396,10 @@ Advisor template is part of the AGET template family:
 **Template**: [template-advisor-aget](https://github.com/aget-framework/template-advisor-aget)
 **Hub** (issues): [aget](https://github.com/aget-framework/aget)
 
-**Version**: v3.0.0 "5D Composition Architecture"
-- **New in v3.0.0**: 5D Composition Architecture, manifest v3 schema, persona dimension
+**Version**: v3.1.0 "5D Composition Architecture"
+- **New in v3.1.0**: 5D Composition Architecture, manifest v3 schema, persona dimension
 - **v2.12.0**: Capability composition system, template manifests
-- **v2.9.0**: Portfolio governance system, organizational memory patterns
+- **v3.1.0**: Portfolio governance system, organizational memory patterns
 
 ---
 

@@ -101,6 +101,6 @@ Content moves from `sessions/` → `knowledge/` when:
 
 ---
 
-*This template is part of AGET v3.0.0*
+*This template is part of AGET v3.1.0*
 *See: L296 (Portability Test), L399 (Content Semantics), L403 (Population Guidance)*
 *Canonical guide: KNOWLEDGE_TAXONOMY_GUIDE.md*

@@ -1,7 +1,7 @@
 # Advisor Template Charter
 
 **Template**: template-advisor-aget
-**Version**: 3.0.0
+**Version**: 3.1.0
 **Date**: 2025-12-27
 
 ---
@@ -50,4 +50,4 @@ This template provides advisory capabilities for agents that guide, teach, and r
 
 ---
 
-*Advisor Template Charter v3.0.0*
+*Advisor Template Charter v3.1.0*

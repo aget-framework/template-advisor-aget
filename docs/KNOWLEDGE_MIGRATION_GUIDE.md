@@ -153,4 +153,4 @@ mv config/thresholds.yaml knowledge/thresholds/
 
 ---
 
-*Migration guide from AGET v3.0.0*
+*Migration guide from AGET v3.1.0*

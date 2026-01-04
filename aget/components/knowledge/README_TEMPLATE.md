@@ -53,4 +53,4 @@ Mark in frontmatter:
 - "Commits should have descriptive messages" → Framework (portable)
 
 ---
-*Template from AGET v3.0.0 - Replace {domain} with your agent's domain*
+*Template from AGET v3.1.0 - Replace {domain} with your agent's domain*
