@@ -5,6 +5,18 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 2026-01-04 - "Version Inventory Coherence"
+
+### Fixed
+- **Version Consistency**: AGENTS.md, manifest.yaml, version.json now all show v3.2.1
+- Part of L444 remediation (version inventory coherence)
+
+### Notes
+- Patch release to fix version inconsistencies from v3.2.0
+- See aget-framework/aget CHANGELOG [3.2.1] for details
+
+---
+
 ## [3.2.0] - 2026-01-04 - "Specification Architecture"
 
 ### Added
