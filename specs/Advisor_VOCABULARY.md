@@ -1,11 +1,13 @@
 # Advisor Domain Vocabulary
 
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Status**: Active
 **Owner**: template-advisor-aget
 **Created**: 2026-01-10
+**Updated**: 2026-01-11
 **Scope**: Template vocabulary (DRIVES instance behavior per L481)
 **Archetype**: Advisor
+**Template**: VOCABULARY_TEMPLATE_v3.3
 
 ---
 
@@ -90,6 +92,37 @@ Stakeholder_Context:
   skos:broader: Advisor_Core_Concepts
   skos:inScheme: Advisor_Vocabulary
 ```
+
+---
+
+## Concept Relationships
+
+```yaml
+relationships:
+  hierarchical:
+    - parent: Advisor_Core_Concepts
+      children: [Recommendation, Trade_Off, Risk_Assessment, Best_Practice, Stakeholder_Context]
+
+  associative:
+    - subject: Recommendation
+      predicate: skos:related
+      object: Trade_Off
+    - subject: Risk_Assessment
+      predicate: skos:related
+      object: Recommendation
+```
+
+---
+
+## EKO Cross-References
+
+Per AGET_EXECUTABLE_KNOWLEDGE_SPEC.md:
+
+| Vocabulary Term | EKO Term | Relationship |
+|-----------------|----------|--------------|
+| Recommendation | EKO:Decision_Support | skos:exactMatch |
+| Trade_Off | EKO:Analysis_Pattern | skos:closeMatch |
+| Best_Practice | EKO:Knowledge_Asset | skos:broadMatch |
 
 ---
 
