@@ -4,7 +4,7 @@
 
 Transform any domain into an AI advisor that provides expert guidance without modifying systems. Supports 5 distinct personas: teacher, mentor, consultant, guru, and coach.
 
-**Current Version**: v3.3.0 "Specification Maturity"
+**Current Version**: v3.4.0 "Session Skills Maturity"
 
 ---
 
