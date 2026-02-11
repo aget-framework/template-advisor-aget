@@ -43,7 +43,6 @@ test_output/
 
 # Development tools
 .aider*
-.claude/
 .cursor*
 .windsurf*
 .session_state.json
@@ -58,3 +57,10 @@ test_output/
 *.original
 *.old
 test_*.py  # Test files should be in tests/
+
+# Claude Code user settings (not versioned)
+.claude/settings.json
+.claude/statsig/
+.claude/todos/
+.claude/chat/
+# .claude/skills/ IS versioned
