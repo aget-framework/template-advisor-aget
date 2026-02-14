@@ -6,7 +6,7 @@ End session for any AGET agent with proper state capture and sanity checks.
 Designed to work across CLI agents (Claude Code, Codex CLI, Cursor, etc.).
 
 Implements: CAP-SESSION-003 (Wind Down Protocol), R-WIND-001-*
-Patterns: L038 (Agent-Agnostic), L021 (Verify-Before-Modify), L039 (Diagnostic Efficiency)
+Patterns: L038 (Agent-Agnostic), L021 (Verify-Before-Modify), L039 (Diagnostic Efficiency), L468 (Re-entrancy Guard)
 
 Usage:
     python3 wind_down.py                    # Human-readable output
@@ -15,12 +15,14 @@ Usage:
     python3 wind_down.py --dir /path/agent  # Run on specific agent
     python3 wind_down.py --notes "..."      # Add handoff notes
     python3 wind_down.py --skip-sanity      # Skip sanity check (not recommended)
+    python3 wind_down.py --force            # Bypass re-entrancy guard (L468)
 
 Exit codes:
     0: Clean close (sanity healthy)
     1: Close with warnings
     2: Close with errors (requires acknowledgment in interactive mode)
     3: Configuration error
+    4: Re-entrancy guard block (cooldown active or concurrent invocation)
 
 L021 Verification Table:
     | Check | Resource | Before Action |
@@ -31,7 +33,7 @@ L021 Verification Table:
     | 4 | sessions/ | Verify exists before writing |
 
 Author: private-aget-framework-AGET (canonical template)
-Version: 1.0.0 (v3.1.0)
+Version: 1.2.0 (v3.4.0) - WD-007 commit message suggestion
 """
 
 import argparse
@@ -171,6 +173,117 @@ def get_session_state(agent_path: Path) -> Dict[str, Any]:
     return load_json_file(state_file, {})
 
 
+def calculate_duration(session_state: Dict[str, Any]) -> Optional[int]:
+    """
+    Calculate session duration from start time.
+
+    WD-008 helper: Calculate duration for session log.
+
+    Returns:
+        Duration in seconds, or None if cannot calculate.
+    """
+    started_str = session_state.get('started')
+    if not started_str:
+        return None
+
+    try:
+        started = datetime.fromisoformat(started_str)
+        duration = datetime.now() - started
+        return int(duration.total_seconds())
+    except (ValueError, TypeError):
+        return None
+
+
+def write_session_log(agent_path: Path, data: Dict[str, Any], description: str = "session") -> Path:
+    """
+    Create session log file per SESSION_LOG_SPEC_v1.0.
+
+    Per SKILL_VOCABULARY Wind_Down_Protocol:
+    "Structured session ending with notes, commit staging, and sanity checks"
+
+    WD-008: The SKILL shall create a session log file in sessions/ with
+    session summary and handoff notes.
+
+    Returns path to created file.
+    """
+    import re
+
+    sessions_dir = agent_path / 'sessions'
+    sessions_dir.mkdir(exist_ok=True)
+
+    date_str = datetime.now().strftime('%Y-%m-%d')
+    safe_desc = re.sub(r'[^a-z0-9_-]', '_', description.lower())[:50]
+    filename = f"SESSION_{date_str}_{safe_desc}.md"
+    filepath = sessions_dir / filename
+
+    # Avoid overwrite - append counter if exists
+    counter = 1
+    while filepath.exists():
+        filename = f"SESSION_{date_str}_{safe_desc}_{counter}.md"
+        filepath = sessions_dir / filename
+        counter += 1
+
+    # Format content
+    content = format_session_log_content(data)
+    filepath.write_text(content)
+
+    return filepath
+
+
+def format_session_log_content(data: Dict[str, Any]) -> str:
+    """
+    Format session log content per SESSION_LOG_SPEC.
+
+    Returns markdown content for session file.
+    """
+    lines = []
+    agent_name = data.get('agent_name', 'unknown')
+    duration = format_duration(data['session'].get('duration_seconds'))
+
+    lines.append(f"# SESSION: {agent_name}")
+    lines.append("")
+    lines.append(f"**Date**: {datetime.now().strftime('%Y-%m-%d')}")
+    lines.append(f"**Duration**: {duration}")
+    lines.append(f"**Status**: Complete")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # Sanity check summary
+    sanity = data.get('sanity_check', {})
+    status = sanity.get('status', 'unknown')
+    passed = sanity.get('checks_passed', 0)
+    total = sanity.get('checks_total', 0)
+    lines.append("## Sanity Check")
+    lines.append("")
+    lines.append(f"- Status: {status.upper()}")
+    lines.append(f"- Passed: {passed}/{total}")
+    lines.append("")
+
+    # Pending work
+    pending = data.get('pending_work', [])
+    if pending:
+        lines.append("## Pending Work")
+        lines.append("")
+        for item in pending:
+            lines.append(f"- {item}")
+        lines.append("")
+
+    # Handoff notes
+    notes = data.get('handoff_notes', '')
+    if notes:
+        lines.append("## Handoff Notes")
+        lines.append("")
+        lines.append(notes)
+        lines.append("")
+
+    lines.append("---")
+    lines.append("")
+    lines.append("*Session log created by wind_down.py (WD-008)*")
+
+    return "\n".join(lines)
+
+
 def scan_pending_work(agent_path: Path) -> List[str]:
     """
     Scan planning/ for in-progress work.
@@ -193,6 +306,105 @@ def scan_pending_work(agent_path: Path) -> List[str]:
             pass
 
     return pending
+
+
+def generate_commit_message(agent_path: Path) -> str:
+    """
+    Generate suggested commit message based on git status.
+
+    WD-007: The SKILL shall suggest a commit message based on session activity.
+
+    Returns:
+        Suggested commit message or empty string if no changes.
+    """
+    try:
+        # Get git status
+        result = subprocess.run(
+            ['git', 'status', '--porcelain'],
+            cwd=agent_path,
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+
+        if not result.stdout.strip():
+            return "No changes to commit"
+
+        lines = result.stdout.strip().split('\n')
+
+        # Categorize changes
+        categories = {
+            'evolution': [],   # .aget/evolution/
+            'specs': [],       # .aget/specs/
+            'sessions': [],    # sessions/
+            'planning': [],    # planning/
+            'docs': [],        # .md, .txt
+            'config': [],      # .yaml, .json, .toml
+            'code': [],        # .py, .sh
+            'skills': [],      # .claude/skills/
+            'other': []
+        }
+
+        for line in lines:
+            if len(line) < 4:
+                continue
+            filepath = line[3:].strip()
+
+            if '.aget/evolution/' in filepath:
+                categories['evolution'].append(filepath)
+            elif '.aget/specs/' in filepath:
+                categories['specs'].append(filepath)
+            elif 'sessions/' in filepath:
+                categories['sessions'].append(filepath)
+            elif 'planning/' in filepath:
+                categories['planning'].append(filepath)
+            elif '.claude/skills/' in filepath:
+                categories['skills'].append(filepath)
+            elif filepath.endswith(('.md', '.txt')):
+                categories['docs'].append(filepath)
+            elif filepath.endswith(('.yaml', '.yml', '.json', '.toml')):
+                categories['config'].append(filepath)
+            elif filepath.endswith(('.py', '.sh')):
+                categories['code'].append(filepath)
+            else:
+                categories['other'].append(filepath)
+
+        # Generate message based on categories (priority order)
+        parts = []
+        if categories['evolution']:
+            count = len(categories['evolution'])
+            parts.append(f"learn: Add {count} L-doc{'s' if count > 1 else ''}")
+        if categories['sessions']:
+            parts.append("session: Add session log")
+        if categories['planning']:
+            parts.append("plan: Update project plans")
+        if categories['specs']:
+            parts.append("spec: Update specifications")
+        if categories['skills']:
+            parts.append("skill: Update skills")
+        if categories['code']:
+            parts.append("feat: Update scripts")
+        if categories['docs']:
+            parts.append("docs: Update documentation")
+        if categories['config']:
+            parts.append("chore: Update config")
+        if categories['other']:
+            count = len(categories['other'])
+            parts.append(f"chore: Update {count} file{'s' if count > 1 else ''}")
+
+        if not parts:
+            return f"chore: Update {len(lines)} file{'s' if len(lines) > 1 else ''}"
+
+        # Return primary action, note if more
+        if len(parts) == 1:
+            return parts[0]
+        else:
+            return f"{parts[0]} + {len(parts) - 1} more"
+
+    except subprocess.TimeoutExpired:
+        return "Unable to generate commit message (timeout)"
+    except Exception:
+        return "Unable to generate commit message"
 
 
 def get_wind_down_data(agent_path: Path,
@@ -220,16 +432,22 @@ def get_wind_down_data(agent_path: Path,
         'clean_close': True,
     }
 
-    # L021 Check 1: Session state
+    # L021 Check 1: Session state (WU-008 format: 'started' at root level)
     session_state = get_session_state(agent_path)
-    current = session_state.get('current_session', {})
-    if current.get('started'):
-        data['session']['started'] = current['started']
-        try:
-            started = datetime.fromisoformat(current['started'])
-            data['session']['duration_seconds'] = int((now - started).total_seconds())
-        except ValueError:
-            pass
+    started_str = session_state.get('started')
+    if started_str:
+        data['session']['started'] = started_str
+        data['session']['duration_seconds'] = calculate_duration(session_state)
+    else:
+        # Legacy format fallback
+        current = session_state.get('current_session', {})
+        if current.get('started'):
+            data['session']['started'] = current['started']
+            try:
+                started = datetime.fromisoformat(current['started'])
+                data['session']['duration_seconds'] = int((now - started).total_seconds())
+            except ValueError:
+                pass
 
     # L021 Check 2: Sanity check
     if skip_sanity:
@@ -248,6 +466,9 @@ def get_wind_down_data(agent_path: Path,
 
     # L021 Check 3: Pending work
     data['pending_work'] = scan_pending_work(agent_path)
+
+    # WD-007: Generate suggested commit message
+    data['suggested_commit'] = generate_commit_message(agent_path)
 
     # Determine clean close
     sanity_status = data['sanity_check'].get('status', 'unknown')
@@ -330,6 +551,11 @@ def format_human_output(data: Dict[str, Any]) -> str:
         lines.append(f"Handoff Notes: {data['handoff_notes']}")
         lines.append("")
 
+    # Suggested commit (WD-007)
+    if data.get('suggested_commit'):
+        lines.append(f"Suggested commit: {data['suggested_commit']}")
+        lines.append("")
+
     # Close confirmation
     if data['clean_close']:
         lines.append("Clean close confirmed.")
@@ -395,9 +621,14 @@ Exit codes:
         help='Enable diagnostic output to stderr'
     )
     parser.add_argument(
+        '--force',
+        action='store_true',
+        help='Bypass re-entrancy guard cooldown (L468)'
+    )
+    parser.add_argument(
         '--version',
         action='version',
-        version='wind_down.py 1.0.0 (AGET v3.1.0)'
+        version='wind_down.py 1.2.0 (AGET v3.4.0, WD-007 commit suggestion)'
     )
 
     args = parser.parse_args()
@@ -423,6 +654,52 @@ Exit codes:
     if args.verbose:
         log_diagnostic(f"Found agent at: {agent_path}")
 
+    # L468: Re-entrancy guard check
+    guard = None
+    try:
+        # Try to import guard module (may not exist in all installations)
+        sys.path.insert(0, str(agent_path))
+        from src.aget.patterns.session.session_guard import SessionGuard
+        guard = SessionGuard('wind_down', agent_path)
+
+        allowed, message = guard.should_proceed(force=args.force)
+
+        if not allowed:
+            if args.json:
+                error = {
+                    'clean_close': False,
+                    'errors': [f'Re-entrancy guard: {message}'],
+                    'guard_blocked': True,
+                }
+                print(json.dumps(error, indent=2 if args.pretty else None))
+            else:
+                print(f"Blocked: {message}", file=sys.stderr)
+            return 4  # New exit code for guard block
+
+        if message and args.verbose:
+            log_diagnostic(f"Guard: {message}")
+
+        # Acquire lock for concurrent execution protection
+        if not guard.acquire_lock():
+            if args.json:
+                error = {
+                    'clean_close': False,
+                    'errors': ['Wind down already running (concurrent invocation)'],
+                    'guard_blocked': True,
+                }
+                print(json.dumps(error, indent=2 if args.pretty else None))
+            else:
+                print("Error: Wind down already running", file=sys.stderr)
+            return 4
+
+        if args.verbose:
+            log_diagnostic("Guard: Lock acquired")
+
+    except ImportError:
+        # Guard module not available - continue without it
+        if args.verbose:
+            log_diagnostic("Guard: Module not available, proceeding without protection")
+
     # Gather data
     data = get_wind_down_data(
         agent_path,
@@ -434,6 +711,24 @@ Exit codes:
     if args.verbose:
         log_diagnostic(f"Data gathered, clean_close={data['clean_close']}")
 
+    # WD-008: Create session log file
+    try:
+        # Generate description from handoff notes or default
+        description = "session"
+        if args.notes:
+            # Use first few words of notes as description
+            words = args.notes.split()[:3]
+            description = '_'.join(words) if words else "session"
+
+        session_file = write_session_log(agent_path, data, description)
+        data['session_file'] = str(session_file)
+
+        if args.verbose:
+            log_diagnostic(f"Session log written: {session_file}")
+    except (IOError, OSError) as e:
+        if args.verbose:
+            log_diagnostic(f"Warning: Could not write session log: {e}")
+
     # Output
     if args.json:
         print(json.dumps(data, indent=2 if args.pretty else None))
@@ -443,6 +738,13 @@ Exit codes:
     if args.verbose:
         elapsed = (time.time() - _start_time) * 1000
         log_diagnostic(f"Complete in {elapsed:.0f}ms")
+
+    # L468: Record successful invocation and release lock
+    if guard:
+        guard.record_invocation()
+        guard.release_lock()
+        if args.verbose:
+            log_diagnostic("Guard: Invocation recorded, lock released")
 
     # Exit code based on sanity status
     sanity_status = data['sanity_check'].get('status', 'unknown')

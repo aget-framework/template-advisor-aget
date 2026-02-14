@@ -96,6 +96,99 @@ def load_json_file(path: Path, default: Any = None) -> Any:
         return default
 
 
+def get_active_projects(agent_path: Path) -> list:
+    """
+    Scan planning/ directory for active PROJECT_PLANs.
+
+    Returns list of dicts with name, status, and current phase/gate.
+    Active = status is not 'Complete'.
+
+    L465: Active project awareness for wake up protocol.
+    """
+    planning_dir = agent_path / 'planning'
+    if not planning_dir.is_dir():
+        return []
+
+    active = []
+    for f in planning_dir.glob('PROJECT_PLAN_*.md'):
+        try:
+            content = f.read_text()
+            # Extract status from **Status**: line
+            status = 'unknown'
+            current_phase = ''
+            for line in content.split('\n'):
+                if line.startswith('**Status**:'):
+                    status = line.split(':', 1)[1].strip()
+                # Look for current phase markers
+                if '- [x]' in line.lower() and 'phase' in line.lower():
+                    current_phase = line.split(']', 1)[1].strip() if ']' in line else ''
+
+            # Skip completed projects
+            if 'complete' in status.lower():
+                continue
+
+            active.append({
+                'name': f.stem.replace('PROJECT_PLAN_', ''),
+                'file': f.name,
+                'status': status,
+                'current_phase': current_phase or status,
+            })
+        except (IOError, UnicodeDecodeError):
+            continue
+
+    return active
+
+
+def get_version_delta(agent_path: Path, supervisor_version: str) -> Dict[str, Any]:
+    """
+    Compare supervisor version to fleet version and explain delta.
+
+    L465: Version delta explanation for wake up protocol.
+    """
+    fleet_file = agent_path / '.aget' / 'fleet' / 'FLEET_STATE.yaml'
+
+    result = {
+        'supervisor_version': supervisor_version,
+        'fleet_version': 'unknown',
+        'has_delta': False,
+        'explanation': '',
+    }
+
+    if not fleet_file.exists():
+        return result
+
+    try:
+        content = fleet_file.read_text()
+        # Simple YAML parsing for notes field
+        for line in content.split('\n'):
+            # Look for version in notes or explicit version field
+            if 'v3.' in line or 'v2.' in line:
+                import re
+                match = re.search(r'v(\d+\.\d+\.\d+)', line)
+                if match and 'FLEET' in line.upper():
+                    result['fleet_version'] = match.group(1)
+                    break
+            # Alternative: look for notes line with version
+            if line.strip().startswith('notes:') and 'v3.' in line:
+                import re
+                match = re.search(r'v(\d+\.\d+\.\d+)', line)
+                if match:
+                    result['fleet_version'] = match.group(1)
+                    break
+    except (IOError, UnicodeDecodeError):
+        pass
+
+    # Check for delta
+    if result['fleet_version'] != 'unknown':
+        sv = supervisor_version.lstrip('v')
+        fv = result['fleet_version'].lstrip('v')
+        if sv != fv:
+            result['has_delta'] = True
+            result['explanation'] = f"Fleet at v{fv} - upgrade in progress"
+
+    return result
+
+
 def get_wake_data(agent_path: Path) -> Dict[str, Any]:
     """
     Gather all data needed for wake output.
@@ -158,7 +251,44 @@ def get_wake_data(agent_path: Path) -> Dict[str, Any]:
     config_data = load_json_file(config_file, {})
     data['config'] = config_data.get('wake_up', {})
 
+    # L465: Active projects awareness
+    data['active_projects'] = get_active_projects(agent_path)
+
+    # L465: Version delta explanation
+    data['version_delta'] = get_version_delta(
+        agent_path,
+        data['version']['aget_version']
+    )
+
     return data
+
+
+def write_session_state(agent_path: Path) -> Path:
+    """
+    Create session state file for duration tracking.
+
+    Per SKILL_VOCABULARY Session_Initialization:
+    "Process of starting an AGET session with status briefing"
+
+    WU-008: The SKILL shall create .aget/session_state.json with session start timestamp.
+
+    Returns path to created file.
+    """
+    state_file = agent_path / '.aget' / 'session_state.json'
+
+    state = {
+        'started': datetime.now().isoformat(),
+        'agent': agent_path.name,
+        'pid': os.getpid(),
+    }
+
+    # Ensure .aget directory exists
+    state_file.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(state_file, 'w') as f:
+        json.dump(state, f, indent=2)
+
+    return state_file
 
 
 def format_human_output(data: Dict[str, Any]) -> str:
@@ -196,6 +326,20 @@ def format_human_output(data: Dict[str, Any]) -> str:
         lines.append(f"Template: {template}")
 
     if archetype or template:
+        lines.append("")
+
+    # L465: Version delta
+    version_delta = data.get('version_delta', {})
+    if version_delta.get('has_delta'):
+        lines.append(f"Fleet: {version_delta.get('explanation', '')}")
+        lines.append("")
+
+    # L465: Active projects
+    active_projects = data.get('active_projects', [])
+    if active_projects:
+        lines.append("Active Projects:")
+        for proj in active_projects:
+            lines.append(f"  - {proj['name']}: {proj['current_phase']}")
         lines.append("")
 
     # Ready
@@ -280,6 +424,15 @@ Exit codes:
 
     if args.verbose:
         log_diagnostic(f"Data gathered, valid={data['valid']}")
+
+    # WU-008: Create session state for duration tracking
+    try:
+        state_file = write_session_state(agent_path)
+        if args.verbose:
+            log_diagnostic(f"Session state written: {state_file}")
+    except (IOError, OSError) as e:
+        if args.verbose:
+            log_diagnostic(f"Warning: Could not write session state: {e}")
 
     # Output
     if args.json:
