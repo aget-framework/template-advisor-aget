@@ -1,10 +1,10 @@
 ---
-name: aget-healthcheck-kb
+name: aget-check-kb
 description: Validate Knowledge Base health by checking structure, frontmatter compliance, and content staleness. Returns conformance score and health status (OK/WARN/CRITICAL).
 version: 1.0.0
 ---
 
-# /aget-healthcheck-kb
+# /aget-check-kb
 
 Validate the health of the `knowledge/` directory by checking structure, file organization, and content freshness.
 
@@ -71,7 +71,7 @@ du -sh knowledge
 ## Output Format
 
 ```
-=== /aget-healthcheck-kb ===
+=== /aget-check-kb ===
 
 Directory: knowledge/
 
@@ -118,8 +118,8 @@ ELSE:
 
 ## Related Skills
 
-- `/aget-healthcheck-evolution` - Evolution directory health
-- `/aget-healthcheck-sessions` - Sessions directory health
+- `/aget-check-evolution` - Evolution directory health
+- `/aget-check-sessions` - Sessions directory health
 
 ## Traceability
 
@@ -132,6 +132,6 @@ ELSE:
 
 ---
 
-*aget-healthcheck-kb v1.0.0*
+*aget-check-kb v1.0.0*
 *Category: Monitoring*
 *POC-017 Phase 1*

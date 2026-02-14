@@ -1,10 +1,10 @@
 ---
-name: aget-healthcheck-sessions
+name: aget-check-sessions
 description: Monitor sessions/ directory health. Detects date subdirectories (anomaly), counts files, validates naming conventions, and tracks disk usage. Returns health status.
 version: 1.0.0
 ---
 
-# /aget-healthcheck-sessions
+# /aget-check-sessions
 
 Monitor the health of the `sessions/` directory by checking file organization, naming conventions, and disk usage.
 
@@ -67,7 +67,7 @@ du -sh sessions
 ## Output Format
 
 ```
-=== /aget-healthcheck-sessions ===
+=== /aget-check-sessions ===
 
 Directory: sessions/
 
@@ -109,8 +109,8 @@ ELSE:
 
 ## Related Skills
 
-- `/aget-healthcheck-evolution` - Evolution directory health
-- `/aget-healthcheck-kb` - Knowledge base health
+- `/aget-check-evolution` - Evolution directory health
+- `/aget-check-kb` - Knowledge base health
 - `/aget-save-state` - Create checkpoints
 
 ## Traceability
@@ -124,6 +124,6 @@ ELSE:
 
 ---
 
-*aget-healthcheck-sessions v1.0.0*
+*aget-check-sessions v1.0.0*
 *Category: Monitoring*
 *POC-017 Phase 1*

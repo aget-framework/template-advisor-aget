@@ -1,10 +1,10 @@
 ---
-name: aget-healthcheck-evolution
+name: aget-check-evolution
 description: Monitor .aget/evolution/ directory health. Validates file counts, naming conventions, disk usage, and returns health status with alerts on anomalies.
 version: 1.0.0
 ---
 
-# /aget-healthcheck-evolution
+# /aget-check-evolution
 
 Monitor the health of the `.aget/evolution/` directory by checking file counts, types, naming conventions, and disk usage.
 
@@ -70,7 +70,7 @@ test -f .aget/evolution/index.json && jq empty .aget/evolution/index.json 2>/dev
 Report the following:
 
 ```
-=== /aget-healthcheck-evolution ===
+=== /aget-check-evolution ===
 
 Directory: .aget/evolution/
 
@@ -113,8 +113,8 @@ ELSE:
 
 ## Related Skills
 
-- `/aget-healthcheck-sessions` - Sessions directory health
-- `/aget-healthcheck-kb` - Knowledge base health
+- `/aget-check-sessions` - Sessions directory health
+- `/aget-check-kb` - Knowledge base health
 - `/aget-record-lesson` - Capture findings as L-docs
 
 ## Traceability
@@ -128,6 +128,6 @@ ELSE:
 
 ---
 
-*aget-healthcheck-evolution v1.0.0*
+*aget-check-evolution v1.0.0*
 *Category: Monitoring*
 *POC-017 Phase 1*

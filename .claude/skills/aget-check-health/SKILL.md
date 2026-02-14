@@ -1,5 +1,5 @@
 ---
-name: aget-sanity-check
+name: aget-check-health
 description: Run AGET health inspection and housekeeping checks
 allowed-tools:
   - Bash
@@ -7,7 +7,7 @@ allowed-tools:
   - Glob
 ---
 
-# aget-sanity-check
+# aget-check-health
 
 Run health inspection on an AGET agent. This skill performs sanity checks, validates structure, and reports agent health status.
 

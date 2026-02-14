@@ -1,0 +1,67 @@
+# Claude Code user settings (not versioned)
+.claude/settings.json
+.claude/statsig/
+.claude/todos/
+.claude/chat/
+
+# Skills ARE versioned (deployed with template)
+# .claude/skills/ is NOT ignored
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project specific
+SESSION_NOTES/
+archive/
+*.log
+.cli-agent-state.json
+
+# Internal documentation (moved to aget-aget)
+DAY_*.md
+DAY_*_*.md
+*_TEST_PLAN.md
+*_STATUS.md
+MIGRATION_TEST_MATRIX.md
+TRANSITION_TEST_SUITE.md
+CURSOR_TEST_PROTOCOL.md
+V2_INCREMENTAL_TEST_PLAN.md
+
+# Testing
+test_output/
+*.test.md
+
+# Development tools
+.aider*
+.cursor*
+.windsurf*
+.session_state.json
+.session_config.json
+.archive/
+*.egg-info/
+.session_state.backup
+
+# Cleanup artifacts
+*.moved
+*.backup
+*.original
+*.old
+test_*.py  # Test files should be in tests/

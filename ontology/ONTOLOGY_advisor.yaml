@@ -1,0 +1,250 @@
+# ONTOLOGY: Advisor Archetype v1.0
+# SKOS-aligned concept definitions for risk assessment and strategic recommendations
+#
+# Archetype: advisor
+# Created: 2026-02-14
+# Author: private-aget-framework-AGET
+# Format: SKOS-inspired YAML (aget-framework convention)
+# Concepts: 6
+# Project: ARC-001 (Archetype Customization v3.5)
+
+apiVersion: aget.framework/v1
+kind: OntologySpec
+metadata:
+  name: advisor-archetype-ontology
+  version: 1.0.0
+  created: 2026-02-14
+  author: private-aget-framework-AGET
+  archetype: advisor
+  description: >
+    Formal vocabulary for advisor archetype agents. Defines concepts for
+    risk assessment, strategic recommendations, and decision support.
+  extends: ONTOLOGY_personal_ai_systems_v1.0.yaml
+
+# ============================================================================
+# CONCEPT SCHEME
+# ============================================================================
+
+conceptScheme:
+  uri: aget:ontology/advisor
+  prefLabel: Advisor Archetype Ontology
+  definition: >
+    A vocabulary for describing advisor agent capabilities including risk
+    assessment, strategy formulation, and recommendation delivery.
+  hasTopConcept:
+    - aget:archetype/advisor/Recommendation
+    - aget:archetype/advisor/Risk
+    - aget:archetype/advisor/Strategy
+  relatedScheme:
+    - aget:ontology/personal-ai-systems
+
+# ============================================================================
+# CONCEPTS
+# ============================================================================
+
+concepts:
+
+  # --------------------------------------------------------------------------
+  # Concept: Recommendation
+  # --------------------------------------------------------------------------
+  - id: ADV-001
+    uri: aget:archetype/advisor/Recommendation
+    prefLabel: Recommendation
+    altLabel:
+      - Advice
+      - Guidance
+      - Suggested_Action
+    definition: >
+      A proposed course of action based on analysis of situation, options,
+      and likely outcomes. The primary output of advisory work.
+    scopeNote: >
+      Recommendations should include rationale, alternatives considered,
+      and risk assessment. Quality depends on analytical rigor.
+    theoreticalBasis:
+      primary: Decision Analysis
+      source: Operations Research
+    broader: null
+    narrower: null
+    related:
+      - aget:archetype/advisor/Risk
+      - aget:archetype/advisor/Strategy
+      - aget:archetype/advisor/Option
+    inScheme: aget:ontology/advisor
+    cluster: Advisory Output
+
+  # --------------------------------------------------------------------------
+  # Concept: Risk
+  # --------------------------------------------------------------------------
+  - id: ADV-002
+    uri: aget:archetype/advisor/Risk
+    prefLabel: Risk
+    altLabel:
+      - Threat
+      - Vulnerability
+      - Uncertainty
+    definition: >
+      A potential negative outcome with associated probability and impact.
+      Risk assessment informs recommendations and contingency planning.
+    scopeNote: >
+      Risks are characterized by likelihood, impact, and mitigation options.
+      Risk tolerance varies by context and stakeholder.
+    theoreticalBasis:
+      primary: Risk Management
+      source: ISO 31000
+      reference: https://en.wikipedia.org/wiki/ISO_31000
+    broader: null
+    narrower: null
+    related:
+      - aget:archetype/advisor/Recommendation
+      - aget:archetype/advisor/Mitigation
+    enumValues:
+      - Low       # Minimal impact/likelihood
+      - Medium    # Moderate concern
+      - High      # Significant threat
+      - Critical  # Existential risk
+    inScheme: aget:ontology/advisor
+    cluster: Risk Assessment
+
+  # --------------------------------------------------------------------------
+  # Concept: Strategy
+  # --------------------------------------------------------------------------
+  - id: ADV-003
+    uri: aget:archetype/advisor/Strategy
+    prefLabel: Strategy
+    altLabel:
+      - Approach
+      - Plan
+      - Direction
+    definition: >
+      A high-level plan for achieving objectives, considering constraints,
+      resources, and competitive/environmental factors.
+    scopeNote: >
+      Strategy bridges current state and desired future state. Good strategy
+      accounts for uncertainty and enables adaptation.
+    theoreticalBasis:
+      primary: Strategic Management
+      source: Porter's Generic Strategies
+    broader: null
+    narrower: null
+    related:
+      - aget:archetype/advisor/Recommendation
+      - aget:archetype/advisor/Option
+    inScheme: aget:ontology/advisor
+    cluster: Strategy Formation
+
+  # --------------------------------------------------------------------------
+  # Concept: Option
+  # --------------------------------------------------------------------------
+  - id: ADV-004
+    uri: aget:archetype/advisor/Option
+    prefLabel: Option
+    altLabel:
+      - Alternative
+      - Choice
+      - Course_of_Action
+    definition: >
+      A possible course of action being evaluated. Options are compared
+      using criteria to inform recommendations.
+    scopeNote: >
+      Option analysis considers feasibility, desirability, and risk.
+      Multiple options enable informed decision-making.
+    theoreticalBasis:
+      primary: Decision Analysis
+      source: Multi-Criteria Decision Making
+    broader: null
+    narrower: null
+    related:
+      - aget:archetype/advisor/Recommendation
+      - aget:archetype/advisor/Criteria
+    inScheme: aget:ontology/advisor
+    cluster: Strategy Formation
+
+  # --------------------------------------------------------------------------
+  # Concept: Criteria
+  # --------------------------------------------------------------------------
+  - id: ADV-005
+    uri: aget:archetype/advisor/Criteria
+    prefLabel: Criteria
+    altLabel:
+      - Evaluation_Criteria
+      - Decision_Factors
+    definition: >
+      The factors used to evaluate and compare options. Criteria may be
+      weighted by importance.
+    scopeNote: >
+      Clear criteria enable objective comparison. Stakeholder input
+      shapes criteria selection and weighting.
+    theoreticalBasis:
+      primary: Multi-Criteria Decision Analysis
+      source: MCDM
+    broader: null
+    narrower: null
+    related:
+      - aget:archetype/advisor/Option
+      - aget:archetype/advisor/Recommendation
+    inScheme: aget:ontology/advisor
+    cluster: Strategy Formation
+
+  # --------------------------------------------------------------------------
+  # Concept: Mitigation
+  # --------------------------------------------------------------------------
+  - id: ADV-006
+    uri: aget:archetype/advisor/Mitigation
+    prefLabel: Mitigation
+    altLabel:
+      - Risk_Response
+      - Countermeasure
+      - Control
+    definition: >
+      Actions taken to reduce the probability or impact of a risk.
+      Mitigation strategies are part of risk management.
+    scopeNote: >
+      Mitigation options: avoid, transfer, mitigate, accept.
+      Cost of mitigation balanced against risk exposure.
+    theoreticalBasis:
+      primary: Risk Response
+      source: PMBOK Risk Management
+    broader: null
+    narrower: null
+    related:
+      - aget:archetype/advisor/Risk
+    enumValues:
+      - Avoid      # Eliminate the risk
+      - Transfer   # Shift to third party
+      - Mitigate   # Reduce likelihood/impact
+      - Accept     # Acknowledge and proceed
+    inScheme: aget:ontology/advisor
+    cluster: Risk Assessment
+
+# ============================================================================
+# RELATIONSHIPS
+# ============================================================================
+
+relationships:
+  - subject: aget:archetype/advisor/Recommendation
+    predicate: skos:related
+    object: aget:archetype/advisor/Risk
+    note: Recommendations consider risks
+
+  - subject: aget:archetype/advisor/Mitigation
+    predicate: skos:related
+    object: aget:archetype/advisor/Risk
+    note: Mitigation addresses risks
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+provenance:
+  project: ARC-001
+  created: 2026-02-14
+  author: private-aget-framework-AGET
+  methodology: Derived from advisor archetype ADVISOR_SPEC.md
+
+validation:
+  conceptCount: 6
+  clusters: 3
+  theoreticalGrounding: 100%
+  skosCompliance: partial
+
+# End of ONTOLOGY_advisor.yaml
