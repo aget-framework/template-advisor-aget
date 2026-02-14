@@ -1,13 +1,16 @@
 # AGET Skill Vocabulary
 
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Created**: 2026-02-10
-**Updated**: 2026-02-10
+**Updated**: 2026-02-14
 **Status**: production
+**Format**: Human-readable markdown (companion to SKOS ontology)
+**SKOS Version**: ONTOLOGY_skills.yaml (machine-readable, L482-compliant)
 
 This vocabulary defines terms specific to AGET Skills and their specifications.
+For formal SKOS-compliant definitions, see `ONTOLOGY_skills.yaml`.
 
-**Term Count**: 29 terms across 7 categories
+**Term Count**: 32 terms across 8 categories
 
 ---
 
@@ -62,7 +65,7 @@ This vocabulary defines terms specific to AGET Skills and their specifications.
 | Category | Description | Examples |
 |----------|-------------|----------|
 | Session | Wake-up, wind-down, save-state lifecycle | aget-wake-up, aget-wind-down |
-| Monitoring | Healthcheck, validation, status reporting | aget-check-evolution |
+| Monitoring | Healthcheck, validation, status reporting | aget-healthcheck-evolution |
 | Learning | Lesson recording, observation capture | aget-record-lesson |
 | Governance | Proposal, review, approval workflows | aget-propose-skill |
 | Planning | Project creation, project review | aget-review-project |
@@ -82,7 +85,7 @@ This vocabulary defines terms specific to AGET Skills and their specifications.
 - Read-only (never modifies files)
 - Threshold calibrated per agent archetype
 
-**Instances**: aget-check-evolution, aget-check-sessions, aget-check-kb
+**Instances**: aget-healthcheck-evolution, aget-healthcheck-sessions, aget-healthcheck-kb
 
 **Related**: Health_Status, Threshold
 
@@ -334,6 +337,50 @@ This vocabulary defines terms specific to AGET Skills and their specifications.
 **Location**: `.claude/skills/{name}/SKILL.md`
 
 **Related**: Skill_Implementation, AGET_Skill
+
+---
+
+## Governance Terms
+
+### Issue_Routing
+
+**Definition**: Determining correct destination repository for an issue based on agent type.
+
+**Characteristics**:
+- Private fleet agents → `gmelli/aget-aget`
+- Public/remote agents → `aget-framework/aget`
+- Based on path, version.json, or git remote detection
+
+**Related**: Content_Sanitization, L520
+
+---
+
+### Content_Sanitization
+
+**Definition**: Removing or redacting private information before filing to public repositories.
+
+**Patterns to sanitize**:
+- Private agent names (`private-*-aget`)
+- Internal repo references (`gmelli/*`)
+- Fleet size disclosures
+- Session references
+
+**Related**: Issue_Routing, L520
+
+---
+
+### Issue_Governance
+
+**Definition**: L520-compliant process for filing issues with correct routing and content handling.
+
+**Components**:
+1. Agent type detection
+2. Destination routing
+3. Content sanitization
+4. Template selection
+5. Validation before filing
+
+**Related**: Issue_Routing, Content_Sanitization, SKILL-040
 
 ---
 
