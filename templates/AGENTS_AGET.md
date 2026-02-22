@@ -160,7 +160,7 @@ AGET provides patterns in these categories:
 1. **Dogfooding**: AGET uses its own patterns
 2. **Backward Compatible**: Works with existing CLAUDE.md setups
 3. **Cross-Platform**: Works on Mac, Linux, Windows (with WSL)
-4. **AI-Agnostic**: Works with Claude, Cursor, Aider, Windsurf, etc.
+4. **AI-Agnostic**: Works with Claude Code, Codex CLI, Gemini CLI, and other CLI coding agents.
 5. **Version Tracking**: This file will be updated with new AGET versions
 
 ## Troubleshooting

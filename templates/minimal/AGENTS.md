@@ -2,7 +2,7 @@
 
 ## Agent Compatibility
 This configuration follows the AGENTS.md open-source standard for universal agent configuration.
-Works with Claude Code, Cursor, Aider, Windsurf, and other CLI coding agents.
+Works with Claude Code, Codex CLI, Gemini CLI, and other CLI coding agents.
 **Note**: CLAUDE.md is a symlink to this file for backward compatibility.
 
 ## Project Context
