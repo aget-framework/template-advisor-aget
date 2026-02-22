@@ -5,6 +5,23 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.6.0] - 2026-02-21 - "Infrastructure Maturation"
+
+### Added
+- Universal skill: `aget-studyup` (focused KB research before implementation)
+- Canonical script: `scripts/study_up.py`
+
+### Changed
+- Platform claims: "Claude Code, Codex CLI, Gemini CLI" (was "Claude Code, Cursor, Aider, Windsurf")
+- Version bump to v3.6.0
+- Migration history entry added
+
+### Notes
+- See aget/CHANGELOG.md [3.6.0] for framework changes
+- Part of Infrastructure Maturation release (observability, content integrity, ontology)
+
+---
+
 ## [3.5.0] - 2026-02-14 - "Archetype Customization"
 
 ### Added
