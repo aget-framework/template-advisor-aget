@@ -24,7 +24,7 @@ Usage:
     finally:
         guard.release_lock()
 
-CLI Compatibility: Works with Claude Code, Cursor, Aider, Windsurf, and any
+CLI Compatibility: Works with Claude Code, Codex CLI, Gemini CLI, and any
 Python-compatible CLI agent.
 
 Best Practices Sources:
