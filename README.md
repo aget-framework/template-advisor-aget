@@ -110,7 +110,7 @@ python3 -m pytest tests/ -v
 ## Learn More
 
 - **[AGET Framework](https://github.com/aget-framework/aget)** — Core framework documentation
-- **[Archetype Guide](https://github.com/aget-framework/aget/blob/main/docs/ARCHETYPE_GUIDE.md)** — All 12 archetypes explained
+- **[Archetype Guide](https://github.com/aget-framework/aget/blob/main/docs/GETTING_STARTED.md)** — All 12 archetypes explained
 - **[Getting Started](https://github.com/aget-framework/aget/blob/main/docs/GETTING_STARTED.md)** — Full onboarding guide
 
 ---
