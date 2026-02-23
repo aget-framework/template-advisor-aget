@@ -96,9 +96,9 @@ Mark in frontmatter:
 Replace `{domain}` with your agent's domain:
 
 ```bash
-# Example for a healthcare agent
-mkdir -p knowledge/healthcare/patterns
-mkdir -p knowledge/healthcare/heuristics
+# Example for a research agent
+mkdir -p knowledge/research/patterns
+mkdir -p knowledge/research/heuristics
 ```
 
 ### 2. Update AGENTS.md (Optional)
