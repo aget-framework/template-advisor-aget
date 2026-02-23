@@ -16,6 +16,8 @@ The Advisor archetype delivers **structured guidance** for decision-making. Unli
 
 **For evaluators**: If you need an AI that provides expert guidance with structured reasoning rather than ad-hoc suggestions, the Advisor archetype brings rigor to your decision support.
 
+**Domain knowledge that compounds**: Advisor agents build persistent understanding of your decision landscape — recurring risks, mitigation outcomes, and decision patterns. Unlike tools that start fresh each session, your agent accumulates advisory context that makes each risk assessment more calibrated and each recommendation more grounded.
+
 ---
 
 ## Skills
@@ -92,6 +94,7 @@ python3 -m pytest tests/ -v
 | **Recommendations** | Single suggestion | Multiple options with trade-offs |
 | **Confidence** | Implicit | Explicit confidence levels |
 | **Accountability** | Unclear | Advisory role clearly maintained |
+| **Domain memory** | Starts fresh each session | Accumulates advisory expertise over time |
 
 ---
 
