@@ -1,0 +1,511 @@
+# GATE_EXECUTION Specification v1.0
+#
+# Purpose: Formal specification for gate execution discipline within plans
+# Format: EARS (Easy Approach to Requirements Syntax)
+# Created: 2026-02-28
+# Based on: L42 (Gate Execution Discipline), L555 (Certainty-Bias Anti-Pattern),
+#           L552 (Spec-First Applies to Merge/Promotion)
+# Companion to: AGET_PROJECT_PLAN_SPEC v1.1, GATE_PLAN_SPEC v1.0
+
+spec:
+  id: SPEC-GATE-EXECUTION
+  version: 1.0.0
+  status: production
+  maturity: standard
+  format_version: "1.1"
+  system_name: "AGET Gate Execution System"
+  created: 2026-02-28
+  format: "EARS with controlled vocabulary"
+  scope: "Defines execution discipline for gates within project plans and gate plans"
+  audience: "Agents executing gated plans"
+
+  related_specifications:
+    - name: "AGET_PROJECT_PLAN_SPEC_v1.1.yaml"
+      relationship: "parent"
+      status: "production"
+      note: "Project plans contain gates governed by this spec"
+    - name: "GATE_PLAN_SPEC_v1.0.yaml"
+      relationship: "companion"
+      status: "production"
+      note: "Gate plans contain gates governed by this spec"
+    - name: "PROPAGATION_SCAN_SPEC_v1.0.yaml"
+      relationship: "references"
+      status: "production"
+      note: "Gate execution may trigger propagation scans"
+
+  foundation_patterns:
+    - id: "L42"
+      name: "Gate Execution Discipline"
+      purpose: "Execute only current gate, stop at boundaries, wait for GO"
+    - id: "L555"
+      name: "Certainty-Bias Anti-Pattern"
+      purpose: "Every state-changing gate must declare a spec basis"
+    - id: "L552"
+      name: "Spec-First Applies to Merge/Promotion"
+      purpose: "Spec-first applies universally, not just to greenfield creation"
+    - id: "L546"
+      name: "Cultural vs Structural Enforcement"
+      purpose: "Structural enforcement persists where cultural reminders fail"
+    - id: "L558"
+      name: "Plan Verification Gap"
+      purpose: "Template compliance does not equal factual accuracy"
+
+# ============================================================
+# Controlled Vocabulary (Gate Execution Domain)
+# ============================================================
+
+vocabulary:
+  Gate_Execution:
+    definition: "The process of working through a gate's deliverables while respecting boundaries and discipline rules"
+    characteristics:
+      - "Scoped: Only current gate deliverables"
+      - "Bounded: Stops at gate boundary"
+      - "Validated: Runs checks before presenting completion"
+      - "Approved: Requires explicit GO before next gate"
+
+  Gate_Boundary:
+    definition: "The point between consecutive gates where execution must pause for decision"
+    characteristics:
+      - "Hard stop: No slipping into next gate work"
+      - "Decision required: Explicit GO/NOGO"
+      - "Validation first: Checks run before presenting"
+
+  Gate_Completion_Sequence:
+    definition: "The 6-step sequence for properly completing a gate"
+    steps:
+      - "1. Execute gate deliverables"
+      - "2. Run validation checks"
+      - "3. Document completion"
+      - "4. Commit changes"
+      - "5. STOP and present decision point"
+      - "6. Wait for explicit GO before starting next gate"
+    based_on: "L42 (lines 39-45)"
+
+  Spec_Basis:
+    definition: "Declaration of which specification, L-doc, or standard justifies a gate's deliverables"
+    valid_sources:
+      - "Ratified decision (with date)"
+      - "Existing spec (with reference)"
+      - "New decision point (requires principal input)"
+    invalid_sources:
+      - "'The test defines it'"
+      - "'It is obvious'"
+      - "'We always do it this way'"
+      - "'I have learned from corrections'"
+    based_on: "L555 (lines 25-40)"
+
+  Gate_Overstepping:
+    definition: "Executing work belonging to a subsequent gate before receiving GO for current gate"
+    red_flags:
+      - "'While we are at it, let us also...'"
+      - "Starting next gate deliverables"
+      - "Assuming GO without asking"
+      - "Optimizing for speed over control"
+    based_on: "L42 (lines 80-84)"
+
+  Spec_First_Scope:
+    definition: "The set of artifact creation actions that require spec-first discipline"
+    includes:
+      - "Greenfield creation (new artifact)"
+      - "Merging 2+ lineages into one"
+      - "Promoting organic to template"
+      - "Major version bump (v1.x to v2.0)"
+      - "Adding features from multiple sources"
+    decision_test: "Am I creating an artifact that does not exist yet? If yes, spec-first applies."
+    based_on: "L552 (lines 26-33, 53-59)"
+
+  Self_Compliance:
+    definition: "Validating that a plan's own execution complies with the specs it produces"
+    purpose: "Prevents bootstrapping paradox where remediation plans inherit the gaps they fix"
+    based_on: "Bootstrapping paradox (discovered 2026-02-28)"
+
+  Validation_Checklist:
+    definition: "List of specific verification items executed before presenting gate completion"
+    characteristics:
+      - "Each item is binary (pass/fail)"
+      - "Executed before decision point"
+      - "Results reported with completion status"
+
+# ============================================================
+# Core Capabilities (EARS Format)
+# ============================================================
+
+capabilities:
+
+  # --- Gate Boundary Discipline ---
+
+  # CAP-GE-001: Gate Boundary Enforcement
+  CAP-GE-001:
+    pattern: ubiquitous
+    domain: execution
+    statement: "System SHALL execute only current gate deliverables and stop at gate boundary"
+    rationale: |
+      L42 establishes that gate boundaries are hard stops. Executing next-gate
+      work before receiving GO undermines the principal's decision authority
+      and causes scope creep.
+    validation:
+      - "No gate actions reference next gate deliverables"
+      - "Execution pauses at gate boundary"
+      - "No 'while we are at it' scope additions"
+    based_on: "L42 (lines 73-78)"
+
+  # CAP-GE-002: Gate Completion Sequence
+  CAP-GE-002:
+    pattern: event-driven
+    domain: execution
+    statement: "WHEN completing a gate, System SHALL follow the 6-step Gate_Completion_Sequence: execute deliverables, run validation, document completion, commit changes, present decision point, wait for GO"
+    rationale: |
+      The 6-step sequence ensures quality at each gate boundary and
+      prevents skipping validation or documentation steps.
+    validation:
+      - "All 6 steps executed in order"
+      - "Validation checks run before presenting completion"
+      - "Changes committed before decision point"
+      - "Explicit GO received before next gate starts"
+    based_on: "L42 (lines 39-45)"
+
+  # CAP-GE-003: Explicit GO Requirement
+  CAP-GE-003:
+    pattern: event-driven
+    domain: execution
+    statement: "WHEN reaching gate boundary, System SHALL wait for explicit GO signal from principal before starting next gate"
+    rationale: |
+      L42 establishes that assuming continuation is a gate discipline violation.
+      Even when the next gate seems obvious, principal must explicitly approve.
+    anti_patterns:
+      - "Assuming GO without asking"
+      - "Interpreting silence as approval"
+      - "Batching multiple gates without intermediate approval"
+    validation:
+      - "Each gate boundary has explicit GO/NOGO"
+      - "No gate starts without prior gate's GO"
+    based_on: "L42"
+
+  # CAP-GE-004: Gate Overstepping Detection
+  CAP-GE-004:
+    pattern: conditional
+    domain: execution
+    statement: "IF agent detects Gate_Overstepping red flags during execution THEN System SHALL stop, identify the boundary violation, and return to current gate scope"
+    rationale: |
+      Gate momentum is a trap. Red flags like 'while we are at it' indicate
+      scope creep into the next gate. Self-detection prevents violations.
+    red_flags:
+      - "'While we are at it, let us also...'"
+      - "Starting deliverables from gate N+1"
+      - "Optimizing for speed over decision control"
+    validation:
+      - "Red flag patterns documented in plan"
+      - "Agent stops when red flag detected"
+      - "Scope returns to current gate"
+    based_on: "L42 (lines 80-84)"
+
+  # --- Spec Basis Discipline ---
+
+  # CAP-GE-005: Spec Basis Requirement
+  CAP-GE-005:
+    pattern: ubiquitous
+    domain: compliance
+    statement: "System SHALL declare a Spec_Basis for every state-changing gate before executing deliverables"
+    rationale: |
+      L555 discovered that gate deliverables without spec basis default to
+      'obviously correct' assumptions. 75% of recent plans had zero spec-basis
+      declarations. Structural enforcement via mandatory field prevents this.
+    protocol:
+      - "1. IDENTIFY the spec basis — what authorizes this change?"
+      - "2. IF none exists, create a decision point (requires principal input)"
+      - "3. DOCUMENT in the gate's Spec Basis field"
+    validation:
+      - "Every gate has Spec Basis field populated before execution starts"
+      - "Spec basis references existing, resolvable artifacts"
+      - "No gate uses 'obvious' or 'common sense' as justification"
+    based_on: "L555 (lines 16, 20-23)"
+
+  # CAP-GE-006: Spec Basis Validation
+  CAP-GE-006:
+    pattern: event-driven
+    domain: compliance
+    statement: "WHEN executing gate deliverables, System SHALL verify that each deliverable aligns with the declared Spec_Basis"
+    rationale: |
+      Declaring a spec basis is necessary but not sufficient. The deliverables
+      must actually follow the referenced spec. Misalignment indicates either
+      wrong spec basis or wrong deliverable.
+    validation:
+      - "Each deliverable traceable to spec basis"
+      - "No deliverables contradict referenced spec"
+      - "Misalignment triggers decision point (which is source of truth?)"
+    based_on: "L555"
+
+  # --- Spec-First Scope ---
+
+  # CAP-GE-007: Universal Spec-First Rule
+  CAP-GE-007:
+    pattern: ubiquitous
+    domain: compliance
+    statement: "System SHALL apply spec-first discipline to all artifact creation including merges, promotions, and major version bumps"
+    rationale: |
+      L552 extended the spec-first rule beyond greenfield creation. A merge of
+      two files produces a NEW artifact requiring its own specification.
+      'Both lineages already work' does not exempt merged result from spec.
+    decision_test: "Am I creating an artifact that does not exist yet? If yes, spec-first applies."
+    validation:
+      - "Spec gate precedes implementation gate for all artifact types"
+      - "Merges have spec defining combined capability surface"
+      - "Promotions have spec defining template baseline"
+      - "Major version bumps have spec defining new contract"
+    anti_patterns:
+      - "'It is just a merge, not a new artifact'"
+      - "Spec in promotion gate (after implementation)"
+      - "'Both lineages already work, so no spec needed'"
+      - "Greenfield-only reading of spec-first rule"
+    based_on: "L552 (lines 22-23, 26-33, 53-59)"
+
+  # CAP-GE-008: Gate Ordering Constraint
+  CAP-GE-008:
+    pattern: ubiquitous
+    domain: compliance
+    statement: "System SHALL order gates so that specification precedes implementation for any gate that produces artifacts with existing spec standards"
+    ordering_pattern: "Spec gate, Validate gate, Implement gate, Verify gate"
+    rationale: |
+      Combining 'write spec + build artifact' in a single gate collapses the
+      spec-first principle. Separate gates ensure spec is reviewed and approved
+      before implementation begins.
+    validation:
+      - "Spec creation gates come before implementation gates"
+      - "No single gate both writes spec and implements artifact"
+      - "Gate ordering follows Spec-Validate-Implement-Verify pattern"
+    based_on: "L546, L552"
+
+  # --- Validation and Verification ---
+
+  # CAP-GE-009: Per-Gate Validation
+  CAP-GE-009:
+    pattern: ubiquitous
+    domain: verification
+    statement: "System SHALL define and execute validation checks for every gate before presenting completion"
+    rationale: |
+      Validation checks at each gate boundary catch errors early. L558 showed
+      that checklist compliance without actual execution creates false confidence.
+    components:
+      - "V-test block: Executable commands with expected output"
+      - "Validation checklist: Binary pass/fail items"
+      - "Regression check: Existing functionality unaffected"
+    validation:
+      - "Every gate has validation items defined"
+      - "Validation items are executable (not aspirational)"
+      - "Validation results recorded before presenting decision point"
+    based_on: "L558, L42"
+
+  # CAP-GE-010: V-Test Execution Recording
+  CAP-GE-010:
+    pattern: event-driven
+    domain: verification
+    statement: "WHEN executing gate V-tests, System SHALL record execution date, command, result, and pass/fail status"
+    rationale: |
+      V-tests without execution records are indistinguishable from V-tests
+      never run. Recording prevents rubber-stamped validation.
+    format: |
+      **Executed**: YYYY-MM-DD | command → result (PASS/FAIL)
+    validation:
+      - "V-test execution block exists after V-test definition"
+      - "Each V-test has recorded result"
+      - "No V-tests left unexecuted at gate completion"
+    based_on: "L558 (rubber-stamped checklist anti-pattern)"
+
+  # --- Self-Compliance ---
+
+  # CAP-GE-011: Self-Compliance Check
+  CAP-GE-011:
+    pattern: conditional
+    domain: compliance
+    statement: "IF a plan produces specs that govern plan structure THEN System SHALL validate the plan against its own output specs at final gate"
+    rationale: |
+      The bootstrapping paradox: a plan to fix verification gaps can itself
+      lack verification. Self-compliance ensures the plan eats its own dog food.
+    validation:
+      - "Final gate includes self-compliance deliverable"
+      - "Plan validated against specs it produced"
+      - "Gaps documented as known deviations with rationale"
+    based_on: "Bootstrapping paradox, L546"
+
+  # CAP-GE-012: Factual Claim Verification
+  CAP-GE-012:
+    pattern: event-driven
+    domain: verification
+    statement: "WHEN presenting gate completion to principal, System SHALL verify factual claims in completion report against ground truth"
+    rationale: |
+      L558 demonstrated plans can pass compliance checks while containing
+      factual inaccuracies. Gate completion reports inherit the same risk.
+      Verification before presentation catches stale or fabricated data.
+    validation:
+      - "Quantitative claims verified (counts, percentages, references)"
+      - "References resolve to existing artifacts"
+      - "Mismatches corrected before presenting"
+    based_on: "L558, CAP-PP-014"
+
+  # --- Decision Point Protocol ---
+
+  # CAP-GE-013: Decision Point Presentation
+  CAP-GE-013:
+    pattern: event-driven
+    domain: execution
+    statement: "WHEN presenting gate decision point, System SHALL include gate status, validation results, and specific GO/NOGO question"
+    rationale: |
+      Decision points with incomplete information force the principal to
+      ask follow-up questions. Complete presentation enables informed decisions.
+    presentation_structure:
+      - "Gate status: complete/incomplete with deliverable checklist"
+      - "Validation results: V-test outcomes and checklist status"
+      - "Decision question: Specific, answerable GO/NOGO"
+    validation:
+      - "Decision point includes all 3 components"
+      - "Question is specific (not 'should I continue?')"
+      - "Validation results are actual (not planned)"
+    based_on: "L42"
+
+  # CAP-GE-014: NOGO Handling
+  CAP-GE-014:
+    pattern: event-driven
+    domain: execution
+    statement: "WHEN principal signals NOGO at gate boundary, System SHALL stop execution, document the reason, and present options: rollback, replan, or abort"
+    rationale: |
+      NOGO decisions need structured handling. Without explicit options,
+      agents may attempt to fix forward without principal guidance.
+    options:
+      - "Rollback: Undo current gate's changes (per rollback strategy)"
+      - "Replan: Revise current or remaining gates based on feedback"
+      - "Abort: Stop plan execution entirely"
+    validation:
+      - "NOGO reason documented"
+      - "Options presented to principal"
+      - "No forward progress without principal direction"
+    based_on: "L42"
+
+# ============================================================
+# Quality Dimensions
+# ============================================================
+
+quality:
+
+  discipline:
+    definition: "Gates executed within boundaries without overstepping"
+    measurement: "Count of gate boundary violations during execution"
+    target: "0 boundary violations"
+
+  traceability:
+    definition: "Every gate has spec basis and deliverables trace to it"
+    measurement: "Count gates with populated Spec Basis field"
+    target: "100% of gates have spec basis"
+
+  verification:
+    definition: "Validation checks executed and recorded at every gate"
+    measurement: "Count gates with V-test execution records"
+    target: "100% of gates have recorded V-test results"
+
+  accuracy:
+    definition: "Factual claims in gate reports verified against ground truth"
+    measurement: "Count of unverified claims at presentation time"
+    target: "0 unverified claims"
+
+# ============================================================
+# Anti-Patterns
+# ============================================================
+
+anti_patterns:
+
+  - name: "Gate Momentum"
+    problem: "Starting next gate because current gate went well"
+    detection: "Agent begins gate N+1 work without explicit GO"
+    fix: "Stop at boundary, present decision point, wait for GO"
+    based_on: "L42"
+
+  - name: "Certainty-Bias Gate"
+    problem: "Gate deliverables with no spec basis"
+    detection: "Gate section has no Spec Basis field"
+    fix: "Add Spec Basis field; if no spec exists, create decision point"
+    based_on: "L555"
+
+  - name: "Greenfield-Only Spec-First"
+    problem: "Applying spec-first only to new artifacts, not merges/promotions"
+    detection: "Merge or promotion gate without preceding spec gate"
+    fix: "Add spec gate before implementation gate for all artifact types"
+    based_on: "L552"
+
+  - name: "Rubber-Stamped Validation"
+    problem: "Marking validation items [x] without executing them"
+    detection: "Validation checklist complete but no V-test execution records"
+    fix: "Execute V-tests and record results before marking complete"
+    based_on: "L558"
+
+  - name: "Bootstrapping Paradox"
+    problem: "Plan to fix verification gaps lacks its own verification"
+    detection: "Plan produces specs that govern plan structure but does not self-validate"
+    fix: "Add self-compliance check at final gate"
+
+# ============================================================
+# Conformance Validation
+# ============================================================
+
+conformance:
+
+  checklist:
+    boundary_discipline:
+      - "[ ] Each gate executed within its declared scope"
+      - "[ ] No gate overstepping detected"
+      - "[ ] Explicit GO received before each gate transition"
+    spec_basis:
+      - "[ ] Every gate has Spec Basis field"
+      - "[ ] Spec basis references resolve to existing artifacts"
+      - "[ ] No 'obvious' or 'common sense' justifications"
+    spec_first:
+      - "[ ] Spec gates precede implementation gates"
+      - "[ ] Merges/promotions have spec-first treatment"
+      - "[ ] Gate ordering follows Spec-Validate-Implement-Verify"
+    validation:
+      - "[ ] V-tests defined per gate"
+      - "[ ] V-test execution recorded with date and result"
+      - "[ ] Factual claims verified before presenting"
+    self_compliance:
+      - "[ ] Plan validated against own output specs (if applicable)"
+
+# ============================================================
+# Version History
+# ============================================================
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-02-28"
+    changes: "Initial specification formalizing gate execution discipline"
+    capabilities: "14 capabilities (CAP-GE-001 through CAP-GE-014)"
+    based_on:
+      - "L42: Gate Execution Discipline (structural layer)"
+      - "L555: Certainty-Bias Anti-Pattern (content layer)"
+      - "L552: Spec-First Applies to Merge/Promotion (scope layer)"
+      - "L546: Cultural vs Structural Enforcement"
+      - "L558: Plan Verification Gap"
+      - "AGET_PROJECT_PLAN_SPEC v1.1 (parent)"
+      - "GATE_PLAN_SPEC v1.0 (companion)"
+      - "Bootstrapping paradox (discovered 2026-02-28)"
+
+# ============================================================
+# Notes
+# ============================================================
+
+notes: |
+  This specification formalizes gate execution discipline from three L-docs:
+
+  Three-layer discipline model:
+  1. L42 (Structural): Gates have hard boundaries; stop and wait for GO
+  2. L555 (Content): Every state change requires spec basis; no exemptions
+  3. L552 (Scope): Spec-first applies to ALL artifact creation types
+
+  Key innovations:
+  - Gate Completion Sequence (CAP-GE-002): 6-step protocol from L42
+  - Gate Overstepping Detection (CAP-GE-004): Self-detection of red flags
+  - Universal Spec-First (CAP-GE-007): Extended beyond greenfield
+  - Self-Compliance (CAP-GE-011): Bootstrapping paradox prevention
+  - V-Test Recording (CAP-GE-010): Prevents rubber-stamped validation
+  - NOGO Handling (CAP-GE-014): Structured options for failed gates
+
+  This spec does NOT define gate plan structure (see GATE_PLAN_SPEC v1.0)
+  or project plan structure (see AGET_PROJECT_PLAN_SPEC v1.1). It governs
+  how gates are executed regardless of plan type.

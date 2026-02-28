@@ -1,0 +1,647 @@
+# GATE_PLAN Specification v1.0
+#
+# Purpose: Formal specification for gate-structured tactical plans (<2 weeks, 2-7 gates)
+# Format: EARS (Easy Approach to Requirements Syntax)
+# Created: 2026-02-28
+# Based on: L42 (Gate Execution Discipline), L104 (Gate Sizing Heuristic),
+#           L275 (Multi-Gate Execution Protocol), GATE_PLAN_TEMPLATE v1.0
+# Parent spec: AGET_PROJECT_PLAN_SPEC v1.1 (gate plans are tactical subset)
+
+spec:
+  id: SPEC-GATE-PLAN
+  version: 1.0.0
+  status: production
+  maturity: standard
+  format_version: "1.1"
+  system_name: "AGET Gate Plan System"
+  created: 2026-02-28
+  format: "EARS with controlled vocabulary"
+  scope: "Defines structure and requirements for AGET gate plans"
+  audience: "Agents creating gate-structured tactical plans for substantial changes"
+
+  related_specifications:
+    - name: "AGET_PROJECT_PLAN_SPEC_v1.1.yaml"
+      relationship: "parent"
+      status: "production"
+      note: "Gate plans are tactical subset; project plans are strategic superset"
+    - name: "GATE_EXECUTION_SPEC_v1.0.yaml"
+      relationship: "companion"
+      status: "production"
+      note: "Governs execution discipline within gates"
+    - name: "PROPAGATION_SCAN_SPEC_v1.0.yaml"
+      relationship: "references"
+      status: "production"
+      note: "Gate plans with fleet-wide impact require propagation scan"
+
+  foundation_patterns:
+    - id: "L42"
+      name: "Gate Execution Discipline"
+      purpose: "Execute only current gate, stop at boundaries, wait for GO"
+    - id: "L104"
+      name: "Gate Sizing Heuristic"
+      purpose: "Match gate count to task complexity"
+    - id: "L275"
+      name: "Multi-Gate Execution Protocol"
+      purpose: "Risk-based gate batching for phased execution"
+    - id: "L551"
+      name: "Due Diligence Process Compliance"
+      purpose: "Plans need process compliance checklist"
+    - id: "L554"
+      name: "Universal Rollback Gap"
+      purpose: "Template slots enforce content that cultural norms cannot"
+    - id: "L555"
+      name: "Certainty-Bias Anti-Pattern"
+      purpose: "Every gate must declare what spec justifies its deliverables"
+    - id: "L558"
+      name: "Plan Verification Gap"
+      purpose: "Template compliance does not equal factual accuracy"
+
+# ============================================================
+# Controlled Vocabulary (Gate Plan Domain)
+# ============================================================
+
+vocabulary:
+  Gate_Plan:
+    definition: "Tactical planning artifact for substantial changes requiring gated execution"
+    characteristics:
+      - "Duration: <2 weeks"
+      - "Complexity: 2-7 gates"
+      - "Tactical: Advances specific feature, fix, or improvement"
+      - "Gated: Decision points with GO/NOGO between gates"
+    relationships:
+      - "Contains: Planning_Summary, Gate_Sequence, Risk_Assessment, Success_Criteria"
+      - "Produces: Deliverables, optionally Learning_Documents"
+      - "Child of: Aget_Project_Plan (may be used within a project phase)"
+    anti_patterns:
+      - "Using gate plan for 2+ week strategic work (use Aget_Project_Plan instead)"
+      - "Using gate plan for 1-hour trivial tasks (no gating needed)"
+      - "Gate plan without gate philosophy rationale"
+
+  Planning_Summary:
+    definition: "Opening section declaring task overview, scope, and gate philosophy"
+    components:
+      - "Task_Overview: What and why"
+      - "Scope_Decision: Included and explicitly excluded items"
+      - "Gate_Philosophy: Why gates are needed, how many, and sizing rationale"
+
+  Gate_Philosophy:
+    definition: "Justification for using gated execution and the chosen gate count"
+    characteristics:
+      - "Explains why gates are needed (irreversibility, risk, coordination)"
+      - "Declares gate sizing: Small (2-3), Medium (4-6), Large (7+)"
+      - "Provides rationale for chosen count"
+    based_on: "L104 (Gate Sizing Heuristic)"
+
+  Gate:
+    definition: "Decision point in execution path requiring explicit approval before proceeding"
+    components:
+      - "Objective: What this gate accomplishes (specific, measurable)"
+      - "Duration: Estimated hours"
+      - "Actions: Numbered list with checkboxes"
+      - "Validation_Checklist: Specific verification items"
+      - "Decision_Point: GO/NOGO question"
+      - "Spec_Basis: What spec/L-doc justifies deliverables (v1.0)"
+    relationships:
+      - "Preceded_by: Previous gate (except Gate 0)"
+      - "Followed_by: Next gate (requires explicit GO)"
+
+  Decision_Point:
+    definition: "Explicit GO/NOGO question at gate boundary"
+    characteristics:
+      - "Phrased as specific question"
+      - "Requires explicit answer before proceeding"
+      - "NOGO triggers: rollback, replanning, or abort"
+    based_on: "L42 (Gate Execution Discipline)"
+
+  Validation_Checklist:
+    definition: "List of specific verification items per gate"
+    characteristics:
+      - "Each item is binary (pass/fail)"
+      - "Includes regression check where applicable"
+      - "Executed before presenting decision point"
+
+  Scope_Decision:
+    definition: "Declaration of what is included and explicitly excluded"
+    components:
+      - "Included: Items in scope for this plan"
+      - "Explicitly_Excluded: Items deliberately excluded with reason"
+
+  Spec_Basis:
+    definition: "Declaration of which specification, L-doc, or standard justifies a gate's deliverables"
+    characteristics:
+      - "Required per gate"
+      - "References specific spec IDs, L-doc numbers, or template versions"
+      - "Prevents certainty-bias (L555)"
+    based_on: "L555, CAP-PP-013"
+
+  Pre_Submission_Verification:
+    definition: "Checkpoint where factual claims are verified against ground truth before presenting"
+    characteristics:
+      - "Required before presenting plan to principal"
+      - "Each claim mapped to verification command"
+      - "Result and match status recorded"
+    based_on: "L558, CAP-PP-014"
+
+  Rollback_Strategy:
+    definition: "Documented procedure for undoing gate operations if they fail"
+    characteristics:
+      - "Required when gate involves irreversible operations"
+      - "Per-gate rollback procedure and verification command"
+    based_on: "L554, CAP-PP-015"
+
+# ============================================================
+# Core Capabilities (EARS Format)
+# ============================================================
+
+capabilities:
+
+  # --- Structure and Planning ---
+
+  # CAP-GP-001: Gate Plan Structure
+  CAP-GP-001:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL structure every Gate_Plan with Planning_Summary, Gate_Sequence, Gate_Execution_Discipline, Process_Compliance_Checklist, Risk_Assessment, Success_Criteria, and Post_Completion sections"
+    rationale: "Consistent structure ensures completeness and enables cross-plan comparison"
+    validation:
+      - "Gate plan contains all 7 required sections"
+      - "No sections skipped or deferred"
+    based_on: "GATE_PLAN_TEMPLATE v1.0"
+
+  # CAP-GP-002: Planning Summary
+  CAP-GP-002:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL include Task_Overview, Scope_Decision, and Gate_Philosophy in every Gate_Plan Planning_Summary"
+    rationale: "Planning summary establishes context before gate details"
+    validation:
+      - "Task Overview answers what and why"
+      - "Scope Decision lists included and explicitly excluded items"
+      - "Gate Philosophy explains why gates are needed and declares sizing"
+    based_on: "GATE_PLAN_TEMPLATE v1.0"
+
+  # CAP-GP-003: Gate Sizing
+  CAP-GP-003:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL declare gate sizing category and rationale in Gate_Philosophy section"
+    rationale: "L104 establishes that gate count should match complexity; declaring rationale prevents arbitrary sizing"
+    sizing_categories:
+      small: "2-3 gates — low risk, straightforward"
+      medium: "4-6 gates — moderate risk or multi-step"
+      large: "7+ gates — high risk, irreversible operations, broad impact"
+    heuristic: "Baseline 2-3, add for: irreversibility (+2), broad impact (+2), high complexity (+2)"
+    validation:
+      - "Gate Philosophy declares sizing category"
+      - "Sizing rationale references task characteristics"
+      - "Gate count matches declared category"
+    based_on: "L104 (Gate Sizing Heuristic)"
+
+  # --- Per-Gate Structure ---
+
+  # CAP-GP-004: Gate Structure
+  CAP-GP-004:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL structure each Gate with Objective, Duration, Actions, Validation_Checklist, and Decision_Point"
+    rationale: "Consistent gate structure enables clear execution and decision-making"
+    validation:
+      - "Every gate has Objective field"
+      - "Every gate has Duration estimate"
+      - "Every gate has numbered Actions with checkboxes"
+      - "Every gate has Validation Checklist"
+      - "Every gate has Decision Point (except final gate which has COMPLETE)"
+    based_on: "GATE_PLAN_TEMPLATE v1.0, L42"
+
+  # CAP-GP-005: Gate 0 Planning Gate
+  CAP-GP-005:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL include Gate 0 as planning and scope decision gate in every Gate_Plan"
+    rationale: "Gate 0 establishes scope lock and gate structure before execution begins"
+    gate_0_actions:
+      - "Create gate plan"
+      - "Identify decision points"
+      - "Size each gate"
+    validation:
+      - "Gate 0 exists"
+      - "Gate 0 objective includes scope definition"
+      - "Gate 0 exit criteria includes 'scope locked, gates designed'"
+    based_on: "GATE_PLAN_TEMPLATE v1.0"
+
+  # CAP-GP-006: Final Validation Gate
+  CAP-GP-006:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL include a final gate for validation, documentation, and completion in every Gate_Plan"
+    rationale: "Final gate ensures all deliverables integrate and learning is captured"
+    final_gate_actions:
+      - "End-to-end validation"
+      - "Documentation update"
+      - "Learning capture (if applicable)"
+      - "Announce completion"
+    validation:
+      - "Final gate exists with validation objective"
+      - "Final gate checks all previous gate deliverables"
+      - "Final gate includes learning capture"
+    based_on: "GATE_PLAN_TEMPLATE v1.0"
+
+  # --- Execution Discipline ---
+
+  # CAP-GP-007: Gate Execution Discipline
+  CAP-GP-007:
+    pattern: ubiquitous
+    domain: execution
+    statement: "System SHALL execute only current gate deliverables, stop at gate boundary, run validation checks, and wait for explicit GO before starting next gate"
+    rationale: "L42 establishes that gate discipline prevents scope creep and ensures quality"
+    red_flags:
+      - "'While we are at it, let us also...' — likely next gate work"
+      - "Optimizing for speed over control"
+      - "Assuming continuation without explicit GO"
+    validation:
+      - "Gate plan includes L42 discipline section"
+      - "Each gate boundary has explicit decision point"
+      - "No gate actions reference next gate deliverables"
+    based_on: "L42 (Gate Execution Discipline)"
+
+  # CAP-GP-008: Decision Point Protocol
+  CAP-GP-008:
+    pattern: event-driven
+    domain: execution
+    statement: "WHEN reaching gate boundary, System SHALL present completion status, validation results, and decision point question before proceeding"
+    rationale: "Decision points ensure principal maintains control at every gate boundary"
+    decision_point_structure:
+      - "Gate status: complete/incomplete"
+      - "Validation checklist results"
+      - "Specific GO/NOGO question"
+    validation:
+      - "Every non-final gate has Decision Point field"
+      - "Decision point is phrased as specific question"
+      - "Decision point includes GO/NOGO options"
+    based_on: "L42"
+
+  # --- Compliance and Verification ---
+
+  # CAP-GP-009: Process Compliance Checklist
+  CAP-GP-009:
+    pattern: ubiquitous
+    domain: compliance
+    statement: "System SHALL include Process_Compliance_Checklist verifying gate structure against mandatory framework patterns"
+    rationale: "L551 discovered that plans without compliance checklists skip process requirements"
+    checklist_items:
+      - "Spec precedes implementation? (L533)"
+      - "Gate ordering follows Spec-Validate-Implement-Verify? (L546)"
+      - "Propagation gate included if fleet-wide? (L541/L328)"
+      - "Cross-portfolio security assessed if multi-agent? (L155)"
+      - "V-tests defined per gate? (L370)"
+      - "Fleet coordination formalized if cross-agent? (L100)"
+      - "Rollback strategy documented if irreversible? (L554)"
+      - "Closure checklist present? (L463)"
+    validation:
+      - "Process Compliance Checklist section exists"
+      - "Each applicable check marked with status"
+      - "N/A items include rationale"
+    based_on: "L551 (Due Diligence Process Compliance)"
+
+  # CAP-GP-010: Spec Basis per Gate
+  CAP-GP-010:
+    pattern: ubiquitous
+    domain: compliance
+    statement: "System SHALL declare a Spec_Basis for every Gate in a Gate_Plan"
+    rationale: |
+      Inherited from CAP-PP-013. Gate plans are equally susceptible to
+      certainty-bias: gate deliverables without spec basis default to
+      'obviously correct' assumptions.
+    validation:
+      - "Every gate section contains a 'Spec Basis:' field"
+      - "Field references at least one existing spec, L-doc, or template"
+      - "References resolve (named artifacts exist)"
+    anti_patterns:
+      - "Gate with deliverables but no spec basis"
+      - "'Common sense' or 'obvious' as justification"
+    based_on: "L555, CAP-PP-013"
+
+  # CAP-GP-011: Pre-Submission Verification
+  CAP-GP-011:
+    pattern: event-driven
+    domain: compliance
+    statement: "WHEN presenting Gate_Plan to principal, System SHALL verify factual claims against ground truth"
+    rationale: |
+      Inherited from CAP-PP-014. Gate plans contain factual claims
+      (effort estimates, risk assessments, dependency references) that
+      can be stale or inaccurate. Verification before presentation
+      catches errors.
+    components:
+      - "Verify quantitative claims (counts, percentages, references)"
+      - "Verify dependency references resolve"
+      - "Correct mismatches before presenting"
+    validation:
+      - "Factual claims verified before presenting to principal"
+      - "Mismatches corrected or noted"
+    based_on: "L558, CAP-PP-014"
+
+  # --- Risk and Recovery ---
+
+  # CAP-GP-012: Risk Assessment
+  CAP-GP-012:
+    pattern: ubiquitous
+    domain: risk
+    statement: "System SHALL identify risks with impact, mitigation, and contingency for every Gate_Plan"
+    rationale: "Risk assessment enables proactive prevention and reduces gate failure"
+    risk_structure:
+      - "Description: What could go wrong"
+      - "Impact: Effect if occurs"
+      - "Mitigation: How to prevent"
+      - "Contingency: Rollback plan if needed"
+    validation:
+      - "Risk Assessment section exists"
+      - "At least 1 risk identified (gate plans are simpler than project plans)"
+      - "High-impact risks have mitigation and contingency"
+    based_on: "CAP-PP-008, GATE_PLAN_TEMPLATE v1.0"
+
+  # CAP-GP-013: Rollback Strategy
+  CAP-GP-013:
+    pattern: conditional
+    domain: risk
+    statement: "IF Gate_Plan contains gates with irreversible operations THEN System SHALL include Rollback_Strategy section with per-gate rollback procedure and verification"
+    rationale: |
+      Inherited from CAP-PP-015. L554 found 100% of plans lacked rollback.
+      Gate plans involving file modifications, deployments, or state mutations
+      need explicit rollback procedures.
+    components:
+      - "Rollback Strategy section (dedicated)"
+      - "Table columns: Gate, Risk Level, Rollback Procedure, Verification"
+      - "One row per gate with Medium or High risk"
+      - "N/A permitted only with explicit rationale"
+    validation:
+      - "Rollback Strategy section present when plan has irreversible ops"
+      - "Every High/Medium risk gate has rollback row"
+      - "Rollback procedures are specific commands"
+      - "Verification column has executable check"
+    based_on: "L554, CAP-PP-015"
+
+  # --- Success and Completion ---
+
+  # CAP-GP-014: Success Criteria
+  CAP-GP-014:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL define measurable Success_Criteria and Quality_Bar for every Gate_Plan"
+    rationale: "Success criteria enable objective completion assessment"
+    components:
+      - "Overall Objectives: Specific measurable outcomes (checkboxes)"
+      - "Quality Bar: Target (done well) and Minimum (acceptable)"
+    validation:
+      - "Success Criteria section exists"
+      - "At least 2 measurable objectives defined"
+      - "Quality Bar has both Target and Minimum"
+    based_on: "CAP-PP-007, GATE_PLAN_TEMPLATE v1.0"
+
+  # CAP-GP-015: Post-Completion
+  CAP-GP-015:
+    pattern: event-driven
+    domain: planning
+    statement: "WHEN completing Gate_Plan, System SHALL capture learnings and document follow-up work"
+    rationale: "Post-completion prevents learning loss and orphaned follow-up items"
+    components:
+      - "Learning Capture: Create L-doc if generalizable pattern revealed"
+      - "Follow-Up Work: Enhancements or tasks deferred for later"
+    validation:
+      - "Post-Completion section exists"
+      - "Learning capture decision documented (created L-doc or 'no generalizable pattern')"
+      - "Follow-up work listed or 'none identified'"
+    based_on: "CAP-PP-010, GATE_PLAN_TEMPLATE v1.0"
+
+  # CAP-GP-016: Scope Exclusion Tracking
+  CAP-GP-016:
+    pattern: event-driven
+    domain: compliance
+    statement: "WHEN declaring items Explicitly_Excluded in Scope_Decision, System SHALL document reason for each exclusion"
+    rationale: |
+      Lighter version of CAP-PP-016 (Out-of-Scope Tracking). Gate plans
+      use 'Explicitly Excluded' with reasons rather than full tracking
+      tables, since gate plans are shorter-lived and lower-risk than
+      project plans.
+    validation:
+      - "Each excluded item has a reason"
+      - "Significant excluded items reference follow-up (issue or plan)"
+    anti_patterns:
+      - "Excluded items with no reason"
+      - "Excluding critical items without follow-up reference"
+    based_on: "L274, CAP-PP-016"
+
+# ============================================================
+# Differentiation from Aget_Project_Plan
+# ============================================================
+
+differentiation:
+  gate_plan_vs_project_plan:
+    gate_plan:
+      duration: "<2 weeks"
+      complexity: "2-7 gates"
+      scope: "Single substantial change (tactical)"
+      structure: "7 sections"
+      success_framework: "Success Criteria + Quality Bar"
+      risk_minimum: "1 risk"
+      learning: "Optional (if pattern revealed)"
+    project_plan:
+      duration: "2+ weeks"
+      complexity: "10+ gates across multiple phases"
+      scope: "Multi-phase strategic initiative"
+      structure: "8 parts (OKR framework)"
+      success_framework: "OKR with Key Results and Verification Tests"
+      risk_minimum: "3 risks"
+      learning: "Required (minimum 1 L-doc)"
+  selection_guide: |
+    Use Gate_Plan when:
+    - Task is <2 weeks
+    - Single feature, fix, or improvement
+    - 2-7 gates sufficient
+    - No formal OKR framework needed
+
+    Use Aget_Project_Plan when:
+    - Task is 2+ weeks
+    - Multi-phase strategic initiative
+    - 10+ gates across phases
+    - OKR framework with measurable Key Results needed
+
+# ============================================================
+# Quality Dimensions
+# ============================================================
+
+quality:
+
+  completeness:
+    definition: "All 7 sections present, no sections skipped"
+    measurement: "Count sections, verify all exist"
+    target: "7/7 sections (100%)"
+
+  actionability:
+    definition: "Gates have specific actions with deliverables, not vague statements"
+    measurement: "Review gate actions, verify each has concrete deliverable"
+    target: "No vague gates"
+
+  discipline:
+    definition: "Gate boundaries enforced with decision points"
+    measurement: "Every non-final gate has Decision Point"
+    target: "100% of non-final gates have decision points"
+
+  traceability:
+    definition: "Every gate declares spec basis"
+    measurement: "Count gates with Spec_Basis field"
+    target: "100% of gates have spec basis"
+
+# ============================================================
+# Anti-Patterns
+# ============================================================
+
+anti_patterns:
+
+  - name: "Ungated Substantial Change"
+    problem: "Performing substantial multi-step change without gate structure"
+    detection: "Multi-file operations, structural changes, or irreversible ops without plan"
+    fix: "Create gate plan with appropriate sizing"
+    based_on: "L42"
+
+  - name: "Over-Gated Trivial Task"
+    problem: "Using 5+ gates for a simple 2-hour task"
+    detection: "Gate count exceeds task complexity"
+    fix: "Reduce to 2-3 gates or use simpler approach"
+    based_on: "L104"
+
+  - name: "Gate Boundary Violation"
+    problem: "Slipping into next gate work before current gate is approved"
+    detection: "'While we are at it' pattern; actions from gate N+1 in gate N"
+    fix: "Stop at boundary, present decision point, wait for GO"
+    based_on: "L42"
+
+  - name: "Missing Gate Philosophy"
+    problem: "Gate plan without explanation of why gates are needed"
+    detection: "No Gate Philosophy section or empty rationale"
+    fix: "Add Gate Philosophy with sizing category and rationale"
+
+  - name: "Certainty-Bias Gate"
+    problem: "Gate deliverables with no spec basis"
+    detection: "Gate section has no 'Spec Basis:' field"
+    fix: "Add Spec Basis field referencing spec, L-doc, or template"
+    based_on: "L555, CAP-GP-010"
+
+# ============================================================
+# Success Patterns
+# ============================================================
+
+success_patterns:
+
+  - name: "Right-Sized Gates"
+    description: "Gate count matches task complexity per L104 heuristic"
+    when: "Designing gate structure"
+    how: "Baseline 2-3, add for irreversibility/impact/complexity"
+    benefit: "Neither over-controlled nor under-controlled"
+    based_on: "L104"
+
+  - name: "Scope Lock at Gate 0"
+    description: "Lock scope before execution begins"
+    when: "Gate 0 planning"
+    how: "Declare included/excluded items, get principal approval"
+    benefit: "Prevents scope creep during execution"
+
+  - name: "Validation Before Decision"
+    description: "Run validation checklist before presenting decision point"
+    when: "At every gate boundary"
+    how: "Execute all validation items, report results with decision point"
+    benefit: "Ensures quality at every checkpoint"
+
+  - name: "Spec Basis Declaration"
+    description: "Declare spec basis for every gate before execution"
+    when: "Designing gate deliverables"
+    how: "Add 'Spec Basis: [refs]' field after deliverables"
+    benefit: "Prevents certainty-bias, makes assumptions explicit"
+    based_on: "L555"
+
+# ============================================================
+# Template Reference
+# ============================================================
+
+template:
+  location: ".aget/templates/GATE_PLAN_TEMPLATE.md"
+  version: "1.0"
+  format: "Markdown with 7-section structure"
+  usage: "Copy template, fill in task-specific details"
+  compliance_gaps:
+    note: "Template predates GATE_PLAN_SPEC v1.0. Known gaps documented below."
+    gaps:
+      - "No Spec Basis field per gate (CAP-GP-010)"
+      - "No Pre-Submission Verification guidance (CAP-GP-011)"
+    remediation: "Template update planned as follow-on work"
+
+# ============================================================
+# Conformance Validation
+# ============================================================
+
+conformance:
+
+  checklist:
+    structure:
+      - "[ ] All 7 sections present"
+      - "[ ] Planning Summary has Task Overview, Scope Decision, Gate Philosophy"
+      - "[ ] Gate 0 exists with scope definition"
+      - "[ ] Final gate exists with validation and learning capture"
+      - "[ ] Gate sizing declared with rationale"
+    per_gate:
+      - "[ ] Objective field present"
+      - "[ ] Duration estimate present"
+      - "[ ] Actions list with checkboxes"
+      - "[ ] Validation Checklist present"
+      - "[ ] Decision Point present (except final gate)"
+      - "[ ] Spec Basis field present (CAP-GP-010)"
+    compliance:
+      - "[ ] Process Compliance Checklist completed (CAP-GP-009)"
+      - "[ ] Risk Assessment present (CAP-GP-012)"
+      - "[ ] Rollback Strategy present if irreversible ops (CAP-GP-013)"
+      - "[ ] Success Criteria with Quality Bar (CAP-GP-014)"
+      - "[ ] Post-Completion section present (CAP-GP-015)"
+
+# ============================================================
+# Version History
+# ============================================================
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-02-28"
+    changes: "Initial specification based on GATE_PLAN_TEMPLATE v1.0"
+    capabilities: "16 capabilities (CAP-GP-001 through CAP-GP-016)"
+    based_on:
+      - "L42: Gate Execution Discipline"
+      - "L104: Gate Sizing Heuristic"
+      - "L275: Multi-Gate Execution Protocol"
+      - "L551: Due Diligence Process Compliance"
+      - "L554: Universal Rollback Gap"
+      - "L555: Certainty-Bias Anti-Pattern"
+      - "L558: Plan Verification Gap"
+      - "GATE_PLAN_TEMPLATE v1.0"
+      - "AGET_PROJECT_PLAN_SPEC v1.1 (parent spec)"
+
+# ============================================================
+# Notes
+# ============================================================
+
+notes: |
+  This specification formalizes GATE_PLAN_TEMPLATE.md into EARS format.
+
+  Key design decisions:
+  - 16 capabilities (vs 17 in parent PROJECT_PLAN_SPEC) — gate plans are simpler
+  - Lighter requirements where appropriate (1 risk vs 3, optional learning vs required)
+  - Inherits L555/L558/L554 enforcement from parent spec (CAP-GP-010/011/013)
+  - Scope exclusion tracking is lighter than project plan out-of-scope tracking
+  - No OKR framework (gate plans use Success Criteria instead)
+  - No hypothesis section (gate plans rarely test hypotheses)
+
+  Relationship to parent spec:
+  - CAP-GP-010 inherits from CAP-PP-013 (Spec Basis)
+  - CAP-GP-011 inherits from CAP-PP-014 (Pre-Submission Verification)
+  - CAP-GP-013 inherits from CAP-PP-015 (Rollback Strategy)
+  - CAP-GP-016 inherits from CAP-PP-016 (Out-of-Scope Tracking, lighter version)
+
+  Template compliance: GATE_PLAN_TEMPLATE v1.0 predates this spec.
+  Known gaps: No Spec Basis field, no Pre-Submission Verification section.
+  Template update tracked as follow-on work.

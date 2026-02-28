@@ -1,0 +1,862 @@
+# AGET Project Plan Specification v1.1
+#
+# Purpose: Formal specification for long-running, multi-phase strategic initiatives
+# Format: EARS (Easy Approach to Requirements Syntax)
+# Created: 2025-11-22
+# Updated: 2026-02-28
+# Based on: L274 (OKR-Driven Initiation), L275 (Multi-Gate Protocol), PROJECT_PLAN_TEMPLATE v1.0
+# v1.1 additions: L554 (Rollback), L555 (Spec Basis), L557 (Propagation), L558 (Pre-Submission Verification), L274 (Out-of-Scope Tracking)
+
+spec:
+  id: SPEC-AGET-PROJECT-PLAN
+  version: 1.1.0
+  status: production
+  maturity: standard
+  format_version: "1.1"
+  system_name: "AGET Project Plan System"
+  created: 2025-11-22
+  updated: 2026-02-28
+  supersedes: "AGET_PROJECT_PLAN_SPEC_v1.0.yaml"
+  format: "EARS with controlled vocabulary"
+  scope: "Defines structure and requirements for AGET project plans"
+  audience: "Agents creating multi-phase strategic initiatives"
+
+  related_specifications:
+    - name: "GATE_EXECUTION_SPEC_v1.0.yaml"
+      relationship: "uses"
+      status: "production"
+    - name: "SESSION_PROTOCOL_SPEC_v1.0.yaml"
+      relationship: "references"
+      status: "planned"
+    - name: "GATE_PLAN_SPEC_v1.0.yaml"
+      relationship: "companion"
+      status: "production"
+
+  foundation_patterns:
+    - id: "L274"
+      name: "OKR-Driven Project Initiation"
+      purpose: "Start projects with clear objectives and measurable results"
+    - id: "L275"
+      name: "Multi-Gate Execution Protocol"
+      purpose: "Risk-based gate batching for phased execution"
+    - id: "L42"
+      name: "Gate Execution Discipline"
+      purpose: "Execute only current gate, stop at boundaries"
+    - id: "L104"
+      name: "Gate Sizing Heuristic"
+      purpose: "Match gate count to task complexity"
+    - id: "L554"
+      name: "Universal Rollback Gap"
+      purpose: "Absence of template slot guarantees absence of content"
+    - id: "L555"
+      name: "Certainty-Bias Anti-Pattern"
+      purpose: "Every state-changing gate must declare a spec basis"
+    - id: "L557"
+      name: "Propagation Scope Underestimation"
+      purpose: "Scope based on known failures is always a lower bound"
+    - id: "L558"
+      name: "Plan Verification Gap"
+      purpose: "Template compliance does not equal factual accuracy"
+
+# -----------------------------------------------------------
+
+# Controlled Vocabulary (Project Plan Domain)
+
+vocabulary:
+  Aget_Project_Plan:
+    definition: "Strategic planning artifact for long-running multi-phase initiative with OKR framework and risk-based gate batching"
+    characteristics:
+      - "Duration: 2+ weeks"
+      - "Complexity: 10+ gates across multiple phases"
+      - "Strategic: Advances framework or domain goals"
+      - "Quantified: OKR framework with measurable key results"
+    relationships:
+      - "Contains: Objective, Key_Results, Phases, Gates"
+      - "Produces: Deliverables, Learning_Documents"
+    anti_patterns:
+      - "Using project plan for <2 week work (use Gate_Plan instead)"
+      - "No quantified KRs (aspirational only)"
+      - "Single phase (not truly multi-phase)"
+
+  Objective:
+    definition: "Qualitative statement of what success looks like for project"
+    characteristics:
+      - "Inspirational and clear"
+      - "Time-bound"
+      - "Single statement (not list)"
+    example: "Make AGET easier to improve"
+
+  Key_Result:
+    definition: "Quantitative measure of project success"
+    characteristics:
+      - "Measurable with specific metric"
+      - "Ambitious but achievable"
+      - "Has before/after values"
+      - "3-5 per objective (focus)"
+    example: "Reduce enhancement filing time 67% (90s → 30s)"
+    validation: "Can you measure progress? If no, revise."
+
+  Initiative:
+    definition: "Specific project or task that advances key results"
+    characteristics:
+      - "Mapped to one or more KRs"
+      - "Concrete deliverable"
+      - "Time-bounded"
+    relationship: "Supports: Key_Result"
+
+  Execution_Phase:
+    definition: "Major subdivision of project work with distinct objective and exit criteria"
+    characteristics:
+      - "Contains: Multiple gates"
+      - "Has: Objective, duration, exit criteria"
+      - "Follows: Risk-based batching (small gates for high risk, large for low risk)"
+    standard_phases:
+      - "Phase 0: Research & Scope Decision"
+      - "Phase 1: Foundation/High-Risk Work"
+      - "Phase 2: Medium-Risk Work"
+      - "Phase 3: Low-Risk Work"
+      - "Phase 4: Validation & Deployment"
+
+  Gate:
+    definition: "Decision point in execution path requiring explicit approval before proceeding"
+    characteristics:
+      - "Clear objective"
+      - "Actionable tasks"
+      - "Decision point (GO/NOGO)"
+      - "Exit criteria"
+      - "Spec basis declared (v1.1)"
+    relationship: "Contained_by: Execution_Phase"
+
+  Spec_Basis:
+    definition: "Declaration of which specification, L-doc, or standard justifies a gate's deliverables"
+    added: "v1.1"
+    characteristics:
+      - "Required per gate (v1.1)"
+      - "References specific spec IDs, L-doc numbers, or template versions"
+      - "Prevents certainty-bias (L555)"
+    example: "Spec Basis: SPEC_FORMAT_v1.1.md, L555, L558"
+
+  Pre_Submission_Verification:
+    definition: "Checkpoint where every factual claim in a plan is verified against ground truth before presenting to principal"
+    added: "v1.1"
+    characteristics:
+      - "Required before presenting plan (v1.1)"
+      - "Each claim mapped to verification command"
+      - "Result and match status recorded"
+    example: "| 'Fleet has 34 agents' | python3 .aget/tools/validate_fleet_state.py | 37 agents | NO — corrected |"
+
+  Rollback_Strategy:
+    definition: "Documented procedure for undoing gate operations if they fail"
+    added: "v1.1"
+    characteristics:
+      - "Required when gate involves irreversible operations"
+      - "Per-gate rollback procedure and verification"
+      - "Commit before high-risk gates (restore point)"
+    example: "| G1 | High | git checkout -- .aget/specs/X | git diff shows no changes |"
+
+  Verification_Test:
+    definition: "Concrete test to validate project deliverable or KR achievement"
+    characteristics:
+      - "Executable (can be run)"
+      - "Measurable (pass/fail)"
+      - "Specific (not vague)"
+    example: "Run pytest tests/ -v and verify 100% pass rate"
+
+  Stub_Retrospective:
+    definition: "Set of predefined questions to guide post-project learning capture"
+    characteristics:
+      - "Created at project start"
+      - "Answered at project completion"
+      - "Captures: What worked, what didn't, what to change"
+    purpose: "Ensure learning is captured, not forgotten"
+
+  Success_Criteria:
+    definition: "Conditions that must be met for project to be considered successful"
+    characteristics:
+      - "Measurable"
+      - "Comprehensive (covers all KRs)"
+      - "Binary (met or not met)"
+
+  Risk_Assessment:
+    definition: "Identified project risks with mitigation and contingency plans"
+    components:
+      - "Impact: Effect if risk occurs"
+      - "Probability: Likelihood (High/Medium/Low)"
+      - "Mitigation: How to prevent"
+      - "Contingency: Plan if it happens"
+
+# -----------------------------------------------------------
+
+# Core Capabilities (EARS Format)
+
+capabilities:
+
+  # CAP-PP-001: Project Plan Structure
+  CAP-PP-001:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL structure every Aget_Project_Plan using 8-part template"
+    components:
+      - "Part 1: Research & Scope Decision"
+      - "Part 2: Objectives & Key Results (OKR Framework)"
+      - "Part 3: Execution Phases (Risk-Based Gate Batching)"
+      - "Part 4: Success Patterns & Anti-Patterns"
+      - "Part 5: Risk Assessment & Mitigation"
+      - "Part 6: Resource Planning"
+      - "Part 7: Success Criteria & Quality Gates"
+      - "Part 8: Learning & Follow-Up (Stub Retrospective)"
+    rationale: "Consistent structure ensures completeness and enables pattern learning"
+    validation:
+      - "Project plan contains all 8 parts"
+      - "No parts skipped or deferred"
+
+  # CAP-PP-002: OKR Framework Requirement
+  CAP-PP-002:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL define exactly one Objective with 3-5 Key_Results for every Aget_Project_Plan"
+    rationale: "Quantified success measures prevent scope drift and enable measurement"
+    validation:
+      - "Objective is qualitative and inspirational"
+      - "Each Key_Result has measurement method and target"
+      - "KR count is 3-5 (focus constraint)"
+      - "Each KR can be measured (test: 'Can you measure progress?')"
+    anti_patterns:
+      - "Objective is task list (too specific)"
+      - "KRs are qualitative (not measurable)"
+      - ">5 KRs (dilutes focus)"
+      - "KRs without before/after values"
+
+  # CAP-PP-003: Multi-Phase Execution
+  CAP-PP-003:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL organize Aget_Project_Plan into minimum 3 Execution_Phases"
+    phases:
+      - "Phase 0: Research & Scope Decision (REQUIRED)"
+      - "Phase N: Execution phases (2+ phases, risk-based batching)"
+      - "Phase Final: Validation & Deployment (REQUIRED)"
+    rationale: "Phases provide natural checkpoints and enable risk-based gate sizing"
+    validation:
+      - "Minimum 3 phases total"
+      - "Phase 0 exists (research/scope)"
+      - "Final phase includes validation and learning capture"
+      - "Each phase has objective, duration, exit criteria"
+
+  # CAP-PP-004: Risk-Based Gate Batching
+  CAP-PP-004:
+    pattern: state-driven
+    domain: planning
+    statement: "WHILE executing high-risk work, system SHALL use small Gates (1-2h each)"
+    statement_2: "WHILE executing medium-risk work, system SHALL use medium Gates (2-4h each)"
+    statement_3: "WHILE executing low-risk work, system SHALL use large Gates (4-8h each)"
+    rationale: "Small gates for high-risk work provide frequent decision points; large gates for low-risk reduce overhead"
+    based_on: "L275 (Multi-Gate Execution Protocol)"
+    validation:
+      - "High-risk phases have >3 gates per phase"
+      - "Low-risk phases have 1-2 gates per phase"
+      - "Gate size inversely proportional to risk"
+
+  # CAP-PP-005: Verification Tests
+  CAP-PP-005:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL define minimum 1 Verification_Test per Key_Result"
+    rationale: "Tests enable objective KR achievement measurement"
+    validation:
+      - "Each KR has test defined"
+      - "Tests are executable (can be run)"
+      - "Tests have pass/fail criteria"
+    examples:
+      - "KR: 'Deploy 10 features' → Test: 'Count features in changelog = 10'"
+      - "KR: 'Reduce time 67%' → Test: 'Measure time, verify ≤33% of baseline'"
+
+  # CAP-PP-006: Stub Retrospective
+  CAP-PP-006:
+    pattern: event-driven
+    domain: planning
+    statement: "WHEN creating Aget_Project_Plan, system SHALL populate Part 8 with minimum 5 retrospective questions"
+    statement_2: "WHEN completing project, system SHALL answer all retrospective questions"
+    questions_minimum:
+      - "Did we achieve our objective? (Yes/No + evidence)"
+      - "What worked well that we should repeat?"
+      - "What didn't work that we should avoid?"
+      - "What surprised us (unexpected discoveries)?"
+      - "What would we do differently next time?"
+    rationale: "Stub questions prevent learning loss; pre-defined structure reduces post-project effort"
+    validation:
+      - "Part 8 contains ≥5 questions at project start"
+      - "All questions answered at project completion"
+      - "Answers include specific evidence"
+
+  # CAP-PP-007: Success Criteria Definition
+  CAP-PP-007:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL define both project-level Success_Criteria and KR-level Verification_Tests"
+    project_level_criteria:
+      - "All KRs achieved (quantified)"
+      - "No regressions in existing functionality"
+      - "Documentation complete"
+      - "Learning captured (retrospective answered)"
+    rationale: "Dual-level criteria ensure both strategic (KRs) and operational (quality) success"
+    validation:
+      - "Project-level criteria defined"
+      - "Each criterion measurable (binary pass/fail)"
+      - "Criteria cover KRs, quality, documentation, learning"
+
+  # CAP-PP-008: Risk Assessment
+  CAP-PP-008:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL identify minimum 3 project risks with mitigation and contingency"
+    risk_structure:
+      - "Description: What could go wrong"
+      - "Impact: Effect if occurs (High/Medium/Low)"
+      - "Probability: Likelihood (High/Medium/Low)"
+      - "Mitigation: How to prevent"
+      - "Contingency: Plan if it happens"
+    rationale: "Proactive risk identification enables prevention and reduces project failure"
+    validation:
+      - "≥3 risks identified"
+      - "Each risk has all 5 components"
+      - "High-impact risks have detailed mitigation"
+
+  # CAP-PP-009: Resource Planning
+  CAP-PP-009:
+    pattern: ubiquitous
+    domain: planning
+    statement: "System SHALL estimate effort per phase and total project duration"
+    components:
+      - "Effort estimation (hours per phase)"
+      - "Calendar time projection (days/weeks)"
+      - "Confidence assessment (High/Medium/Low with rationale)"
+    validation:
+      - "All phases have effort estimates"
+      - "Total effort calculated"
+      - "Calendar time accounts for work hours per day"
+      - "Confidence level stated with rationale"
+
+  # CAP-PP-010: Learning Capture
+  CAP-PP-010:
+    pattern: event-driven
+    domain: planning
+    statement: "WHEN completing Aget_Project_Plan, system SHALL create minimum 1 Learning_Document IF project revealed generalizable pattern"
+    criteria_for_learning_doc:
+      - "Pattern benefits 3+ agents (generalizability)"
+      - "Pattern addresses concrete waste/friction (quantified)"
+      - "Pattern has actionable protocol (copy-paste executable)"
+    rationale: "Learning documents prevent pattern loss and enable fleet improvement"
+    validation:
+      - "Retrospective identifies generalizable patterns"
+      - "L### document created for each pattern"
+      - "Pattern filed as enhancement issue if framework improvement"
+
+  # CAP-PP-012: Prerequisites Discovery
+  CAP-PP-012:
+    pattern: ubiquitous
+    domain: planning
+    statement: "BEFORE writing plan content, system SHALL search for and document existing SOPs, specs, templates, and L-docs applicable to the project topic"
+    added: "2026-01-24"
+    based_on: "L531 (Prerequisites Discovery Protocol)"
+    search_targets:
+      - "SOPs: sops/ and aget-framework/aget/sops/"
+      - "Specs: .aget/specs/ filtered by topic"
+      - "Templates: .aget/templates/ filtered by topic"
+      - "L-docs: .aget/evolution/ grepped for topic"
+      - "Prior plans: planning/ filtered by topic"
+    rationale: |
+      Plans that skip artifact discovery risk:
+      - Reinventing existing procedures (waste)
+      - Missing established patterns (quality)
+      - Creating inconsistent approaches (drift)
+      Root cause: L531 discovered this gap when agent creation plan
+      failed to reference existing SOP_aget_create.md and INSTANCE_CREATION_SPEC.
+    validation:
+      - "Prerequisites Discovery section completed before Executive Summary"
+      - "All found artifacts listed with locations"
+      - "Decision recorded: proceed or discovery incomplete"
+      - "Found artifacts referenced in plan References section"
+    anti_patterns:
+      - "Skipping discovery because 'I know what exists'"
+      - "Listing artifacts without checking if referenced in plan"
+      - "Proceeding with 'None found' without actually searching"
+
+  # ============================================================
+  # v1.1 Additions — Spec Basis, Pre-Submission, Rollback,
+  #                   Propagation, Out-of-Scope Tracking
+  # ============================================================
+
+  # CAP-PP-013: Spec Basis per Gate (L555)
+  CAP-PP-013:
+    pattern: ubiquitous
+    domain: planning
+    added: "2026-02-28"
+    based_on: "L555 (Certainty-Bias Anti-Pattern)"
+    statement: "System SHALL declare a Spec_Basis for every Gate in an Aget_Project_Plan"
+    rationale: |
+      L555 discovered that gate deliverables without spec basis default to
+      "obviously correct" assumptions. 75% of recent plans (3/4 audited)
+      had zero spec-basis declarations. Spec basis forces explicit justification.
+    components:
+      - "Spec_Basis field: One or more spec IDs, L-doc numbers, or template versions"
+      - "Field placement: After gate deliverables, before V-test"
+      - "Empty spec basis: NOT permitted (use 'N/A — pure research' with rationale)"
+    validation:
+      - "Every gate section contains a 'Spec Basis:' field"
+      - "Field references at least one existing spec, L-doc, or template"
+      - "References resolve (named artifacts exist)"
+    anti_patterns:
+      - "Gate with deliverables but no spec basis"
+      - "Spec basis that references non-existent artifacts"
+      - "'Common sense' or 'obvious' as justification"
+    evidence:
+      baseline: "3/4 recent plans had 0 spec-basis declarations (75% missing)"
+      source: "G1.2 baseline audit, 2026-02-28"
+
+  # CAP-PP-014: Pre-Submission Verification (L558)
+  CAP-PP-014:
+    pattern: event-driven
+    domain: planning
+    added: "2026-02-28"
+    based_on: "L558 (Plan Verification Gap)"
+    statement: "WHEN presenting Aget_Project_Plan to principal, system SHALL verify every factual claim against ground truth and document results in Pre_Submission_Verification table"
+    rationale: |
+      L558 demonstrated that a plan can pass 8/8 compliance checks while
+      containing 11 factual gaps (50% false compliance). Template compliance
+      enforces completeness but not accuracy. Verification must be explicit.
+    components:
+      - "Pre-Submission Verification section in plan"
+      - "Table columns: Claim, Command, Result, Matches?"
+      - "Minimum 1 row per quantitative claim"
+      - "All NO matches corrected before presenting"
+    validation:
+      - "Pre-Submission Verification section exists"
+      - "Table contains ≥1 row per factual claim"
+      - "No unresolved NO matches at presentation time"
+      - "Evidence table (if present) has Verified column"
+    anti_patterns:
+      - "Marking checklist items [x] without running verification"
+      - "Using stale data as 'current baseline'"
+      - "Conflating 'I searched for L-docs' with 'my claims are accurate'"
+      - "Speculative V-tests (writing commands without executing them)"
+    evidence:
+      trigger: "L558: 11 factual gaps in plan that passed 8/8 compliance"
+      source: "PROJECT_PLAN_fleet_ci_remediation_wave2 v1.0 self-audit"
+
+  # CAP-PP-015: Rollback Strategy (L554)
+  CAP-PP-015:
+    pattern: conditional
+    domain: planning
+    added: "2026-02-28"
+    based_on: "L554 (Universal Rollback Gap)"
+    statement: "IF Aget_Project_Plan contains gates with irreversible operations THEN system SHALL include Rollback_Strategy section with per-gate rollback procedure and verification"
+    rationale: |
+      L554 audited 6 active plans and found 100% lacked rollback strategy,
+      including 3 plans with confirmed irreversible operations (file scrubbing,
+      fleet-push, encryption). Template slots now exist (L554 remediation)
+      but spec-level enforcement ensures compliance.
+    components:
+      - "Rollback Strategy section (dedicated, not embedded in risk assessment)"
+      - "Table columns: Gate, Risk Level, Rollback Procedure, Verification"
+      - "One row per gate with Medium or High risk"
+      - "N/A permitted only with explicit rationale ('all operations additive')"
+    irreversible_operations:
+      - "File modifications across multiple repos (scrubbing, renaming, migration)"
+      - "Fleet-wide deployments (template pushes, header injection, version bumps)"
+      - "Cryptographic operations (key generation, encryption)"
+      - "State mutations (database changes, config modifications)"
+    validation:
+      - "Rollback Strategy section present"
+      - "Every High/Medium risk gate has rollback row"
+      - "Rollback procedures are specific commands (not 'revert if needed')"
+      - "Verification column has executable check"
+    evidence:
+      trigger: "L554: 6/6 plans (100%) missing rollback strategy"
+      source: "L551 backport audit, 2026-02-25"
+
+  # CAP-PP-016: Out-of-Scope Tracking (L274)
+  CAP-PP-016:
+    pattern: event-driven
+    domain: planning
+    added: "2026-02-28"
+    based_on: "L274 (Orphaned Work Pattern)"
+    statement: "WHEN declaring items Out of Scope, system SHALL assign tracking artifact type and owner for each item"
+    rationale: |
+      Out-of-scope items declared as bullet points are systematically
+      forgotten. L274/L275 identified 1,301 lines of orphaned work from
+      items marked "out of scope" without tracking. Structured tracking
+      prevents orphaning.
+    components:
+      - "Out of Scope table (not bullet list)"
+      - "Table columns: Item, Tracking (issue/plan/N/A), Owner"
+      - "Anti-orphaning commitment: all items tracked before project closure"
+    validation:
+      - "Out of Scope section uses table format (not bullets)"
+      - "Each item has Tracking column populated"
+      - "Each item has Owner column populated"
+      - "At project closure: tracking artifacts verified to exist"
+    anti_patterns:
+      - "Bullet-list out-of-scope items with no tracking"
+      - "'Deferred to future' without owner or artifact type"
+      - "Closing project without verifying tracking artifacts created"
+
+  # CAP-PP-017: Hypothesis Measurability
+  CAP-PP-017:
+    pattern: conditional
+    domain: planning
+    added: "2026-02-28"
+    based_on: "L555 (Certainty-Bias), Bootstrapping Paradox"
+    statement: "IF Aget_Project_Plan includes a hypothesis THEN system SHALL define baseline measurement method, measurement gate, and success threshold"
+    rationale: |
+      Hypotheses without baselines cannot be tested. The bootstrapping
+      paradox audit found H-SEW-001 was unfalsifiable because no baseline
+      measurement existed and no gate was responsible for measuring outcome.
+    components:
+      - "Baseline: What to measure before intervention"
+      - "Measurement method: How to count/score the metric"
+      - "Measurement gate: Which gate performs measurement"
+      - "Success threshold: What constitutes confirmation vs refutation"
+    validation:
+      - "Hypothesis section includes baseline definition"
+      - "Measurement method is executable (specific command or audit procedure)"
+      - "A specific gate is assigned to perform measurement"
+      - "Success threshold is quantified (percentage, count, or binary)"
+    anti_patterns:
+      - "Hypothesis without baseline ('reduce violations by 50%' but no current count)"
+      - "Measurement deferred to 'future audit' with no scheduled gate"
+      - "Success defined as 'improvement observed' (subjective)"
+
+# -----------------------------------------------------------
+
+# Integration with Other Specifications
+
+integration:
+
+  gate_execution_protocol:
+    specification: "GATE_EXECUTION_SPEC_v1.0.yaml"
+    relationship: "Aget_Project_Plan uses Gate execution for each phase"
+    status: "production"
+    requirements:
+      - "Each Gate follows CAP-GATE-001 (execute only current gate)"
+      - "Gate boundaries require explicit GO signal"
+      - "Gates validate completion before proceeding"
+
+  session_protocol:
+    specification: "SESSION_PROTOCOL_SPEC_v1.0.yaml"
+    relationship: "Project execution follows session patterns"
+    requirements:
+      - "Wind down creates session notes per CAP-SESSION-003"
+      - "Study up loads project context per CAP-SESSION-002"
+
+  okr_framework:
+    pattern: "L274"
+    domain: planning
+    relationship: "Part 2 of project plan uses OKR structure"
+    requirements:
+      - "Objective: Qualitative, inspirational, time-bound"
+      - "Key Results: Quantitative, measurable, 3-5 count"
+      - "Initiatives: Mapped to KRs, concrete deliverables"
+
+# -----------------------------------------------------------
+
+# Quality Dimensions
+
+quality:
+
+  completeness:
+    definition: "All 8 parts present, no sections skipped"
+    measurement: "Count parts, verify all exist"
+    target: "8/8 parts (100%)"
+
+  measurability:
+    definition: "All KRs have quantified targets and verification tests"
+    measurement: "Count KRs with tests, verify all measurable"
+    target: "100% of KRs measurable"
+
+  actionability:
+    definition: "Gates have clear actions, not vague statements"
+    measurement: "Review gate actions, verify executable"
+    target: "No vague gates (e.g., 'improve things', 'work on X')"
+
+  learnability:
+    definition: "Retrospective answered with specific evidence"
+    measurement: "Count answered questions, verify evidence present"
+    target: "5/5 minimum questions answered"
+
+  accuracy:
+    definition: "All factual claims verified against ground truth"
+    added: "v1.1"
+    measurement: "Pre-Submission Verification table completeness"
+    target: "100% of claims verified, 0 unresolved mismatches"
+
+  traceability:
+    definition: "Every gate declares spec basis; every out-of-scope item has tracking"
+    added: "v1.1"
+    measurement: "Count gates with Spec_Basis field; count out-of-scope items with tracking"
+    target: "100% gates have spec basis; 100% out-of-scope items tracked"
+
+# -----------------------------------------------------------
+
+# Anti-Patterns (What NOT to Do)
+
+anti_patterns:
+
+  - name: "Aspirational KRs"
+    problem: "KRs lack quantified targets"
+    bad_example: "KR1: Make things better"
+    good_example: "KR1: Reduce filing time 67% (90s → 30s)"
+    detection: "KR has no numbers, percentages, or before/after"
+    fix: "Add measurement method and specific target"
+
+  - name: "Single-Phase Project"
+    problem: "Using project plan for work that doesn't need multiple phases"
+    bad_example: "Phase 1: Do all the work (8 hours)"
+    good_example: "Use GATE_PLAN_TEMPLATE for <2 week work instead"
+    detection: "Project has only 1 execution phase"
+    fix: "Break into logical phases or downgrade to gate plan"
+
+  - name: "No Retrospective Stub"
+    problem: "Deferring retrospective questions to project end"
+    bad_example: "Part 8: TBD after project complete"
+    good_example: "Part 8: 7 questions defined at project start"
+    detection: "Part 8 empty or 'TBD' at project creation"
+    fix: "Define ≥5 questions immediately, answer later"
+
+  - name: "Untestable Success Criteria"
+    problem: "Success criteria are subjective or unmeasurable"
+    bad_example: "Success: User is happy"
+    good_example: "Success: All 5 KRs achieved (measured via tests)"
+    detection: "Criteria have no measurement method"
+    fix: "Map criteria to KR tests or define new tests"
+
+  - name: "Risk-Free Risk Assessment"
+    problem: "No risks identified or only trivial risks listed"
+    bad_example: "Risk: None identified"
+    good_example: "Risk 1: SKOS migration loses information (High impact, Low prob)"
+    detection: "Part 5 has <3 risks or all risks are Low/Low"
+    fix: "Brainstorm what could go wrong, be realistic"
+
+  # v1.1 additions
+
+  - name: "Certainty-Bias Gate"
+    added: "v1.1"
+    problem: "Gate deliverables with no spec basis — 'obviously correct' assumed"
+    bad_example: "Gate 2: Draft spec (no Spec Basis field)"
+    good_example: "Gate 2: Draft spec\nSpec Basis: SPEC_FORMAT_v1.1.md, L555"
+    detection: "Gate section has no 'Spec Basis:' field"
+    fix: "Add Spec Basis field referencing at least one spec, L-doc, or template"
+    based_on: "L555"
+
+  - name: "Rubber-Stamped Checklist"
+    added: "v1.1"
+    problem: "Marking compliance checks [x] without executing verification"
+    bad_example: "[x] All claims verified (no verification table)"
+    good_example: "[x] All claims verified — see Pre-Submission Verification table (7 claims, 7 matches)"
+    detection: "Compliance checklist fully checked but no Pre-Submission Verification section"
+    fix: "Add Pre-Submission Verification table with claim/command/result/match columns"
+    based_on: "L558"
+
+  - name: "Orphaned Out-of-Scope"
+    added: "v1.1"
+    problem: "Out-of-scope items listed as bullets with no tracking mechanism"
+    bad_example: "Out of Scope:\n- Template updates\n- Fleet deployment"
+    good_example: "Out of Scope:\n| Template updates | G5.3 creates issue | supervisor |"
+    detection: "Out of Scope section uses bullet list instead of table with tracking"
+    fix: "Convert to table with Item, Tracking, Owner columns"
+    based_on: "L274"
+
+# -----------------------------------------------------------
+
+# Success Patterns (What TO Do)
+
+success_patterns:
+
+  - name: "OKR-First Planning"
+    description: "Define OKRs before detailed phases"
+    when: "Starting any new project"
+    how: "Write Part 2 (OKRs) before Part 3 (Phases)"
+    benefit: "Ensures phases serve objectives, not vice versa"
+    evidence: "V2.8 project (defined OKRs in Gate 0, guided all execution)"
+
+  - name: "Risk-Based Batching"
+    description: "Small gates for high-risk, large gates for low-risk"
+    when: "Designing phase gate structure"
+    how: "Phase 1 (high-risk): 5-7 small gates; Phase 3 (low-risk): 2-3 large gates"
+    benefit: "Frequent checkpoints where needed, efficiency where safe"
+    evidence: "L275 (Multi-Gate Execution Protocol)"
+
+  - name: "Quantified Everything"
+    description: "Use numbers for all success measures"
+    when: "Defining KRs, success criteria, quality targets"
+    how: "Add before/after values, percentages, counts"
+    benefit: "Objective measurement, no ambiguity"
+    evidence: "V2.8 KR1: 67% reduction (90s→30s) = measurable success"
+
+  - name: "Stub Retro Early"
+    description: "Write retrospective questions at project start"
+    when: "Creating Part 8 during project planning"
+    how: "Define 5-7 questions immediately, answer at project end"
+    benefit: "Prevents learning loss, reduces post-project effort"
+    evidence: "Projects with stub retros capture 3x more learnings"
+
+  # v1.1 additions
+
+  - name: "Spec Basis Declaration"
+    added: "v1.1"
+    description: "Declare spec basis for every gate before execution"
+    when: "Designing gate deliverables"
+    how: "Add 'Spec Basis: [refs]' field after deliverables list"
+    benefit: "Prevents certainty-bias, makes assumptions explicit"
+    evidence: "L555: 75% of plans had no spec-basis declarations"
+
+  - name: "Verify Before Present"
+    added: "v1.1"
+    description: "Run verification commands for every factual claim before presenting plan"
+    when: "Plan is complete, before principal review"
+    how: "Create Pre-Submission Verification table, run each command, fix mismatches"
+    benefit: "Catches stale data, fabricated specifics, and rubber-stamped checklists"
+    evidence: "L558: 11 factual gaps caught by self-audit"
+
+# -----------------------------------------------------------
+
+# Template Location
+
+template:
+  location: ".aget/templates/PROJECT_PLAN_TEMPLATE.md"
+  version: "2.1.0"
+  format: "Markdown with 8-part structure"
+  usage: "Copy template, fill in project-specific details"
+  compliance_gaps:
+    note: "Template predates v1.1 spec. Known gaps documented below."
+    gaps:
+      - "No Spec Basis field per gate (CAP-PP-013)"
+      - "No Pre-Submission Verification section (CAP-PP-014)"
+      - "No Propagation Impact section (future enhancement)"
+    remediation: "Template update planned as follow-on project"
+
+# -----------------------------------------------------------
+
+# Conformance Validation
+
+conformance:
+
+  checklist:
+    structure:
+      - "[ ] All 8 parts present"
+      - "[ ] Part 2 has 1 objective + 3-5 KRs"
+      - "[ ] Part 3 has ≥3 phases with gates"
+      - "[ ] Part 5 has ≥3 risks assessed"
+      - "[ ] Part 6 has effort estimates per phase"
+      - "[ ] Part 7 has success criteria + quality bar"
+      - "[ ] Part 8 has ≥5 retrospective questions"
+
+    quality:
+      - "[ ] All KRs measurable (have numbers/percentages)"
+      - "[ ] Each KR has verification test"
+      - "[ ] Gates sized appropriately (risk-based)"
+      - "[ ] Risks have mitigation + contingency"
+      - "[ ] Retrospective questions answerable (not vague)"
+
+    # v1.1 additions
+    verification:
+      - "[ ] Every gate has Spec Basis field (CAP-PP-013)"
+      - "[ ] Pre-Submission Verification table exists with ≥1 row per factual claim (CAP-PP-014)"
+      - "[ ] Rollback Strategy section present for plans with irreversible ops (CAP-PP-015)"
+      - "[ ] Out-of-Scope items in table format with Tracking and Owner columns (CAP-PP-016)"
+      - "[ ] Hypothesis (if present) has baseline, measurement method, and threshold (CAP-PP-017)"
+
+  validation_script:
+    location: ".aget/tools/validate_project_plan.py"
+    usage: "python3 .aget/tools/validate_project_plan.py <plan_file>"
+    checks:
+      - "Part count (8 required)"
+      - "KR count (3-5 required)"
+      - "KR measurability (numbers present)"
+      - "Risk count (≥3 required)"
+      - "Retrospective question count (≥5 required)"
+      # v1.1 additions
+      - "Spec Basis field per gate (CAP-PP-013)"
+      - "Pre-Submission Verification section (CAP-PP-014)"
+      - "Rollback Strategy section (CAP-PP-015)"
+      - "Out-of-Scope table format (CAP-PP-016)"
+
+# -----------------------------------------------------------
+
+# Version History
+
+version_history:
+  - version: "1.0.0"
+    date: "2025-11-22"
+    changes: "Initial specification based on PROJECT_PLAN_TEMPLATE v1.0"
+    based_on:
+      - "L274: OKR-Driven Project Initiation"
+      - "L275: Multi-Gate Execution Protocol"
+      - "L42: Gate Execution Discipline"
+      - "L104: Gate Sizing Heuristic"
+      - "PROJECT_PLAN_TEMPLATE.md v1.0"
+
+  - version: "1.1.0"
+    date: "2026-02-28"
+    changes: "Added 5 new capabilities (CAP-PP-013 through CAP-PP-017) addressing L554-L558 enforcement gaps"
+    additions:
+      - "CAP-PP-013: Spec Basis per Gate (L555) — mandatory spec-basis declaration"
+      - "CAP-PP-014: Pre-Submission Verification (L558) — factual claim verification"
+      - "CAP-PP-015: Rollback Strategy (L554) — per-gate rollback procedures"
+      - "CAP-PP-016: Out-of-Scope Tracking (L274) — anti-orphaning table"
+      - "CAP-PP-017: Hypothesis Measurability — baseline and measurement gate"
+    vocabulary_additions:
+      - "Spec_Basis"
+      - "Pre_Submission_Verification"
+      - "Rollback_Strategy"
+    quality_dimensions_added:
+      - "accuracy"
+      - "traceability"
+    anti_patterns_added:
+      - "Certainty-Bias Gate"
+      - "Rubber-Stamped Checklist"
+      - "Orphaned Out-of-Scope"
+    evidence:
+      baseline_audit: "4 recent plans: 75% missing spec-basis, 50% missing pre-submission verification, 0% missing rollback (already remediated by L554 template update)"
+      trigger: "Bootstrapping paradox — plan to fix L558 gaps used template that predates L558"
+    based_on:
+      - "L554: Universal Rollback Gap"
+      - "L555: Certainty-Bias Anti-Pattern"
+      - "L557: Propagation Scope Underestimation"
+      - "L558: Plan Verification Gap"
+      - "L274: Orphaned Work Pattern"
+      - "Bootstrapping Paradox (discovered 2026-02-28)"
+
+# -----------------------------------------------------------
+
+# Notes
+
+notes: |
+  This specification formalizes the PROJECT_PLAN_TEMPLATE.md into EARS format.
+
+  Key innovations (v1.0):
+  - Stub Retrospective (CAP-PP-006): Questions defined at start, answered at end
+  - Verification Tests (CAP-PP-005): Each KR must have executable test
+  - Risk-Based Batching (CAP-PP-004): Gate size inversely proportional to risk
+  - OKR Framework (CAP-PP-002): Mandatory quantified success measures
+
+  Key innovations (v1.1):
+  - Spec Basis (CAP-PP-013): Every gate declares what spec justifies its deliverables
+  - Pre-Submission Verification (CAP-PP-014): Factual claims verified before presenting
+  - Rollback Strategy (CAP-PP-015): Per-gate rollback for irreversible operations
+  - Out-of-Scope Tracking (CAP-PP-016): Table format prevents orphaned work items
+  - Hypothesis Measurability (CAP-PP-017): Baseline + measurement gate required
+
+  Difference from GATE_PLAN:
+  - Project Plan: Multi-phase, 2+ weeks, OKR framework, strategic
+  - Gate Plan: Single-phase, <2 weeks, substantial change, tactical
+
+  Difference from ENHANCEMENT_PLAN:
+  - Project Plan: Multi-phase, 10+ gates, weeks/months
+  - Enhancement Plan: Single feature, 1-8 hours, one issue
+
+  Template compliance (v1.1): PROJECT_PLAN_TEMPLATE v2.1.0 predates v1.1 spec.
+  Known gaps: No Spec Basis field, no Pre-Submission Verification section.
+  Template update is a planned follow-on project (tracked in project plan G5.3).
+
+  All Aget_Project_Plans MUST conform to this specification (CAP-PP-001).

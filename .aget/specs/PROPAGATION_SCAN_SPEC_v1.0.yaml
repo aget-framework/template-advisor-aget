@@ -1,0 +1,306 @@
+# PROPAGATION_SCAN Specification v1.0
+#
+# Purpose: Formal specification for mandatory impact scanning before state-changing operations
+# Format: EARS (Easy Approach to Requirements Syntax)
+# Created: 2026-02-28
+# Based on: L557 (Propagation Scope Underestimation), L119 (CI CWD Deletion),
+#           L224 (Template CI Validation), L549 (Deploy-Without-Migrate)
+# Companion to: AGET_PROJECT_PLAN_SPEC v1.1, GATE_EXECUTION_SPEC v1.0
+
+spec:
+  id: SPEC-PROPAGATION-SCAN
+  version: 1.0.0
+  status: production
+  maturity: standard
+  format_version: "1.1"
+  system_name: "AGET Propagation Scan System"
+  created: 2026-02-28
+  format: "EARS with controlled vocabulary"
+  scope: "Defines requirements for exhaustive impact scanning before removal, rename, or restructure operations"
+  audience: "Agents executing gates that modify, remove, rename, or restructure state"
+
+  related_specifications:
+    - name: "AGET_PROJECT_PLAN_SPEC_v1.1.yaml"
+      relationship: "references"
+      status: "production"
+      note: "Project plans with state-changing gates require propagation scans"
+    - name: "GATE_PLAN_SPEC_v1.0.yaml"
+      relationship: "references"
+      status: "production"
+      note: "Gate plans with fleet-wide impact require propagation scans"
+    - name: "GATE_EXECUTION_SPEC_v1.0.yaml"
+      relationship: "companion"
+      status: "production"
+      note: "Gate execution triggers propagation scans for qualifying operations"
+    - name: "CI_GOVERNANCE_SPEC_v1.0.yaml"
+      relationship: "companion"
+      status: "production"
+      note: "CI failures often result from propagation gaps"
+
+  foundation_patterns:
+    - id: "L557"
+      name: "Propagation Scope Underestimation"
+      purpose: "Scope based on known failures is always a lower bound (2.3x-305x underestimate)"
+    - id: "L119"
+      name: "CI CWD Deletion"
+      purpose: "Path changes propagated across 52 files in 3 templates — specific instance of propagation"
+    - id: "L224"
+      name: "Template CI Validation"
+      purpose: "Template changes propagate to all derived agents (1 x N = N incidents)"
+    - id: "L549"
+      name: "Deploy-Without-Migrate"
+      purpose: "Deploying enforcement on non-conforming corpus without baseline measurement"
+    - id: "L546"
+      name: "Cultural vs Structural Enforcement"
+      purpose: "Structural enforcement persists where cultural reminders fail"
+
+# ============================================================
+# Controlled Vocabulary (Propagation Scan Domain)
+# ============================================================
+
+vocabulary:
+  Propagation_Scan:
+    definition: "An exhaustive search across all relevant directories to identify the full scope of impact before a state-changing operation"
+    characteristics:
+      - "Exhaustive: searches ALL directories, not just known-affected ones"
+      - "Documented: records hit count before execution"
+      - "Budgeted: applies scope multiplier to initial estimate"
+    source: "L557:21-26"
+
+  State_Changing_Operation:
+    definition: "An operation that removes, renames, restructures, or reformats existing state"
+    examples:
+      - "Removing directories (e.g., `.aget/` removal from agents)"
+      - "Renaming fields (e.g., changing schema property names)"
+      - "Restructuring layouts (e.g., moving files between directories)"
+      - "Reformatting data (e.g., changing sort order, data types)"
+    triggers_scan: true
+
+  Scope_Multiplier:
+    definition: "A factor applied to initial scope estimate to account for propagation effects"
+    table:
+      removal: "2-3x — tests, configs, and docs reference removed items"
+      rename: "2-3x — grep won't catch dynamic references"
+      data_format: "10-100x — systemic patterns affect all instances"
+      cross_repo: "3-5x — each repo has its own test surface"
+    source: "L557:30-35"
+
+  Scope_Re_evaluation:
+    definition: "A checkpoint during multi-gate execution to assess whether actual scope exceeds planned scope"
+    characteristics:
+      - "Triggered at plan midpoint or after discovering unexpected propagation"
+      - "Compares actual hit count against initial estimate"
+      - "May require plan update if scope grew >20%"
+    source: "L557:42, Bootstrapping fix #6"
+
+# ============================================================
+# Capabilities (Propagation Scan)
+# ============================================================
+
+capabilities:
+  # --- Scan Requirements ---
+
+  # CAP-PS-001: Mandatory Scan Trigger (Conditional)
+  CAP-PS-001:
+    domain: "scan"
+    statement: "If a gate deliverable involves removing, renaming, or restructuring state, the propagation scan system shall require an exhaustive grep scan across ALL directories before execution begins"
+    pattern: "conditional"
+    condition: "gate involves removal, rename, or restructure"
+    source: "L557:21-23"
+    rationale: "L557 demonstrated 2.3x-305x scope underestimation when scanning was partial or absent"
+
+  # CAP-PS-002: Exhaustive Directory Coverage (Ubiquitous)
+  CAP-PS-002:
+    domain: "scan"
+    statement: "The propagation scan system shall search all directories including tests/, .aget/, src/, .github/, docs/, and any other directories in the repository — not only directories the agent expects to be affected"
+    pattern: "ubiquitous"
+    source: "L557:23"
+    rationale: "PROCO-2026-061 missed 9 failures in test_internal_state_contract.py because tests/ was not fully scanned during initial analysis"
+
+  # CAP-PS-003: Hit Count Documentation (Ubiquitous)
+  CAP-PS-003:
+    domain: "scan"
+    statement: "The propagation scan system shall record the total number of matches found, not only the matches the agent plans to fix"
+    pattern: "ubiquitous"
+    source: "L557:24"
+    rationale: "Documented hit count enables scope comparison and reveals hidden propagation"
+
+  # CAP-PS-004: Scope Multiplier Application (Ubiquitous)
+  CAP-PS-004:
+    domain: "scan"
+    statement: "The propagation scan system shall apply a scope multiplier of at least 2x to the initial scope estimate for any state-changing operation"
+    pattern: "ubiquitous"
+    source: "L557:25,30-35"
+    multipliers:
+      removal: "2-3x"
+      rename: "2-3x"
+      data_format: "10-100x"
+      cross_repo: "3-5x"
+    rationale: "Every measured instance in L557 exceeded initial estimates by at least 2x"
+
+  # --- Data Operations ---
+
+  # CAP-PS-005: Programmatic Full Scan for Data (Conditional)
+  CAP-PS-005:
+    domain: "data"
+    statement: "If a gate involves data format changes, the propagation scan system shall require a full programmatic scan of ALL instances — not spot checks of a sample"
+    pattern: "conditional"
+    condition: "gate involves data format changes"
+    source: "L557:26"
+    rationale: "L557 documented 2 known unsorted arrays -> 611 discovered via full scan (305x underestimate). Systemic data patterns are never isolated."
+
+  # CAP-PS-006: Systemic Pattern Assumption (Conditional)
+  CAP-PS-006:
+    domain: "data"
+    statement: "If 2 or more instances of a data quality issue are found, the propagation scan system shall assume the pattern is systemic and scan all instances"
+    pattern: "conditional"
+    condition: "≥2 instances of same data issue found"
+    source: "L557:26"
+    rationale: "Pattern: if 2 items are unsorted, scan ALL items — the pattern is likely systemic"
+
+  # --- Cross-Repository ---
+
+  # CAP-PS-007: Cross-Repository Impact Assessment (Conditional)
+  CAP-PS-007:
+    domain: "cross_repo"
+    statement: "If a change affects a template repository, the propagation scan system shall assess impact on all derived agents using a 3-5x scope multiplier"
+    pattern: "conditional"
+    condition: "change affects template repository"
+    source: "L557:35, L224"
+    rationale: "Template changes propagate to derived agents; L119 affected 52 files across 3 templates"
+
+  # CAP-PS-008: Fleet-Wide Scan Command (Event-Driven)
+  CAP-PS-008:
+    domain: "cross_repo"
+    statement: "When a propagation scan identifies cross-repository impact, the propagation scan system shall provide commands to scan affected repositories for the same pattern"
+    pattern: "event_driven"
+    trigger: "cross-repository impact identified"
+    source: "L119, L224"
+    rationale: "L119 remediation required 28 path fixes across multiple repos — pattern must be applied fleet-wide"
+
+  # --- Scope Management ---
+
+  # CAP-PS-009: Scope Re-evaluation Trigger (State-Driven)
+  CAP-PS-009:
+    domain: "scope"
+    statement: "While executing a multi-gate plan, the propagation scan system shall trigger a scope re-evaluation checkpoint at the plan midpoint or when actual scope exceeds initial estimate by more than 20%"
+    pattern: "state_driven"
+    state: "plan at midpoint OR actual scope >20% above estimate"
+    source: "L557:42, Bootstrapping fix #6"
+    rationale: "PROCO-2026-061 plan went from v1.0 to v6.0 during execution. Midpoint re-evaluation prevents runaway scope growth."
+
+  # CAP-PS-010: Plan Update on Scope Growth (Conditional)
+  CAP-PS-010:
+    domain: "scope"
+    statement: "If a scope re-evaluation reveals scope growth exceeding 20% of the initial estimate, the propagation scan system shall require a plan update before continuing execution"
+    pattern: "conditional"
+    condition: "scope growth >20%"
+    source: "L557:42"
+    rationale: "Continuing execution on an undersized plan leads to mid-execution plan explosions"
+
+  # --- Anti-Pattern Prevention ---
+
+  # CAP-PS-011: Spot-Check Prevention (Ubiquitous)
+  CAP-PS-011:
+    domain: "prevention"
+    statement: "The propagation scan system shall prohibit using spot checks or sample-based scanning as the sole basis for scope estimation in state-changing gates"
+    pattern: "ubiquitous"
+    source: "L557:39-42"
+    rationale: "Every L557 anti-pattern involves partial scanning mistaken for complete assessment"
+
+# ============================================================
+# Quality Dimensions
+# ============================================================
+
+quality_dimensions:
+  coverage:
+    description: "Scan covers all directories in repository"
+    measurement: "Directories scanned / total directories"
+    threshold: "100% (no directory excluded without justification)"
+  accuracy:
+    description: "Scope estimate matches actual scope"
+    measurement: "Actual fixes / estimated fixes"
+    threshold: "Within 2x (ratio between 0.5 and 2.0)"
+  documentation:
+    description: "Scan results documented before execution"
+    measurement: "Presence of hit count in plan before gate execution"
+    threshold: "100% of state-changing gates"
+
+# ============================================================
+# Anti-Patterns
+# ============================================================
+
+anti_patterns:
+  - name: "Partial Directory Scan"
+    description: "Scanning only 'obviously affected' directories while missing tests/, docs/, or configs/"
+    example: "PROCO-2026-061: scanned src/ but missed tests/test_internal_state_contract.py (9 additional failures)"
+    source: "L557:39"
+    fix: "CAP-PS-002 requires scanning ALL directories"
+
+  - name: "Spot-Check Extrapolation"
+    description: "Finding 2 instances and assuming that's the total scope"
+    example: "L557: 2 unsorted arrays found via spot check -> 611 found via full scan (305x)"
+    source: "L557:40"
+    fix: "CAP-PS-005/006 require full programmatic scan for data operations"
+
+  - name: "Scope Optimism"
+    description: "Using initial estimate as scope without applying multiplier"
+    example: "Plans that go from v1.0 to v6.0 during execution due to scope growth"
+    source: "L557:25"
+    fix: "CAP-PS-004 requires minimum 2x multiplier on all state-changing operations"
+
+  - name: "Mid-Execution Gate Addition"
+    description: "Adding gates during execution without stepping back to re-scope the full plan"
+    example: "PROCO-2026-061: Gate 1b added mid-session without re-evaluating downstream gates"
+    source: "L557:42"
+    fix: "CAP-PS-009/010 trigger re-evaluation when scope exceeds estimate by >20%"
+
+# ============================================================
+# Compliance Checklist
+# ============================================================
+
+compliance_checklist:
+  - "[ ] All state-changing gates have propagation scan before execution (CAP-PS-001)"
+  - "[ ] Scan covers ALL directories, not just expected ones (CAP-PS-002)"
+  - "[ ] Hit count documented in plan before execution (CAP-PS-003)"
+  - "[ ] Scope multiplier applied (≥2x for structural, ≥10x for data) (CAP-PS-004)"
+  - "[ ] Data operations use full programmatic scan, not spot checks (CAP-PS-005)"
+  - "[ ] Cross-repo impact assessed for template changes (CAP-PS-007)"
+  - "[ ] Scope re-evaluation checkpoint planned at midpoint (CAP-PS-009)"
+
+# ============================================================
+# Version History
+# ============================================================
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-02-28"
+    changes: "Initial specification formalizing L557 propagation scan requirements into EARS capabilities"
+    capabilities_added:
+      - "CAP-PS-001: Mandatory scan trigger for state-changing operations"
+      - "CAP-PS-002: Exhaustive directory coverage"
+      - "CAP-PS-003: Hit count documentation"
+      - "CAP-PS-004: Scope multiplier application (2-100x)"
+      - "CAP-PS-005: Full programmatic scan for data operations"
+      - "CAP-PS-006: Systemic pattern assumption (≥2 instances)"
+      - "CAP-PS-007: Cross-repository impact assessment"
+      - "CAP-PS-008: Fleet-wide scan command"
+      - "CAP-PS-009: Scope re-evaluation trigger"
+      - "CAP-PS-010: Plan update on >20% scope growth"
+      - "CAP-PS-011: Spot-check prohibition"
+
+# ============================================================
+# Notes
+# ============================================================
+#
+# This spec addresses the most expensive pattern in AGET project execution:
+# scope underestimation leading to mid-execution plan explosions.
+#
+# Key evidence:
+# - 7 known failures -> 16 actual (2.3x) — PROCO-2026-061
+# - 2 known issues -> 611 actual (305x) — vocabulary scan
+# - v1.0 -> v6.0 plan iterations — scope growth without re-evaluation
+# - 52 files across 3 templates — L119 path remediation
+#
+# The core structural fix is making exhaustive scanning mandatory (CAP-PS-001/002)
+# rather than relying on the agent's judgment about which directories to check.

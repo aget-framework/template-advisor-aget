@@ -1,0 +1,331 @@
+# CI_GOVERNANCE Specification v1.0
+#
+# Purpose: Formal specification for CI health governance across the AGET fleet
+# Format: EARS (Easy Approach to Requirements Syntax)
+# Created: 2026-02-28
+# Based on: L556 (CI Signal Fatigue), L527 (CI Health SOP Development),
+#           L001 (Cross-Agent CI Debugging Handoff), L119 (CI CWD Deletion)
+# Related SOPs: CI_HEALTH_CHECK_SOP_v1.0.md, CI_REMEDIATION_SOP_v1.0.md
+
+spec:
+  id: SPEC-CI-GOVERNANCE
+  version: 1.0.0
+  status: production
+  maturity: standard
+  format_version: "1.1"
+  system_name: "AGET CI Governance System"
+  created: 2026-02-28
+  format: "EARS with controlled vocabulary"
+  scope: "Defines CI health monitoring, triage, and enforcement requirements for the AGET fleet"
+  audience: "Supervisors managing fleet CI health and agents maintaining individual CI pipelines"
+
+  related_specifications:
+    - name: "AGET_PROJECT_PLAN_SPEC_v1.1.yaml"
+      relationship: "references"
+      status: "production"
+      note: "Project plans may include CI governance gates"
+    - name: "GATE_EXECUTION_SPEC_v1.0.yaml"
+      relationship: "references"
+      status: "production"
+      note: "Gate execution includes CI validation steps"
+    - name: "PROPAGATION_SCAN_SPEC_v1.0.yaml"
+      relationship: "companion"
+      status: "production"
+      note: "CI failures often result from propagation gaps"
+
+  foundation_patterns:
+    - id: "L556"
+      name: "CI Signal Fatigue"
+      purpose: "CI red beyond 7 days is a governance failure, not a technical one"
+    - id: "L527"
+      name: "CI Health SOP Development"
+      purpose: "Taxonomy and assessment procedures for CI failures"
+    - id: "L001"
+      name: "Cross-Agent CI Debugging Handoff"
+      purpose: "Delegation protocol when local debugging is insufficient"
+    - id: "L119"
+      name: "CI CWD Deletion"
+      purpose: "Path-relative test patterns for CI environment compatibility"
+    - id: "L224"
+      name: "Template CI Validation"
+      purpose: "Template changes require CI validation before release"
+    - id: "L546"
+      name: "Cultural vs Structural Enforcement"
+      purpose: "Structural enforcement persists where cultural reminders fail"
+
+# ============================================================
+# Controlled Vocabulary (CI Governance Domain)
+# ============================================================
+
+vocabulary:
+  CI_Health:
+    definition: "The operational status of a repository's continuous integration pipeline"
+    characteristics:
+      - "Binary: passing or failing (no intermediate states)"
+      - "Measured per-repository, aggregated per-fleet"
+      - "Assessed via automated health check script"
+    states:
+      - "Healthy: all CI checks pass"
+      - "Unhealthy: one or more CI checks fail"
+      - "Unconfigured: no CI pipeline exists"
+
+  CI_Signal_Fatigue:
+    definition: "The normalization of CI failure notifications until they cease to trigger action"
+    characteristics:
+      - "Progressive: escalates from acknowledge-defer through accumulation to fatigue"
+      - "Measurable: count of ignored notifications over time"
+      - "Structural fix: branch protection, not cultural reminders"
+    source: "L556"
+
+  Triage_Session:
+    definition: "A mandatory classification and action-assignment session for CI failures"
+    characteristics:
+      - "Triggered by CI red >7 days"
+      - "Uses C1-C6 failure taxonomy"
+      - "Produces owner, timeline, and action per failure"
+
+  Failure_Category:
+    definition: "Classification of CI failure root cause using the C1-C6 taxonomy"
+    categories:
+      C1: "Test Contract Mismatch — test assertion doesn't match current code/schema"
+      C2: "Path/Environment Issues — file paths break in CI environment (L119)"
+      C3: "Validation False Positive — security/privacy check flags legitimate content"
+      C4: "Missing Dependencies — import errors, package version conflicts"
+      C5: "Infrastructure Issues — GitHub Actions outage, runner problems, timeouts"
+      C6: "Delegation Required — environment asymmetry, needs agent-level access (L001)"
+
+  CI_Mask:
+    definition: "A shell construct (typically `|| true`) that suppresses CI failure exit codes"
+    characteristics:
+      - "Converts blocking failures into silent passes"
+      - "Prevents CI from fulfilling its governance function"
+      - "Must be audited and justified when present"
+    anti_pattern: "Using `|| true` to silence failures rather than fixing them"
+
+# ============================================================
+# Capabilities (CI Governance)
+# ============================================================
+
+capabilities:
+  # --- Monitoring ---
+
+  # CAP-CG-001: Health Check Availability (Ubiquitous)
+  CAP-CG-001:
+    domain: "monitoring"
+    statement: "The CI governance system shall provide a fleet-wide health check command that reports passing, failing, and unconfigured repository counts"
+    pattern: "ubiquitous"
+    source: "CI_HEALTH_CHECK_SOP_v1.0:80-90"
+    rationale: "Fleet awareness requires rapid assessment capability"
+
+  # CAP-CG-002: Per-Repository Assessment (Event-Driven)
+  CAP-CG-002:
+    domain: "monitoring"
+    statement: "When a CI failure is detected, the CI governance system shall provide per-repository diagnostic commands that identify the failed job, step, and error message"
+    pattern: "event_driven"
+    trigger: "CI failure detected"
+    source: "CI_HEALTH_CHECK_SOP_v1.0:125-198"
+    rationale: "Diagnosis must precede remediation"
+
+  # --- Triage ---
+
+  # CAP-CG-003: 7-Day Triage Mandate (State-Driven)
+  CAP-CG-003:
+    domain: "triage"
+    statement: "While a repository's CI has been red for more than 7 days, the CI governance system shall require a mandatory triage session that classifies all failures using the C1-C6 taxonomy"
+    pattern: "state_driven"
+    state: "CI red for >7 days"
+    source: "L556:24"
+    rationale: "L556 established that CI red >7 days is a governance failure, not a technical one. Without time-bounded triage, acknowledge-defer becomes permanent deferral."
+
+  # CAP-CG-004: Failure Classification (Ubiquitous)
+  CAP-CG-004:
+    domain: "triage"
+    statement: "The CI governance system shall classify each CI failure into exactly one category from the C1-C6 taxonomy before remediation begins"
+    pattern: "ubiquitous"
+    source: "CI_REMEDIATION_SOP_v1.0:67-89, L556:24"
+    rationale: "Classification guides fix strategy; unclassified failures get ad-hoc treatment"
+
+  # CAP-CG-005: Deferred Fix Documentation (Conditional)
+  CAP-CG-005:
+    domain: "triage"
+    statement: "If a CI failure fix is deferred, the CI governance system shall require documentation of: reason for deferral, owner, and target resolution date"
+    pattern: "conditional"
+    condition: "fix is deferred"
+    source: "L556:25"
+    rationale: "Undocumented deferrals become permanent deferrals (L556 drift vector 1: acknowledge-defer)"
+
+  # CAP-CG-006: Escalation Threshold (Conditional)
+  CAP-CG-006:
+    domain: "triage"
+    statement: "If a repository has more than 3 deferred CI failures, the CI governance system shall escalate to the supervisor for prioritization"
+    pattern: "conditional"
+    condition: ">3 deferred failures"
+    source: "L556:26"
+    rationale: "Accumulation of deferrals is drift vector 2 (L556); supervisor intervention prevents normalization"
+
+  # --- Enforcement ---
+
+  # CAP-CG-007: Branch Protection Requirement (Ubiquitous)
+  CAP-CG-007:
+    domain: "enforcement"
+    statement: "The CI governance system shall recommend branch protection on main/master branches to convert CI from informational to blocking"
+    pattern: "ubiquitous"
+    source: "L556:27,55"
+    rationale: "Branch protection is the highest-effectiveness structural enforcement (L556:35). Cultural 'fix CI' norms erode under workload pressure (L556:33)."
+
+  # CAP-CG-008: CI Mask Audit (Event-Driven)
+  CAP-CG-008:
+    domain: "enforcement"
+    statement: "When a new CI workflow is created or modified, the CI governance system shall audit for `|| true` masks and require justification for each instance"
+    pattern: "event_driven"
+    trigger: "CI workflow created or modified"
+    source: "L556:anti-patterns, Issue #301"
+    rationale: "`|| true` masks convert blocking failures into silent passes, defeating CI's governance function"
+
+  # CAP-CG-009: Wind-Down Test Gate (Event-Driven)
+  CAP-CG-009:
+    domain: "enforcement"
+    statement: "When a session wind-down is initiated, the CI governance system shall recommend running the test suite to catch breakage at session boundaries"
+    pattern: "event_driven"
+    trigger: "session wind-down initiated"
+    source: "L556:36,56, Issue #303"
+    rationale: "Session boundaries are natural checkpoints; breakage caught here prevents CI red accumulation"
+
+  # --- Remediation ---
+
+  # CAP-CG-010: Category-Specific Fix Procedures (Ubiquitous)
+  CAP-CG-010:
+    domain: "remediation"
+    statement: "The CI governance system shall provide documented fix procedures for each C1-C6 failure category with diagnosis commands, fix steps, and verification commands"
+    pattern: "ubiquitous"
+    source: "CI_REMEDIATION_SOP_v1.0:171-554"
+    rationale: "Standardized procedures reduce fix time and prevent ad-hoc troubleshooting"
+
+  # CAP-CG-011: Delegation Protocol (Conditional)
+  CAP-CG-011:
+    domain: "remediation"
+    statement: "If an agent has attempted 3 or more fixes for the same CI failure without progress, the CI governance system shall require delegation per L001 with documented investigation, evidence, and success criteria"
+    pattern: "conditional"
+    condition: "3+ fix attempts without progress"
+    source: "L001, CI_REMEDIATION_SOP_v1.0:483-554"
+    rationale: "Continued iteration without progress wastes time; delegation transfers to agent with environmental access"
+
+  # --- Severity ---
+
+  # CAP-CG-012: Severity Classification (Ubiquitous)
+  CAP-CG-012:
+    domain: "severity"
+    statement: "The CI governance system shall classify each CI failure by severity (Critical, High, Medium, Low) with associated response time expectations"
+    pattern: "ubiquitous"
+    source: "CI_HEALTH_CHECK_SOP_v1.0:242-247"
+    severity_table:
+      critical:
+        criteria: "Template repo failing, blocks fleet"
+        response_time: "Same day"
+      high:
+        criteria: "Production agent failing, blocking work"
+        response_time: "1-2 days"
+      medium:
+        criteria: "Non-blocking failure, recurring"
+        response_time: "1 week"
+      low:
+        criteria: "Transient, one-time, non-production"
+        response_time: "2 weeks"
+    rationale: "Severity drives prioritization; template repos have fleet-wide impact"
+
+  # CAP-CG-013: Template Priority (Conditional)
+  CAP-CG-013:
+    domain: "severity"
+    statement: "If a CI failure affects a template repository, the CI governance system shall assign higher priority because template failures propagate to all derived agents"
+    pattern: "conditional"
+    condition: "failure affects template repository"
+    source: "L224, CI_HEALTH_CHECK_SOP_v1.0:235"
+    rationale: "1 template failure x N derived agents = N potential incidents (L224)"
+
+# ============================================================
+# Quality Dimensions
+# ============================================================
+
+quality_dimensions:
+  timeliness:
+    description: "CI failures triaged within SLA-appropriate timeframes"
+    measurement: "Days from failure detection to triage session"
+    threshold: "≤7 days for any severity"
+  coverage:
+    description: "All fleet repositories have CI pipelines configured"
+    measurement: "Configured repos / total repos"
+    threshold: "≥90% of active repos"
+  resolution_rate:
+    description: "CI failures resolved without permanent deferral"
+    measurement: "Resolved failures / total failures per 30-day window"
+    threshold: "≥80%"
+
+# ============================================================
+# Anti-Patterns
+# ============================================================
+
+anti_patterns:
+  - name: "Acknowledge-Defer Spiral"
+    description: "Acknowledging CI failure as 'known issue' without timeline or owner, leading to permanent deferral"
+    source: "L556:18"
+    fix: "CAP-CG-005 requires documented reason, owner, and target date for all deferrals"
+
+  - name: "Silent Mask"
+    description: "Using `|| true` to suppress CI failures rather than fixing root causes"
+    source: "L556:anti-patterns, Issue #301"
+    fix: "CAP-CG-008 requires audit and justification for all `|| true` instances"
+
+  - name: "Failure Accumulation"
+    description: "Shipping new features while ignoring growing CI failure count (2->7->16)"
+    source: "L556:19"
+    fix: "CAP-CG-006 escalates when >3 failures are deferred"
+
+# ============================================================
+# Compliance Checklist
+# ============================================================
+
+compliance_checklist:
+  - "[ ] Fleet health check command available and documented (CAP-CG-001)"
+  - "[ ] Failure taxonomy (C1-C6) documented and accessible (CAP-CG-004)"
+  - "[ ] 7-day triage mandate communicated to all agents (CAP-CG-003)"
+  - "[ ] Deferred fixes have owner + timeline (CAP-CG-005)"
+  - "[ ] Branch protection enabled on template repos (CAP-CG-007)"
+  - "[ ] `|| true` masks audited in CI workflows (CAP-CG-008)"
+  - "[ ] Severity classification applied to all failures (CAP-CG-012)"
+
+# ============================================================
+# Version History
+# ============================================================
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-02-28"
+    changes: "Initial specification formalizing L556 and CI SOPs into EARS capabilities"
+    capabilities_added:
+      - "CAP-CG-001: Fleet health check availability"
+      - "CAP-CG-002: Per-repository diagnostic assessment"
+      - "CAP-CG-003: 7-day triage mandate"
+      - "CAP-CG-004: C1-C6 failure classification"
+      - "CAP-CG-005: Deferred fix documentation"
+      - "CAP-CG-006: Escalation threshold (>3 deferrals)"
+      - "CAP-CG-007: Branch protection recommendation"
+      - "CAP-CG-008: CI mask audit"
+      - "CAP-CG-009: Wind-down test gate"
+      - "CAP-CG-010: Category-specific fix procedures"
+      - "CAP-CG-011: Delegation protocol (3+ attempts)"
+      - "CAP-CG-012: Severity classification"
+      - "CAP-CG-013: Template priority escalation"
+
+# ============================================================
+# Notes
+# ============================================================
+#
+# This spec formalizes the cultural enforcement from L556 into structural requirements.
+# The CI SOPs (CI_HEALTH_CHECK_SOP_v1.0.md, CI_REMEDIATION_SOP_v1.0.md) provide
+# implementation detail; this spec provides the governance requirements.
+#
+# Key structural enforcement mechanisms:
+# 1. Time-bounded triage (7-day mandate) — CAP-CG-003
+# 2. Branch protection (blocking vs informational) — CAP-CG-007
+# 3. CI mask audit (|| true detection) — CAP-CG-008
+# 4. Delegation protocol (stop iterating after 3 attempts) — CAP-CG-011
