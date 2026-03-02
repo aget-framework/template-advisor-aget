@@ -2,7 +2,7 @@
 
 > Assess risks and provide recommendations with evidence-based guidance
 
-**Version**: v3.6.0 | **Archetype**: Advisor | **Skills**: 2 specialized + 15 universal
+**Version**: v3.7.0 | **Archetype**: Advisor | **Skills**: 2 specialized + 15 universal
 
 ---
 
@@ -102,7 +102,7 @@ python3 -m pytest tests/ -v
 
 | Attribute | Value |
 |-----------|-------|
-| **Framework** | [AGET v3.6.0](https://github.com/aget-framework/aget) |
+| **Framework** | [AGET v3.7.0](https://github.com/aget-framework/aget) |
 | **Archetype** | Advisor |
 | **Skills** | 17 total (2 archetype + 15 universal) |
 | **Ontology** | 6 concepts, 2 clusters |
