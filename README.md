@@ -98,6 +98,18 @@ python3 -m pytest tests/ -v
 
 ---
 
+## .claude/ Directory
+
+| Directory | Purpose | Owner |
+|-----------|---------|-------|
+| `.claude/skills/` | Slash command definitions | Framework + Agent |
+| `.claude/agents/` | Subagent definitions | Agent |
+| `.claude/rules/` | Path-scoped context rules | Agent |
+
+Skills are provided by the template. Agents and rules directories are scaffolded for your customization.
+
+---
+
 ## Framework Specification
 
 | Attribute | Value |

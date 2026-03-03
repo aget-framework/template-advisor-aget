@@ -106,6 +106,21 @@ vim .aget/version.json  # Set "portfolio": "example" for personal coaching
 - ❌ Take action without explicit user approval
 - ❌ Change system configuration
 
+### Skill Routing
+
+| Task | Skill | When to Use |
+|------|-------|-------------|
+| Start session | /aget-wake-up | Beginning of every session |
+| End session | /aget-wind-down | End of every session |
+| Research topic | /aget-study-up | Before proposing changes |
+| Record learning | /aget-record-lesson | After discovering reusable insight |
+| Create project | /aget-create-project | Starting multi-gate work |
+| Review project | /aget-review-project | Mid-flight assessment |
+| File issue | /aget-file-issue | Reporting bugs or gaps |
+| Check health | /aget-check-health | Verifying agent structure |
+| Assess risk | /aget-assess-risk | Evaluating risk factors and exposure |
+| Recommend action | /aget-recommend-action | Proposing advisory recommendations |
+
 ---
 
 ## Persona Configuration
