@@ -5,6 +5,44 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.8.0] - 2026-03-08 - "Governance Maturation"
+
+### Added
+- AGENTS.md governance patterns: capability declarations, CLI feature adoption guidance
+- `.claude/` scaffolding: settings.json, skills directory structure
+- Skill: `aget-expand-ontology` v1.0.0 (optional, acquirable)
+- Skill: `aget-enhance-spec` v1.1.0 (specification enhancement lifecycle)
+
+### Changed
+- Version bump to v3.8.0
+- identity.json: `type` field added
+- SOP headers: CAP-SOP-001 compliance
+- Migration history entry added
+
+### Notes
+- See aget/CHANGELOG.md [3.8.0] for framework changes
+- Part of Governance Maturation release (principle codification, deliverable conformance)
+
+---
+
+## [3.7.0] - 2026-03-05 - "Quality Reconciliation"
+
+### Added
+- AGENTS.md governance patterns backported (TEMPLATE_AGENTS_MD_SPEC v1.0.0)
+- `.claude/` directory scaffolding for CLI feature adoption
+
+### Changed
+- Skill renames: `aget-studyup` → `aget-study-up`, `aget-healthcheck-*` → `aget-check-*`
+- README positioning: evidence-based reframe, removed undemonstrated claims
+- Version bump to v3.7.0
+- Migration history entry added
+
+### Notes
+- See aget/CHANGELOG.md [3.7.0] for framework changes
+- Part of Quality Reconciliation release (content integrity, SOP lifecycle, positioning reframe)
+
+---
+
 ## [3.6.0] - 2026-02-21 - "Infrastructure Maturation"
 
 ### Added
