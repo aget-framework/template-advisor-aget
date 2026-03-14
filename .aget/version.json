@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.8.0",
+  "aget_version": "3.9.0",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2026-03-08",
+  "updated": "2026-03-14",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -57,6 +57,7 @@
     "v3.4.0 -> v3.5.0: 2026-02-14 (Archetype Customization)",
     "v3.5.0 -> v3.6.0: 2026-02-21 (Infrastructure Maturation)",
     "v3.6.0 -> v3.7.0: 2026-03-01",
-    "v3.7.0 -> v3.8.0: 2026-03-08"
+    "v3.7.0 -> v3.8.0: 2026-03-08",
+    "v3.8.0 -> v3.9.0: 2026-03-14"
   ]
 }

@@ -2,7 +2,7 @@
 
 > Assess risks and provide recommendations with evidence-based guidance
 
-**Version**: v3.8.0 | **Archetype**: Advisor | **Skills**: 2 specialized + 15 universal
+**Version**: v3.9.0 | **Archetype**: Advisor | **Skills**: 2 specialized + 15 universal
 
 ---
 
@@ -114,7 +114,7 @@ Skills are provided by the template. Agents and rules directories are scaffolded
 
 | Attribute | Value |
 |-----------|-------|
-| **Framework** | [AGET v3.8.0](https://github.com/aget-framework/aget) |
+| **Framework** | [AGET v3.9.0](https://github.com/aget-framework/aget) |
 | **Archetype** | Advisor |
 | **Skills** | 17 total (2 archetype + 15 universal) |
 | **Ontology** | 6 concepts, 2 clusters |

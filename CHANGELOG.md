@@ -5,7 +5,21 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.8.0] - 2026-03-08 - "Governance Maturation"
+## [3.9.0] - 2026-03-15 - "Governance Enforcement"
+
+### Added
+- Gate 0: Spec Verification (MP-1) in project plan template
+- Phase -1: Release Readiness governance in SOP
+
+### Changed
+- Version bump to v3.9.0 (5/5 artifact types)
+- version_bump.py: extended to cover AGENTS.md, codemeta.json, CITATION.cff
+- TEMPLATE_PROJECT_PLAN.md: mandatory Gate 0 added
+
+### Fixed
+- aget-enhance-spec: Phase 6 consistency (#418), phantom spec reference (#419)
+
+ - 2026-03-08 - "Governance Maturation"
 
 ### Added
 - AGENTS.md governance patterns: capability declarations, CLI feature adoption guidance
