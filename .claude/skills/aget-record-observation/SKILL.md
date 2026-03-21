@@ -1,13 +1,13 @@
 ---
-name: aget-capture-observation
-description: Capture research observations into AGET KB without committing specs. Use when discovering vocabulary candidates, RQ proposals, web findings, patterns, or observations mid-session that should be preserved before continuing.
+name: aget-record-observation
+description: Record research observations into AGET KB without committing specs. Use when discovering vocabulary candidates, RQ proposals, web findings, patterns, or observations mid-session that should be preserved before continuing.
 ---
 
-## Capture Protocol (v2 - Autonomous-Explicit Continuum)
+## Record Protocol (v2 - Autonomous-Explicit Continuum)
 
-You are capturing research observations for the AGET knowledge base.
+You are recording research observations for the AGET knowledge base.
 
-**Renamed**: `/aget-capture-observation` → `/aget-capture-observation` per S-V-O naming convention (L584) and ACM SIGSOFT "Observation" grounding.
+**Renamed**: `/aget-record-observation` → `/aget-record-observation` per S-V-O naming convention (L584) and ACM SIGSOFT "Observation" grounding.
 
 ### Input
 
@@ -26,7 +26,7 @@ Detect the input mode based on $ARGUMENTS:
 
 ### Mode 1: Autonomous (no args)
 
-When invoked as `/aget-capture-observation` with no arguments:
+When invoked as `/aget-record-observation` with no arguments:
 
 1. **Scan** recent session conversation for valuable signals
 2. **Identify** vocabulary candidates, patterns, RQs, findings, gaps
@@ -36,7 +36,7 @@ When invoked as `/aget-capture-observation` with no arguments:
 
 ### Mode 2: Time-Budget (duration arg)
 
-When invoked as `/aget-capture-observation <duration>` (e.g., `/aget-capture-observation 10min`):
+When invoked as `/aget-record-observation <duration>` (e.g., `/aget-record-observation 10min`):
 
 | Time Budget | Depth | Actions |
 |-------------|-------|---------|
@@ -47,7 +47,7 @@ When invoked as `/aget-capture-observation <duration>` (e.g., `/aget-capture-obs
 
 ### Mode 3: Explicit (signal arg)
 
-When invoked as `/aget-capture-observation "<signal>"`:
+When invoked as `/aget-record-observation "<signal>"`:
 
 Classify the input and route to appropriate target:
 

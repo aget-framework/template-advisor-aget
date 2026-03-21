@@ -1,10 +1,10 @@
 ---
-name: aget-study-up
+name: aget-study-topic
 description: Research a topic across the knowledge base before implementation. Searches L-docs, patterns, PROJECT_PLANs, SOPs, and governance for relevant context.
 version: 1.0.0
 ---
 
-# /aget-study-up
+# /aget-study-topic
 
 Focused KB research on a specific topic before proposing changes or starting implementation.
 
@@ -17,9 +17,9 @@ Per L335 (Memory Architecture) and PATTERN_step_back_review_kb, this skill enabl
 $ARGUMENTS - The topic to research (required)
 
 Examples:
-- `/aget-study-up release` — Research release-related artifacts
-- `/aget-study-up skills` — Research skill-related context
-- `/aget-study-up L477` — Find references to specific L-doc
+- `/aget-study-topic release` — Research release-related artifacts
+- `/aget-study-topic skills` — Research skill-related context
+- `/aget-study-topic L477` — Find references to specific L-doc
 
 ## Execution
 
@@ -29,9 +29,9 @@ If no topic provided, prompt user:
 
 > **Topic required**
 >
-> Usage: `/aget-study-up <topic>`
+> Usage: `/aget-study-topic <topic>`
 >
-> Example: `/aget-study-up release`
+> Example: `/aget-study-topic release`
 
 ### Step 2: Run Study Up Script
 
@@ -51,7 +51,7 @@ The script searches 5 KB areas:
 Display results in this format:
 
 ```
-=== /aget-study-up: {topic} ===
+=== /aget-study-topic: {topic} ===
 
 L-docs Found: [count]
   - L###: {title} ({match_count} matches)
@@ -106,7 +106,7 @@ python3 scripts/study_up.py --topic "$ARGUMENTS" --quiet
 
 ## When to Use
 
-| Scenario | Use /aget-study-up |
+| Scenario | Use /aget-study-topic |
 |----------|-------------------|
 | Before implementing a feature | Yes — check for related patterns |
 | Before creating L-doc | Yes — avoid duplicating existing learnings |
@@ -132,6 +132,6 @@ python3 scripts/study_up.py --topic "$ARGUMENTS" --quiet
 
 ---
 
-*aget-study-up v1.0.0*
+*aget-study-topic v1.0.0*
 *Category: Research*
 *Based on CAP-SESSION-007 (Study Up Protocol)*

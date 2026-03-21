@@ -161,7 +161,7 @@ Report:
 ## Related Skills
 
 - `/aget-check-evolution` - Check evolution directory health
-- `/aget-capture-observation` - Capture observations (lighter weight)
+- `/aget-record-observation` - Capture observations (lighter weight)
 
 ## Traceability
 

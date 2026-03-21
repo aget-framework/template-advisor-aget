@@ -37,7 +37,7 @@ All AGET agents include session management, knowledge capture, and health monito
 
 - `aget-wake-up` / `aget-wind-down` — Session lifecycle
 - `aget-create-project` / `aget-review-project` — Project management
-- `aget-record-lesson` / `aget-capture-observation` — Learning capture
+- `aget-record-lesson` / `aget-record-observation` — Learning capture
 - `aget-check-health` / `aget-check-kb` / `aget-check-evolution` — Health monitoring
 - `aget-propose-skill` / `aget-create-skill` — Skill development
 - `aget-save-state` / `aget-file-issue` — State and issue management

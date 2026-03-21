@@ -41,7 +41,7 @@ Track research topics and observations that warrant deeper investigation but don
 
 ## Adding Topics
 
-Use `/aget-capture-observation` to add topics, or add manually:
+Use `/aget-record-observation` to add topics, or add manually:
 
 ```markdown
 | RB-001 | {Topic} | P2 | {Source} | Open | {Notes} |
@@ -63,7 +63,7 @@ Captured → Prioritized → Investigating → Complete/Deferred
 
 | Link | Reference |
 |------|-----------|
-| Skill | `/aget-capture-observation` |
+| Skill | `/aget-record-observation` |
 | Template | `templates/poc/RESEARCH_PROJECT_PLAN.template.md` |
 | Governance | L586 (skill infrastructure) |
 

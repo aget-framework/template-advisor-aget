@@ -391,7 +391,7 @@ The skill actively checks for these anti-patterns:
 - `/aget-propose-skill` — Propose new skills (used in this project at G3)
 - `/aget-record-lesson` — Capture lessons discovered during enhancement
 - `/aget-review-project` — Review enhancement project progress
-- `/aget-study-up` — Research topic before enhancing
+- `/aget-study-topic` — Research topic before enhancing
 
 ## Traceability
 
