@@ -6,7 +6,7 @@ We release patches for security vulnerabilities. Currently supported versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
+| 3.9.0   | :white_check_mark: |
 | < 0.1   | :x:                |
 
 ## Reporting a Vulnerability
