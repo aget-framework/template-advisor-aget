@@ -5,6 +5,23 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.10.0] - 2026-03-21 - "Structural Enforcement"
+
+### Added
+- MUST-invoke directives for /aget-create-project and /aget-file-issue (D71)
+- Gate Boundary Protocol: plan update + commit as structural proof of gate completion
+- Skill Completion Signal pattern in /aget-create-project and /aget-enhance-spec
+- SOP Phase -0.5: Content Sync governance (D69/GOV-040)
+- SKILL_SPEC_TEMPLATE.yaml (#439)
+
+### Changed
+- Skill renames: aget-capture-observation → aget-record-observation, aget-capture-nugget → aget-record-nugget, aget-study-up → aget-study-topic (#480)
+- `capture` verb retired from Learning family
+- Gate Execution Discipline strengthened with MUST update + MUST commit
+
+### Fixed
+- Template hygiene: VERSION, classifier, SECURITY.md corrections (#574)
+
 ## [3.9.0] - 2026-03-15 - "Governance Enforcement"
 
 ### Added
