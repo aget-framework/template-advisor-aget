@@ -123,6 +123,35 @@ vim .aget/version.json  # Set "portfolio": "example" for personal coaching
 
 ---
 
+
+## Governed Project Creation (STRUCTURAL — D71 Layer 1)
+
+**MUST invoke** `/aget-create-project` when creating any `planning/PROJECT_PLAN_*.md` file. Direct creation via Write or Edit is **PROHIBITED** — the skill enforces spec conformance (CAP-PP-001 through CAP-PP-007), gate ordering (L617), and self-verification (Step 7.5 + Step 8) that manual creation bypasses.
+
+**Enforcement**: Strict (ADR-008). If a PROJECT_PLAN exists without skill invocation evidence, flag as governance bypass in retrospective.
+
+## Structural Skill Routing (D71)
+
+Skills with STRUCTURAL enforcement level. When the trigger condition is met, the skill MUST be invoked.
+
+| Skill | Trigger Condition | Prohibited Alternative | ADR-008 Level |
+|-------|-------------------|----------------------|:-------------:|
+| `/aget-create-project` | Creating `planning/PROJECT_PLAN_*.md` | Direct Write/Edit to planning/ | **Strict** |
+| `/aget-file-issue` | Filing GitHub issues | Direct `gh issue create` | **Strict** |
+
+All other skills remain at **Advisory** level (available, recommended, not enforced).
+
+## Governance Bypass Detection (D71)
+
+When reviewing retrospectives or gate completions, check for these bypass indicators:
+
+| Bypass Type | Detection | Response |
+|-------------|-----------|----------|
+| PROJECT_PLAN without skill | `planning/PROJECT_PLAN_*.md` created but no `/aget-create-project` in session | Flag in retrospective. Missing: spec conformance, gate ordering, self-verification. |
+| Issue without skill | `gh issue create` in session but no `/aget-file-issue` | Flag in retrospective. Missing: destination routing, content sanitization. |
+| Gate without plan update | Gate deliverables marked [x] but no commit with V-test results | Flag as gate boundary slack. Missing: structural proof of compliance. |
+
+
 ## Persona Configuration
 
 ### Supported Personas

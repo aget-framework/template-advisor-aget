@@ -393,6 +393,24 @@ The skill actively checks for these anti-patterns:
 - `/aget-review-project` — Review enhancement project progress
 - `/aget-study-topic` — Research topic before enhancing
 
+
+### Step 10: Skill Completion Signal (D71 Layer 3)
+
+**Purpose**: Make skill execution completeness structurally visible. If this signal is absent, the skill execution is incomplete.
+
+The skill MUST output this signal as the LAST section of the report:
+
+```markdown
+## Skill Completion Signal
+**Self-Compliance**: PASS | FAIL (items: [list])
+**Cross-References**: PASS (N mapped) | SKIP (justification)
+**Phases Completed**: 0→1→2→3→4→5→6→9→10
+```
+
+If Phase 6 (Self-Compliance Check) was not executed, the signal MUST report FAIL. Per C3, Phase 6 has no skip option.
+
+**Enforcement**: Strict (ADR-008, D71). Signal absence = incomplete execution.
+
 ## Traceability
 
 | Link | Reference |

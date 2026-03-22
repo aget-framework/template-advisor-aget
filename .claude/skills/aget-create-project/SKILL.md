@@ -410,6 +410,24 @@ Per AGET governance principles:
 
 This skill implements the "research-informed project creation" pattern per PROJECT_PLAN_AGET_CREATE_PROJECT_V2.md, enhanced with principle enforcement per PROJECT_PLAN_create_project_principles_enforcement_v1.0.md (D62).
 
+
+### Step 9: Skill Completion Signal (D71 Layer 3)
+
+**Purpose**: Make skill execution completeness structurally visible. If this signal is absent from the skill output, the skill execution is incomplete.
+
+The skill MUST output this signal as the LAST section of the report:
+
+```markdown
+## Skill Completion Signal
+**Self-Verification**: PASS | FIXED (N items) | FAIL (items: [list])
+**Gate Ordering**: PASS | WARN (issue: [description])
+**Steps Completed**: 0→1→2→3→3.6→3.7→3.8→4→4.5→5→6→7→7.5→8→9
+```
+
+If Step 7.5 or Step 8 were skipped or failed, the signal MUST report FAIL with the specific items.
+
+**Enforcement**: Strict (ADR-008, D71). Signal absence = incomplete execution.
+
 ## Traceability
 
 | Link | Reference |
