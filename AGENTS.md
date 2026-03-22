@@ -117,6 +117,7 @@ vim .aget/version.json  # Set "portfolio": "example" for personal coaching
 | Create project | /aget-create-project | Starting multi-gate work |
 | Review project | /aget-review-project | Mid-flight assessment |
 | File issue | /aget-file-issue | Reporting bugs or gaps |
+| Enhance spec | /aget-enhance-spec | Improving specification maturity |
 | Check health | /aget-check-health | Verifying agent structure |
 | Assess risk | /aget-assess-risk | Evaluating risk factors and exposure |
 | Recommend action | /aget-recommend-action | Proposing advisory recommendations |
