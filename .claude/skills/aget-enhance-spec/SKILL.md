@@ -191,7 +191,10 @@ Execute:
    - Optional: `WHERE condition, the SYSTEM should...`
    - Prohibited: `The SYSTEM shall NOT...`
    - Unwanted: `artifact shall NOT...`
-3. Assign unique requirement IDs: R-{DOMAIN}-{NNN}
+3. Assign unique requirement IDs: CAP-{DOMAIN}-{NNN}[-{SUB}]
+   - For ADD-REQ: read existing spec to detect current ID format, match it for consistency
+   - If detected format is R- (legacy): flag for CAP- migration in cross-reference report
+   - Reference: SPEC_FORMAT v1.2 §Namespaced Capability IDs
 4. If new vocabulary terms introduced, add SKOS vocabulary section
 5. If applicable, use "codify existing behavior" approach (fastest — L622 evidence)
 
@@ -216,7 +219,7 @@ Execute:
 3. Validate EARS pattern compliance for all requirements:
    ```
    For each requirement:
-   - Has unique R-{DOMAIN}-{NNN} ID? ✓/✗
+   - Has unique CAP-{DOMAIN}-{NNN}[-{SUB}] ID? ✓/✗
    - Uses EARS pattern keyword? ✓/✗
    - Pattern type recorded? ✓/✗
    ```
@@ -359,6 +362,23 @@ Outputs:
   - Decision Log: <inline>
 ```
 
+### Step 10: Skill Completion Signal (D71 Layer 3)
+
+**Purpose**: Make skill execution completeness structurally visible. If this signal is absent, the skill execution is incomplete.
+
+The skill MUST output this signal as the LAST section of the report:
+
+```markdown
+## Skill Completion Signal
+**Self-Compliance**: PASS | FAIL (items: [list])
+**Cross-References**: PASS (N mapped) | SKIP (justification)
+**Phases Completed**: 0→1→2→3→4→5→6→9→10
+```
+
+If Phase 6 (Self-Compliance Check) was not executed, the signal MUST report FAIL. Per C3, Phase 6 has no skip option.
+
+**Enforcement**: Strict (ADR-008, D71). Signal absence = incomplete execution.
+
 ## Constraints
 
 These are INVIOLABLE — you MUST NOT violate these constraints:
@@ -371,7 +391,7 @@ These are INVIOLABLE — you MUST NOT violate these constraints:
 6. **C6**: ALWAYS produce cross-reference report as output
 7. **C7**: ALWAYS cite governing spec requirements (CAP-xxx-nnn) in deliverables
 8. **C8**: ALWAYS use EARS patterns for requirements
-9. **C9**: ALWAYS assign unique R-{DOMAIN}-{NNN} IDs to requirements
+9. **C9**: ALWAYS assign unique CAP-{DOMAIN}-{NNN} IDs to requirements per SPEC_FORMAT v1.2
 
 ## Anti-Pattern Detection
 
@@ -392,24 +412,6 @@ The skill actively checks for these anti-patterns:
 - `/aget-record-lesson` — Capture lessons discovered during enhancement
 - `/aget-review-project` — Review enhancement project progress
 - `/aget-study-topic` — Research topic before enhancing
-
-
-### Step 10: Skill Completion Signal (D71 Layer 3)
-
-**Purpose**: Make skill execution completeness structurally visible. If this signal is absent, the skill execution is incomplete.
-
-The skill MUST output this signal as the LAST section of the report:
-
-```markdown
-## Skill Completion Signal
-**Self-Compliance**: PASS | FAIL (items: [list])
-**Cross-References**: PASS (N mapped) | SKIP (justification)
-**Phases Completed**: 0→1→2→3→4→5→6→9→10
-```
-
-If Phase 6 (Self-Compliance Check) was not executed, the signal MUST report FAIL. Per C3, Phase 6 has no skip option.
-
-**Enforcement**: Strict (ADR-008, D71). Signal absence = incomplete execution.
 
 ## Traceability
 
