@@ -5,6 +5,22 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.11.0] - 2026-03-28 - "Skill Conformance, Requirements & Hooks"
+
+### Added
+
+- **requirements/** directory scaffolded (L742 two-level model, #725)
+- **.claude/hooks/** directory with README (ADR-008 Generator, #505)
+- **governance_intensity** field in AGENTS.md (#732)
+
+### Changed
+
+- 17 skill SKILL.md files updated for L736 conformance (SICR, #678)
+- "sanity check" → "health check" terminology (#658)
+- RUBRIC.template.md v2.0 deployed
+
+---
+
 ## [3.10.0] - 2026-03-21 - "Structural Enforcement"
 
 ### Added

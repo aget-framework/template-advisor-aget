@@ -1,6 +1,6 @@
 # Agent Configuration - Advisor AGET Template
 
-@aget-version: 3.10.0
+@aget-version: 3.11.0
 
 ## Agent Compatibility
 This configuration follows the AGENTS.md open-source standard for universal agent configuration.
