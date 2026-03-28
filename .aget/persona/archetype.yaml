@@ -35,6 +35,8 @@ archetype:
       style: iterative_feedback
       communication: encouraging
 
+  governance_intensity: moderate
+
   anti_patterns:
     - Executing actions in user's codebase
     - Making decisions for the user
