@@ -5,6 +5,15 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.11.1] - 2026-04-04
+
+### Changed
+
+- Renamed `aget_housekeeping_protocol.py` → `health_check.py`
+- Renamed `study_up.py` → `study_topic.py`
+- Config key `skip_sanity` → `skip_health_check`
+
+---
 ## [3.11.0] - 2026-03-28 - "Skill Conformance, Requirements & Hooks"
 
 ### Added
