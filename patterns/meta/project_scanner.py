@@ -203,7 +203,7 @@ class ProjectScanner:
             self.check_file_exists(project_path, 'scripts/aget_session_protocol.py') or
             self.check_file_exists(project_path, 'scripts/session_protocol.py')
         )
-        has_housekeeping_protocols = self.check_file_exists(project_path, 'scripts/aget_housekeeping_protocol.py')
+        has_housekeeping_protocols = self.check_file_exists(project_path, 'scripts/health_check.py')
 
         # Get pattern categories
         pattern_categories = self.detect_pattern_categories(project_path)

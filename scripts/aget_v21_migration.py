@@ -45,7 +45,7 @@ class V21Migration:
         if self.scripts_dir.exists():
             # List of known framework scripts that should have aget_ prefix
             framework_scripts_with_prefix = [
-                "aget_housekeeping_protocol.py",
+                "health_check.py",
                 "aget_session_protocol.py",
                 "aget_check_permissions.py",
                 "aget_pre_release.sh",
@@ -129,7 +129,7 @@ class V21Migration:
 ### Framework Files (Don't Edit These)
 ```
 scripts/aget_session_protocol.py
-scripts/aget_housekeeping_protocol.py
+scripts/health_check.py
 scripts/aget_pre_release.sh
 .aget/patterns/
 ```

@@ -111,7 +111,7 @@ def run_sanity_check(agent_path: Path, verbose: bool = False) -> Dict[str, Any]:
     script_locations = [
         agent_path / '.aget' / 'patterns' / 'session' / 'sanity_check.py',
         agent_path / '.aget' / 'patterns' / 'session' / 'housekeeping.py',
-        Path(__file__).parent / 'aget_housekeeping_protocol.py',
+        Path(__file__).parent / 'health_check.py',
     ]
 
     script_path = None

@@ -193,7 +193,7 @@ class ProjectValidator:
 
         # Check for housekeeping protocols
         housekeeping_scripts = [
-            'aget_housekeeping_protocol.py',
+            'health_check.py',
             'housekeeping_protocol.py'
         ]
 

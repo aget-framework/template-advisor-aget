@@ -112,7 +112,7 @@ Run tests before submitting:
 
 ```bash
 python3 -m pytest tests/ -v
-python3 scripts/aget_housekeeping_protocol.py sanity-check
+python3 scripts/health_check.py sanity-check
 ```
 
 ### Documentation

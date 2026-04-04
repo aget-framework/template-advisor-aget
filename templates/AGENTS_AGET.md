@@ -33,25 +33,25 @@ When user says "all done", "sync up", "sign off", or "sign":
 
 ### Documentation Check
 When user says "check docs" or "documentation check":
-1. Run: `python3 scripts/aget_housekeeping_protocol.py documentation-check`
+1. Run: `python3 scripts/health_check.py documentation-check`
 2. Analyzes documentation quality
 3. Reports grade (A-F) and issues found
 
 ### Light Cleanup (Housekeeping)
 When user says "tidy up" or "housekeeping":
-1. Run: `python3 scripts/aget_housekeeping_protocol.py housekeeping --dry-run`
+1. Run: `python3 scripts/health_check.py housekeeping --dry-run`
 2. Preview cleanup actions
 3. Run without --dry-run only after user approval
 
 ### Deep Clean
 When user says "deep clean" or "spring clean":
-1. Run: `python3 scripts/aget_housekeeping_protocol.py spring-clean --dry-run`
+1. Run: `python3 scripts/health_check.py spring-clean --dry-run`
 2. Archives old files, removes duplicates
 3. Requires confirmation if not dry-run
 
 ### Health Check (System Diagnostic)
 When user says "health check" or "sanity check":
-1. Run: `python3 scripts/aget_housekeeping_protocol.py sanity-check`
+1. Run: `python3 scripts/health_check.py sanity-check`
 2. Checks Python, git, critical files, imports
 3. Reports system status: OK/DEGRADED/CRITICAL
 
@@ -169,7 +169,7 @@ If protocols don't work:
 1. Check Python 3.8+ is installed: `python3 --version`
 2. Ensure you're in project root with AGENTS.md
 3. Verify scripts/ directory exists with protocols
-4. Run health check: `python3 scripts/aget_housekeeping_protocol.py sanity-check`
+4. Run health check: `python3 scripts/health_check.py sanity-check`
 
 ## Getting Help
 

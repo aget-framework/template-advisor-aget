@@ -37,7 +37,7 @@ class TestProjectScanner:
         }))
         (migrated / "scripts").mkdir()
         (migrated / "scripts" / "aget_session_protocol.py").write_text("# Session protocol")
-        (migrated / "scripts" / "aget_housekeeping_protocol.py").write_text("# Housekeeping")
+        (migrated / "scripts" / "health_check.py").write_text("# Housekeeping")
         (migrated / "patterns").mkdir()
         (migrated / "patterns" / "session").mkdir()
         (migrated / ".git").mkdir()  # Mark as git repo
@@ -193,7 +193,7 @@ class TestProjectScanner:
         (custom / ".aget").mkdir()
         (custom / "scripts").mkdir()
         (custom / "scripts" / "aget_session_protocol.py").write_text("# Session")
-        (custom / "scripts" / "aget_housekeeping_protocol.py").write_text("# Housekeeping")
+        (custom / "scripts" / "health_check.py").write_text("# Housekeeping")
         (custom / "patterns").mkdir()
 
         # Add custom pattern categories

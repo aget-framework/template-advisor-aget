@@ -33,25 +33,25 @@ When user says "all done", "sync up", or "sign off", execute:
 
 ### Documentation Check
 When user says "check docs" or "documentation check", execute:
-- Run: `python3 scripts/aget_housekeeping_protocol.py documentation-check`
+- Run: `python3 scripts/health_check.py documentation-check`
 - Analyze documentation quality (line counts, staleness, missing files)
 - Report grade (A-F) and specific issues
 
 ### Light Cleanup (Housekeeping)
 When user says "tidy up" or "housekeeping", execute:
-- Run: `python3 scripts/aget_housekeeping_protocol.py housekeeping --dry-run`
+- Run: `python3 scripts/health_check.py housekeeping --dry-run`
 - Clean temporary files, caches, Python artifacts
 - Show what would be removed, then ask for confirmation
 
 ### Deep Clean
 When user says "deep clean" or "spring clean", execute:
-- Run: `python3 scripts/aget_housekeeping_protocol.py spring-clean --dry-run`
+- Run: `python3 scripts/health_check.py spring-clean --dry-run`
 - Deep cleanup: archive old files, remove duplicates, organize
 - Always dry-run first, require explicit confirmation for actual execution
 
 ### Health Check
 When user says "health check" or "sanity check", execute:
-- Run: `python3 scripts/aget_housekeeping_protocol.py sanity-check`
+- Run: `python3 scripts/health_check.py sanity-check`
 - Emergency diagnostics: Python version, git status, dependencies
 - Report system status: OK/DEGRADED/CRITICAL
 

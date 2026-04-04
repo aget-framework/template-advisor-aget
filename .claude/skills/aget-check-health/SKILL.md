@@ -17,7 +17,7 @@ When this skill is invoked:
 
 1. Run the housekeeping script:
    ```bash
-   python3 scripts/aget_housekeeping_protocol.py
+   python3 scripts/health_check.py
    ```
 
 2. The script checks:
