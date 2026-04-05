@@ -90,7 +90,7 @@ Each dimension must be classified as **Quality** or **Maturity**. Score quality 
 
 **Separation principle**: Quality and maturity dimensions answer different questions and should not be collapsed into a single composite unless explicitly justified. Consider producing separate quality and maturity scores.
 
-**Reference**: CMMI capability vs. maturity levels; ISO 33000 process vs. capability dimensions; VP-of-AI L636 (inter-rater agreement improved 50% → 87.5% after separation); #652
+**Reference**: CMMI capability vs. maturity levels; ISO 33000 process vs. capability dimensions; internal research (inter-rater agreement improved 50% → 87.5% after separation); #652
 
 ---
 
@@ -105,7 +105,7 @@ Performance level descriptors must describe **observable behavior**, not abstrac
 
 **Test**: For each performance level descriptor, ask: "Would a plausibly defective artifact PASS this criterion?" If yes, the criterion lacks discriminative power (L689).
 
-**Reference**: BARS (Behaviorally Anchored Rating Scales); VP-of-AI L689 (rubric-as-adversary); Anthropic "Demystifying Evals" 2026 (grade what was produced, not the path)
+**Reference**: BARS (Behaviorally Anchored Rating Scales); internal research (rubric-as-adversary); Anthropic "Demystifying Evals" 2026 (grade what was produced, not the path)
 
 ---
 

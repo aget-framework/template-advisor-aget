@@ -52,7 +52,7 @@ fi
 
 | Agent Type | Destination |
 |------------|-------------|
-| Private Fleet | `gmelli/aget-aget` |
+| Private Fleet | `{private-tracker}` |
 | Public/Remote | `aget-framework/aget` |
 
 ### Step 3: Prepare Content
@@ -79,7 +79,7 @@ Check required fields:
 ```bash
 # Private fleet agent
 gh issue create \
-  --repo gmelli/aget-aget \
+  --repo {private-tracker} \
   --title "$TITLE" \
   --body "$BODY" \
   --label "type:$TYPE"
@@ -138,7 +138,7 @@ These are INVIOLABLE:
 /aget-file-issue enhancement Add skill validation
 ```
 
-**Result**: Files to `gmelli/aget-aget` (no sanitization needed)
+**Result**: Files to `{private-tracker}` (no sanitization needed)
 
 ### Example 2: Public Agent Filing Bug
 
