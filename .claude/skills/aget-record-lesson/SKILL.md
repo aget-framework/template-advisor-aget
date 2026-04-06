@@ -153,7 +153,7 @@ Report:
 | Lesson Type | Classification | Example |
 |-------------|---------------|---------|
 | Process improvement for AGET framework | Framework | "Threshold calibration methodology" |
-| Domain-specific knowledge | Domain | "Workco contract parsing rules" |
+| Domain-specific knowledge | Domain | "domain-specific contract analysis rules" |
 | CLI behavior finding | Framework | "Skills work in headless mode" |
 | Project-specific pattern | Domain | "API rate limit handling" |
 | Anti-pattern applicable to all AGETs | Framework | "Context-Anchoring Blindness" |
