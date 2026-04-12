@@ -31,7 +31,7 @@ L021 Verification Table:
     | 4 | governance/ | Check before verifying files |
     | 5 | evolution/ | Check before counting L-docs |
 
-Author: private-aget-framework-AGET (canonical template)
+Author: aget-framework (canonical template)
 Version: 1.0.0 (v3.1.0)
 """
 
@@ -288,7 +288,10 @@ def check_sessions_directory(agent_path: Path) -> CheckResult:
             fixable=True
         )
 
-    session_files = list(sessions_dir.glob('session_*.md'))
+    # SC-011: Use correct SESSION_*.md convention with legacy fallback
+    session_files = list(sessions_dir.glob('SESSION_*.md'))
+    if not session_files:
+        session_files = list(sessions_dir.glob('session_*.md'))  # legacy fallback
     return CheckResult(
         name="sessions_directory",
         passed=True,
