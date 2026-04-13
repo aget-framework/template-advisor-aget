@@ -80,9 +80,9 @@ class InstallVerifier:
             expected_files = {
                 'minimal': ['AGENTS.md', 'CLAUDE.md', 'scripts/session_protocol.py', 'Makefile'],
                 'standard': ['AGENTS.md', 'CLAUDE.md', 'scripts/session_protocol.py',
-                            'scripts/housekeeping_protocol.py', 'Makefile'],
+                            'scripts/health_check.py', 'Makefile'],
                 'advanced': ['AGENTS.md', 'CLAUDE.md', 'scripts/session_protocol.py',
-                            'scripts/housekeeping_protocol.py', 'Makefile']
+                            'scripts/health_check.py', 'Makefile']
             }
 
             missing = []

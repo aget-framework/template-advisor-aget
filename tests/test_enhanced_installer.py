@@ -45,7 +45,7 @@ class TestTemplateInstaller:
             assert success
             assert (target / 'AGENTS.md').exists()
             assert (target / 'scripts' / 'session_protocol.py').exists()
-            assert (target / 'scripts' / 'housekeeping_protocol.py').exists()
+            assert (target / 'scripts' / 'health_check.py').exists()
             assert (target / 'Makefile').exists()
 
     def test_advanced_install(self):
@@ -61,7 +61,7 @@ class TestTemplateInstaller:
             # Should include everything from standard
             assert (target / 'AGENTS.md').exists()
             assert (target / 'scripts' / 'session_protocol.py').exists()
-            assert (target / 'scripts' / 'housekeeping_protocol.py').exists()
+            assert (target / 'scripts' / 'health_check.py').exists()
 
     def test_dry_run(self):
         """Test dry run mode doesn't modify files"""
