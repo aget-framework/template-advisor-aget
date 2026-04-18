@@ -94,10 +94,10 @@ class TemplateInstaller:
         # Start with minimal
         self.install_minimal()
 
-        # Add housekeeping protocol
+        # Add health check (renamed from housekeeping_protocol in HCNA-001)
         self.copy_file(
-            self.source / 'scripts/housekeeping_protocol.py',
-            self.target / 'scripts/housekeeping_protocol.py'
+            self.source / 'scripts/health_check.py',
+            self.target / 'scripts/health_check.py'
         )
 
         # Add standard Makefile

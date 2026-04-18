@@ -5,6 +5,13 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.14.1] - 2026-04-18
+
+### Fixed
+
+- `installer/install.py`: reference `scripts/health_check.py` (was stale `scripts/housekeeping_protocol.py` from partial #979 propagation). Restores CI green; `test_enhanced_installer.py` assertions satisfied. See `aget-framework/aget/CHANGELOG.md` v3.14.1 for framework-level context.
+
+---
 ## [3.14.0] - 2026-04-18
 
 **Theme**: Aligned with framework v3.14.0 (v3.13 Loop Closure + Scope-Lock Discipline)
