@@ -1,6 +1,7 @@
 ---
 name: aget-check-health
-description: Run AGET health inspection and housekeeping checks
+description: Run AGET health inspection and housekeeping checks. Detect-only — pair with /aget-enhance-health for remediation.
+version: 1.1.0
 allowed-tools:
   - Bash
   - Read
@@ -54,8 +55,9 @@ Recommendations:
 ## Options
 
 - `--json`: Machine-readable output
-- `--fix`: Attempt auto-fixes for known issues
 - `--dir /path`: Run on specific agent directory
+
+**Remediation**: This skill is **detect-only**. For auto-fixes and drift remediation, use `/aget-enhance-health` (SKILL-049, governing spec CAP-SESSION-014). Canonical `check → enhance` pipeline per DESIGN_DIRECTION §Principle 9.
 
 ## Error Handling
 
@@ -66,5 +68,13 @@ Recommendations:
 
 ## Related
 
+- `/aget-enhance-health` — **Pair sibling**: remediates drift detected by this skill (SKILL-049, CAP-SESSION-014)
 - L532: Skills vs Learnings Distinction
-- CAP-SESSION-002: Sanity Check Protocol
+- L656: Loading Dock anti-pattern (`--fix` removed v1.1.0 — was documented but never implemented)
+- L671: Classification Without Consequence (`--fix` was unrooted at spec level)
+- CAP-SESSION-002: Sanity Check Protocol (legacy reference — canonical is CAP-SESSION-008)
+- CAP-SESSION-014: Health Remediation Protocol (governs enhance-health pair skill)
+
+---
+
+*v1.1.0 (2026-04-20): `--fix` flag removed (L656/L671). Remediation migrated to `/aget-enhance-health` SKILL-049.*
