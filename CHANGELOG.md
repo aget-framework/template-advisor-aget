@@ -5,6 +5,22 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.15.0] - 2026-04-25
+
+**Theme**: Aligned with framework v3.15.0 (Two-Level Model Coherence + Security Hardening)
+
+### Changed
+
+- Version bump: 3.14.0 → 3.15.0 (framework alignment)
+- `AGENTS.md` `@aget-version` updated to 3.15.0
+
+### Breaking
+
+- **BC-001**: `.aget/version.json` old field names removed (e.g. `agent_name` → `aget_agent_name`). See `aget/docs/BREAKING_CHANGES_v3.15.md`.
+- **BC-002**: `--fix` flag removed from `/aget-check-health` (SKILL-003). Use `/aget-enhance-health` instead.
+
+---
+
 ## [3.14.1] - 2026-04-18
 
 ### Fixed
