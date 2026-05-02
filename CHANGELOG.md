@@ -5,6 +5,24 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.16.0] - 2026-05-02
+
+**Theme**: Aligned with framework v3.16.0 (Framework-Discipline Closure + Wave-1A Spec Contracts + /aget-go Production)
+
+### Changed
+
+- Version bump: 3.15.0 → 3.16.0 (framework alignment)
+- `AGENTS.md` `@aget-version` updated to 3.16.0
+- **Universal-skills migration (#1120)**: 15 missing universal skills added from worker baseline (advisor/analyst/architect/consultant/developer/executive/operator/researcher/reviewer/spec-engineer pre-bump count 19 → post-migration 34, then post-archetype-fit-revert 31 = 29 universal + 2 archetype-specific).
+- **Release-triad revert (CAP-TPL-016-07 NEW)**: 3 release-triad skills (`aget-release-build`, `aget-release-audit-specs`, `aget-release-critique`) removed from this template — moved to release-execution archetype catalog (worker, supervisor only). Closes the "presence-not-fit" misfit surfaced by Gate 1 defects audit.
+
+### Compatibility
+
+- **No breaking changes** in v3.16. Existing instances upgrade by version-bump only.
+- Optional adoption: `**Plan_Status**:` / `**Gate_Status:**` schema in new PROJECT_PLAN files (CAP-PP-003 disambiguation; backward-compatible).
+
+---
+
 ## [3.15.0] - 2026-04-25
 
 **Theme**: Aligned with framework v3.15.0 (Two-Level Model Coherence + Security Hardening)
