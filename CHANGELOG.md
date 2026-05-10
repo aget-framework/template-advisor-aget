@@ -5,6 +5,24 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.17.0] - 2026-05-09
+
+**Theme**: Aligned with framework v3.17.0 (Theme C3 — Canonical Coherence + Structural Self-Conformance)
+
+### Changed
+
+- Version bump: 3.16.0 → 3.17.0 (framework alignment)
+- `AGENTS.md` `@aget-version` updated to 3.17.0
+- Inherits framework v3.17.0 deliverables: framework-manager archetype formalization (Q4=A.2 disposition); T2.18 SOP_scope_lock_ceremony LANDED v1.0.0; T2.19 AGET_SKILL_LIFECYCLE_SPEC LANDED v1.0.0 with full V-test authoring; T2.20 AGET_FLEET_UPGRADE_SPEC v0.1 DRAFT; T2.23 AGET_TASK_ROUTING_SPEC v0.1 DRAFT.
+- CAP-REL-030 + CAP-REL-031 (post-release CHANGELOG + tag validators) IMPLEMENTED (closes v3.16 sleeping CAPs); CAP-REL-032 + CAP-REL-033 grace-extended to v3.18.0 per Q1=B disposition.
+
+### Compatibility
+
+- **No breaking changes** in v3.17. Existing instances upgrade by version-bump only.
+- Optional adoption: `framework-manager` archetype field in `.aget/identity.json`; existing `archetype` values continue to function.
+
+---
+
 ## [3.16.0] - 2026-05-02
 
 **Theme**: Aligned with framework v3.16.0 (Framework-Discipline Closure + Wave-1A Spec Contracts + /aget-go Production)
