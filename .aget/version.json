@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.17.0",
+  "aget_version": "3.18.0",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2026-05-09",
+  "updated": "2026-05-16",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
