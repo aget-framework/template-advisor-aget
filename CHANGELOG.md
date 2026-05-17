@@ -5,6 +5,27 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.18.0] - 2026-05-16
+
+**Theme**: Aligned with framework v3.18.0 (Substrate Hygiene + Memory-Layer Self-Application; Hybrid A primary + B-tagged streams)
+
+### Changed
+
+- Version bump: 3.17.0 → 3.18.0 (framework alignment)
+- `.aget/version.json` `aget_version` updated to 3.18.0
+
+### Framework v3.18.0 Highlights
+
+- `AGET_MEMORY_SURFACE_SPEC v0.2.0` canonical promotion (T1.16 + T2.37) — harness-vs-KB taxonomy formalized
+- Verb Registry Currency (T1.9 = PP-021) — 37 Active + 4 Reserved verbs + 11 §Hierarchy Decisions pairs
+- `/aget-create-initiative` Strict promotion (T2.46) — D71 verb-pair gap closed
+- Homepage Fork C Hybrid (T1.12) — L941-L944 cluster closed structurally
+- L908 family memory-layer closure (L960 + L963 + L964 graduated)
+
+See [framework v3.18.0 release notes](https://github.com/aget-framework/aget/releases/tag/v3.18.0) for full details + DEFECT-2/4 acknowledgment.
+
+---
+
 ## [3.17.0] - 2026-05-09
 
 **Theme**: Aligned with framework v3.17.0 (Theme C3 — Canonical Coherence + Structural Self-Conformance)
