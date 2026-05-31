@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.20.0",
+  "aget_version": "3.20.2",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2026-05-30",
+  "updated": "2026-05-31",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -68,6 +68,7 @@
     "v3.15.0 -> v3.16.0: 2026-05-02",
     "v3.16.0 -> v3.17.0: 2026-05-09",
     "v3.18.0 -> v3.19.0: 2026-05-23 (version sync)",
-    "v3.19.0 -> v3.20.0: 2026-05-30"
+    "v3.19.0 -> v3.20.0: 2026-05-30",
+    "v3.20.0 -> v3.20.2: 2026-05-31 (consumer-surface delivery: C-F1/C-P1/C-P3; gh#1551)"
   ]
 }
