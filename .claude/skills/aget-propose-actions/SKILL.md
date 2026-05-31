@@ -147,7 +147,7 @@ For each proposed action:
 
 Rank by value-to-time ratio. Total estimated time MUST fit within budget.
 
-### Step 4: Present
+### Step 4: Present (v3.20 C-F1 enhancement — evidence-visible · recommendation-led · decisions-surfaced)
 
 Output using standardized format:
 
@@ -156,13 +156,23 @@ Output using standardized format:
 
 **Session goal**: [restate primary objective]
 **Progress**: [key milestones reached]
+**▶ Recommendation**: [the single highest-value action + one-line why — what the agent would do first if the principal does nothing else]
 
-| # | Action | Time | Principal | Value | Risk if Skipped |
-|---|--------|:----:|:---------:|-------|-----------------|
-| 1 | ... | N min | Autonomous | ... | ... |
+| # | Action | Time | Principal | Value | Evidence | Risk if Skipped |
+|---|--------|:----:|:---------:|-------|----------|-----------------|
+| 1 | ... | N min | Autonomous | ... | [L-doc / #issue / finding / PROJECT_PLAN] | ... |
+
+**⚠ Decisions needed** (Decide-class — block execute-all until ruled):
+- #N: [the judgment call, framed as a question + the agent's lean]
+  (omit this block entirely when no Decide-class action is present)
 
 Execution default: all [count], priority order — adapted by Principal role (per Execute-All Default).
 ```
+
+**C-F1 rationale** (v3.20; INIT-PRINCIPAL-EXPERIENCE Stream 2, CAP-PEX-003 — wire wow-lever into propose-actions): the highest-frequency session surface gains three principal-facing improvements over the prior flat table:
+1. **Evidence column** — surfaces the per-action citation Step 3.3 already gathers but the prior table dropped; the principal can *inspect the grounding* of each option, not just its label (raises V3 reach / observability).
+2. **▶ Recommendation line** — the agent's single lead pick + why, so the principal sees a *recommendation*, not only a menu (the L680 decision-impact lever).
+3. **⚠ Decisions-needed callout** — Decide-class items are lifted out of the table into an explicit block framed as questions, so required judgment calls don't hide among autonomous rows.
 
 **Principal column values** (derived from Decision Authority Matrix):
 
