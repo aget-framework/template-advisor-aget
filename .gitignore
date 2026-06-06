@@ -64,3 +64,5 @@ test_*.py  # Test files should be in tests/
 .claude/todos/
 .claude/chat/
 # .claude/skills/ IS versioned
+*.pyc
+sessions/
