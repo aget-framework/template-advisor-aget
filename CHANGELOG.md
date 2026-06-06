@@ -13,11 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.20.3] - 2026-05-31
 
-- C-P3 health-check correctness fix (`check_structural_skill_frontmatter`) propagated to template consumer surface (gmelli/aget-aget#1553).
+- C-P3 health-check correctness fix (`check_structural_skill_frontmatter`) propagated to template consumer surface.
 
 ## [3.20.2] - 2026-05-31
 
-- Consumer-surface delivery: C-F1/C-P1/C-P3 health & config checks delivered to templates (gmelli/aget-aget#1551).
+- Consumer-surface delivery: C-F1/C-P1/C-P3 health & config checks delivered to templates.
 
 ## [3.20.0] - 2026-05-30
 
