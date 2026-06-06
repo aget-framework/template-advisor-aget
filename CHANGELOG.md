@@ -5,6 +5,28 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.21.0] - 2026-06-06
+
+**Theme**: Always-On Fleet Operations (governance-scoped)
+
+- Framework version sync to 3.21.0. No template content change (governance scaffolding for unattended operation lands in the canonical framework; see aget/CHANGELOG.md).
+
+## [3.20.3] - 2026-05-31
+
+- C-P3 health-check correctness fix (`check_structural_skill_frontmatter`) propagated to template consumer surface (gmelli/aget-aget#1553).
+
+## [3.20.2] - 2026-05-31
+
+- Consumer-surface delivery: C-F1/C-P1/C-P3 health & config checks delivered to templates (gmelli/aget-aget#1551).
+
+## [3.20.0] - 2026-05-30
+
+- Framework version sync to 3.20.0.
+
+## [3.19.0] - 2026-05-23
+
+- Framework version sync to 3.19.0.
+
 ## [3.18.0] - 2026-05-16
 
 **Theme**: Aligned with framework v3.18.0 (Substrate Hygiene + Memory-Layer Self-Application; Hybrid A primary + B-tagged streams)
