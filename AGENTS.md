@@ -145,9 +145,11 @@ Skills with STRUCTURAL enforcement level. When the trigger condition is met, the
 | Skill | Trigger Condition | Prohibited Alternative | ADR-008 Level |
 |-------|-------------------|----------------------|:-------------:|
 | `/aget-create-project` | Creating `planning/PROJECT_PLAN_*.md` | Direct Write/Edit to planning/ | **Strict** |
+| `/aget-create-initiative` | Creating `planning/initiatives/INIT-*.md` | Direct Write/Edit to planning/initiatives/ | **Strict** |
 | `/aget-file-issue` | Filing GitHub issues | Direct `gh issue create` | **Strict** |
 
 All other skills remain at **Advisory** level (available, recommended, not enforced).
+> **⚠️ GATED — `/aget-create-initiative` (do NOT enforce yet)**: this Strict route requires its producer half — the `/aget-propose-initiative` skill + `sops/SOP_initiative.md` (it refuses without an APPROVED `PROPOSAL_init_*.md` and reads the SOP). As of v3.21.x the producer half is **canonically present** but enforcement is **pending end-to-end functional verification** (gh#1461). **Removal condition: canonically present AND functional** — "skill present" alone is not sufficient (present ≠ functional). Remove this marker only once the route is verified working end-to-end.
 
 ## Governance Bypass Detection (D71)
 
