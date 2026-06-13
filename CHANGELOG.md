@@ -5,6 +5,12 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.22.0] - 2026-06-13
+
+**Theme**: Skill-Support Delivery + Verify-at-Point-of-Use + Hygiene
+
+- Framework version sync to 3.22.0. `/aget-propose-actions` skill updated to **v1.8.0** (Step 3.5 Self-Critique 10-point checklist + Type column; also clears accumulated v1.7.x propagation lag). New framework gates (`deploy_skill.py`, `check_claim_freshness.py`, `check_skill_coherence.py`, `validate_spec_binding.py`) are available in canonical `aget/scripts/` — copy as needed. No breaking changes.
+
 ## [3.21.0] - 2026-06-06
 
 **Theme**: Always-On Fleet Operations (governance-scoped)
