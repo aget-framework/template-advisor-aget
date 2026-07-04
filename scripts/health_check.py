@@ -38,6 +38,7 @@ Version: 1.0.0 (v3.1.0)
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime
@@ -320,6 +321,73 @@ def check_planning_directory(agent_path: Path) -> CheckResult:
     )
 
 
+def check_duplicate_ldoc_ids(agent_path: Path) -> CheckResult:
+    """L131: Detect duplicate L-doc IDs (two distinct lessons sharing one L###).
+
+    Presence/count checks cannot catch ID collisions. This check CAN fail on a
+    real, independently-detectable defect — the test L131/L671 demand of every
+    health check ("what real failure turns this RED?").
+    """
+    evolution_dir = agent_path / '.aget' / 'evolution'
+    if not evolution_dir.is_dir():
+        return CheckResult("duplicate_ldoc_ids", True,
+                           "No evolution/ directory", "info")
+
+    seen: Dict[str, int] = {}
+    for f in evolution_dir.glob('L*.md'):
+        m = re.match(r'(L\d+)_', f.name)
+        if m:
+            seen[m.group(1)] = seen.get(m.group(1), 0) + 1
+
+    dups = sorted(k for k, v in seen.items() if v > 1)
+    if dups:
+        return CheckResult(
+            name="duplicate_ldoc_ids",
+            passed=False,
+            message=(f"{len(dups)} duplicate L-doc ID(s): {', '.join(dups)} "
+                     "(two lessons share one ID; renumber per L131)"),
+            severity="warning"
+        )
+    return CheckResult(
+        name="duplicate_ldoc_ids",
+        passed=True,
+        message=f"{len(seen)} unique L-doc IDs, no collisions"
+    )
+
+
+def check_config_size(agent_path: Path) -> CheckResult:
+    """L146: AGENTS.md must stay under the 40k hard limit (30k recommended)."""
+    agents_md = agent_path / 'AGENTS.md'
+    if not agents_md.exists():
+        return CheckResult("config_size", True, "No AGENTS.md", "info")
+
+    size = agents_md.stat().st_size
+    if size > 40000:
+        return CheckResult(
+            name="config_size",
+            passed=False,
+            message=f"AGENTS.md {size} bytes exceeds 40k hard limit (L146)",
+            severity="error"
+        )
+    if size > 30000:
+        return CheckResult(
+            name="config_size",
+            passed=False,
+            message=(f"AGENTS.md {size} bytes over 30k recommended (L146); "
+                     "extract content to .aget/docs/"),
+            severity="warning"
+        )
+    return CheckResult(
+        name="config_size",
+        passed=True,
+        message=f"AGENTS.md {size} bytes (under 30k)"
+    )
+
+
+# =============================================================================
+# Main Protocol
+# =============================================================================
+
 # D71-STRUCTURAL skills the agent MUST be able to model-invoke (AGENTS.md D71)
 D71_STRUCTURAL_SKILLS = (
     "aget-create-project", "aget-close-project",
@@ -376,9 +444,35 @@ def check_structural_skill_frontmatter(agent_path: Path) -> CheckResult:
                        "carry no disable-model-invocation", "info")
 
 
-# =============================================================================
-# Main Protocol
-# =============================================================================
+def check_reliance_manifest(agent_path: Path) -> CheckResult:
+    """R-BND-001-03 (v3.25, gh#1787): self-attest reliance-manifest conformance.
+
+    Graceful: agents without a manifest (pre-adoption) PASS with an advisory
+    message — absence is expected lag, not an error (L601). When both the
+    manifest and its validator are present, the validator's verdict is the check.
+    """
+    manifest = agent_path / '.aget' / 'skill_reliance_manifest.yaml'
+    validator = agent_path / 'scripts' / 'check_skill_reliance_manifest.py'
+    if not manifest.exists():
+        return CheckResult('reliance_manifest', True,
+                           'no manifest (pre-adoption — advisory, not required)')
+    if not validator.exists():
+        return CheckResult('reliance_manifest', False,
+                           'manifest present but validator missing (R-BND-001-03 wiring gap)',
+                           severity='warning')
+    import subprocess
+    try:
+        r = subprocess.run([sys.executable, str(validator)], capture_output=True,
+                           text=True, timeout=15, cwd=str(agent_path))
+        ok = r.returncode == 0
+        tail = (r.stdout or r.stderr).strip().splitlines()
+        msg = tail[-1] if tail else f'exit {r.returncode}'
+        return CheckResult('reliance_manifest', ok, msg,
+                           severity='info' if ok else 'warning')
+    except Exception as e:
+        return CheckResult('reliance_manifest', False, f'validator error: {e}',
+                           severity='warning')
+
 
 def run_housekeeping(agent_path: Path, verbose: bool = False) -> Dict[str, Any]:
     """
@@ -410,7 +504,10 @@ def run_housekeeping(agent_path: Path, verbose: bool = False) -> Dict[str, Any]:
         check_5d_structure,
         check_sessions_directory,
         check_planning_directory,
+        check_duplicate_ldoc_ids,
+        check_config_size,
         check_structural_skill_frontmatter,
+        check_reliance_manifest,
     ]
 
     for check_fn in checks:
