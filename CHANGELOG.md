@@ -5,6 +5,17 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.25.0] - 2026-07-04
+
+**Theme**: Grounded Entities & Trusted Releases
+
+- aget-ask production v1.0.0 (SKILL-045 + spec) — entropy-reducing clarification/followup with altitude filter.
+- `study_topic.py`: active-plan detection fixed (case-insensitive, Plan_Status-first — live plans no longer render inactive) + knowledge/+ontology/ search areas.
+- `capture_friction.py`: ledger entries carry a value-class (`owed` pending-triage default, CAP-FRIC-006).
+- `wake_up.py`/`health_check.py`: reliance self-attestation (R-BND-001-03) + permission-accumulation gate.
+- `close_gate_check.py`: closure-substance detection + release-close DoD guard wiring.
+- Conformance model: reliance-only (D-1) — canonical-specs reference line added to AGENTS.md; no spec copies shipped.
+
 ## [3.22.0] - 2026-06-13
 
 **Theme**: Skill-Support Delivery + Verify-at-Point-of-Use + Hygiene
