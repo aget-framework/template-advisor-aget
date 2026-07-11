@@ -130,6 +130,19 @@ jq '.next_id' .aget/evolution/index.json
 ---
 ```
 
+### Step 4.5: Cross-Seat Propagation Check (v3.26 C-26-31, gh#1857 — CAP-ISSUE-011 point-of-use wiring)
+
+After writing the lesson, test BOTH triggers; if either fires, OFFER the lesson-first filing path (do not silently skip):
+
+| Trigger | Test |
+|---------|------|
+| **Multi-seat evidence** | Does the lesson's evidence span more than one seat/fleet (cross-seat exchange, sibling incident, relayed datum)? |
+| **Framework-artifact subject** | Does the lesson name a framework artifact (canonical script/spec/skill/SOP) as cause or fix? |
+
+If YES to either → file via `/aget-file-issue` with `routing_mode: lesson_first` (CAP-ISSUE-011..014), citing this L-doc as substrate. The tracker's `lesson_first` label is the **cross-namespace join key** the supervisors' weekly lessons-miners match on — a lesson that stays only in this repo's evolution/ is invisible fleet-wide (L467 discovery-lottery at fleet scale).
+
+**Worked example (the motivating triple, 2026-07-10)**: three seats independently derived "authorization doesn't travel across seats, sessions, or quotations" from three different incidents — main-SUP L681, legalon-SUP L249, FWK persistent memory — each invisible to the others except via principal relay. All three had multi-seat evidence; zero used lesson-first mode (3-for-3 non-invocation of a shipped capability = L962 habit-channel gap). One lesson-first filing by any seat would have made the other two derivations dedup-hits instead of re-derivations.
+
 ### Step 5: Update Index (Framework only)
 
 Add entry to `.aget/evolution/index.json` and increment `next_id`.
