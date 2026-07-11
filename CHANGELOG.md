@@ -5,6 +5,17 @@ All notable changes to AGET will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.26.0] - 2026-07-11
+
+**Theme**: Signals & Contracts
+
+- `wake_up.py` release-currency signal — session start reports when the local framework version is behind the latest release; silent when current (fail-soft).
+- `health_check_ext.py` + `study_topic_ext.py` extension hooks — instance customization without forking Framework_Artifacts.
+- `study_topic.py` search contract: surface manifest in output, keyword hygiene, token-boundary matching, ranking floor, `inbox/` surface joined.
+- `/aget-close-project`: C-CLOSE-007 (closer mutates scaffold in place) + C-CLOSE-008 (has-it-run gate — executable deliverables need execution evidence pre-COMPLETE).
+- Three-state check contract (PASS / FAIL / UNREACHABLE) + terminal-state vocabulary + verify-before-claim coverage matrix (canonical `docs/CONVENTION_*.md`).
+- Fixes: `wake_up.py` session-glob case-fold; `check_skill_reliance_manifest.py` archetype-index paths; `close_gate_check.py` independence-WARN restore.
+
 ## [3.25.0] - 2026-07-04
 
 **Theme**: Grounded Entities & Trusted Releases
