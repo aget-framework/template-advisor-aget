@@ -270,7 +270,10 @@ def scan_pending_work(agent_path: Path) -> List[str]:
             for line in content.split('\n')[:30]:
                 line_stripped = line.strip().lower()
                 # Match patterns: "status: X", "**status**: X", "**Status**: X"
-                for prefix in ('status:', '**status**:', '**status:'):
+                # v3.16+ adds disambiguated **Plan_Status**: (plan-level) per CAP-PP-003
+                # (Gate_Status remains per-gate; not used for top-level pending detection)
+                for prefix in ('plan_status:', '**plan_status**:', '**plan_status:',
+                               'status:', '**status**:', '**status:'):
                     if line_stripped.startswith(prefix):
                         top_status = line_stripped.split(':', 1)[1].strip().strip('*').strip()
                         break
@@ -624,6 +627,20 @@ def format_human_output(data: Dict[str, Any]) -> str:
 # Main
 # =============================================================================
 
+def _recent_close_session_exists(agent_path, minutes=30):
+    """gh#1795 (v3.27 G3.5.2): a clean /aget-close-session writes a rich session
+    file; a wind_down stub minutes later shadows it with orphan litter that
+    mis-surfaces at next wake-up. If a session file was written within the last
+    `minutes`, wind-down defers to it (skip stub; --force overrides)."""
+    import time
+    sessions = agent_path / 'sessions'
+    if not sessions.is_dir():
+        return None
+    cutoff = time.time() - minutes * 60
+    recent = [p for p in sessions.glob('session_*.md') if p.stat().st_mtime >= cutoff]
+    return max(recent, key=lambda p: p.stat().st_mtime) if recent else None
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Wind down protocol for AGET agents (v2.0.0)',
@@ -681,6 +698,15 @@ Exit codes:
     )
 
     args = parser.parse_args()
+
+    # gh#1795 double-fire guard: recent close-session file wins; stub defers
+    if not getattr(args, 'force', False):
+        _recent = _recent_close_session_exists(Path.cwd())
+        if _recent:
+            print(f"wind-down: recent session file {_recent.name} (<30min) — "
+                  f"close-session already recorded this session; skipping stub "
+                  f"(gh#1795 double-fire guard; --force overrides)")
+            return 0
 
     # L491: --verify mode
     if args.verify:
