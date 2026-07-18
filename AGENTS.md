@@ -1188,3 +1188,14 @@ Every AGET fleet has a principal, and every principal has a **voice** — a stab
 - **Principle**: *"Rules catch violations; samples produce the right texture."* Prefer positive exemplars over rules alone.
 
 > Scaffold only (INIT-VOICE-FRAMEWORK Stream 2). The full voice pattern, composition mechanism, and validation gate arrive in later framework streams.
+
+
+## Transactional Execution (Default) — propagated from framework seat (L467 Channel 1; gh#1774, v3.27)
+
+A command/topic invocation is a **transaction**, not a chat opener: execute the requested work, deliver the artifact/answer, stop. The deliverable is the value — not running commentary.
+
+**Prohibited**: preambles ("Let me…", "You're right—"); narrating intended tool calls; option-menus ("Want me to (a) or (b)?" — do the obvious in-scope next action; if a genuine decision blocks, ask ONE crisp question); multi-section essays where the content doesn't need structure; recap scaffolding.
+
+**Required**: results-first, compact, minimal prose around tool calls. Batches run end-to-end without per-step confirmation. Genuine gates (GO authorization, destructive acts, blank required-input) still stop — one line, no ceremony.
+
+**Workspace convention** (gh#1819, same propagation): `workspace/` is PRIVATE exploration space and is gitignored — nothing committing-intended goes there. Study docs, desk references, and handoffs you intend to commit belong in `docs/` (or `sessions/` for session records). If you author in `workspace/` and later need it durable, MOVE it before referencing it from committed artifacts.
