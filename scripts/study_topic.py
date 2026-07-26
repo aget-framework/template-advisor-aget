@@ -142,9 +142,12 @@ FILENAME_BOOST = 3.0     # name/title match is the strongest feature (audit R2, 
 RELEVANCE_FLOOR_DEFAULT = 2.0  # composite-score floor (audit R3, #1560); --no-floor escapes
 
 SURFACES_SEARCHED = [
-    '.aget/evolution/L*.md', 'docs/patterns/PATTERN_*.md',
+    '.aget/evolution/**/L*.md (RECURSIVE — includes discoveries/; 2026-07-25 fix)',
+    'docs/patterns/**/*.md AND patterns/**/*.md (both roots, any filename — 2026-07-25 fix)',
     'planning/PROJECT_PLAN*.md', 'sops/SOP_*.md', 'governance/*.md',
     'knowledge/** + ontology/** (v3.25 C-25-14)',
+    'specs/** + .aget/specs/** (gh#1580 — instance-local spec tier)',
+    '../aget/specs/** + ../aget/sops/** (canonical contract-tier authority, read-only cross-repo)',
     'inbox/ ≤14d (v3.26 C-26-11 — S2 revisit ruling: NOTIFYs are study-relevant, gh#1850)',
 ]
 SURFACES_EXCLUDED = [
@@ -273,8 +276,19 @@ def search_file_for_topic(file_path: Path, topic: str, case_insensitive: bool = 
             if len(contexts) >= 3:
                 break
 
+        # `relative_to` RAISES for any path outside the agent root, and that is
+        # very likely why the spec tier was never wired despite being advertised
+        # in SURFACES_SEARCHED since gh#1580: the canonical contract tier lives at
+        # `../aget/specs/` (AGENTS.md §Canonical Path Resolution), one level ABOVE
+        # the agent root, so the first attempt to search it would have crashed the
+        # whole run. A helper that cannot express a path outside the repo silently
+        # bounds every surface to the repo.
+        try:
+            rel = str(file_path.relative_to(get_agent_root()))
+        except ValueError:
+            rel = str(file_path)          # cross-repo (canonical tier) — keep absolute
         result = {
-            'file': str(file_path.relative_to(get_agent_root())),
+            'file': rel,
             'match_count': len(matches),
             'contexts': contexts
         }
@@ -351,7 +365,23 @@ def find_ldocs(topic: str, domain_keywords: list = None) -> list:
     if not evolution_path.exists():
         return results
 
-    for file in evolution_path.glob('L*.md'):
+    # rglob, not glob: `.aget/evolution/discoveries/` (and any other
+    # sub-directory a seat uses) held real, citable KB and was invisible to a
+    # non-recursive glob. Field evidence 2026-07-25: a study-topic run reported
+    # "no direct pattern/governance hits" for a north-star query while
+    # `.aget/evolution/discoveries/north_star_revelation.md` — the origin-story
+    # artifact for that exact concept — sat unsearched. The caller then cited it
+    # anyway, from a manual read, without noticing the instrument had implicitly
+    # denied it existed. A clean zero from a scoped search is not absence.
+    # Prefix rule differs by depth, and conflating the two is what caused the
+    # original miss AND its first attempted fix. Top level: keep the `L*` filter
+    # (that IS the L-doc naming convention). Sub-directories: curated KB with
+    # their own conventions — `discoveries/north_star_revelation.md` carries no
+    # `L` prefix, so a recursive walk that still demanded one re-excluded the
+    # exact artifact the recursion was added to reach.
+    for file in sorted(evolution_path.rglob('*.md')):
+        if file.parent == evolution_path and not file.name.startswith('L'):
+            continue
         match = search_file_for_topic(file, topic, domain_keywords=domain_keywords)
         if match:
             # Extract L-doc title from first heading
@@ -387,21 +417,34 @@ def find_patterns(topic: str, domain_keywords: list = None) -> list:
         List of matching pattern info
     """
     agent_root = get_agent_root()
-    patterns_path = agent_root / 'docs' / 'patterns'
+
+    # TWO pattern roots, and neither filename convention is universal.
+    # `docs/patterns/PATTERN_*.md` was the only surface searched until
+    # 2026-07-25; seats also keep patterns at a top-level `patterns/` tree with
+    # descriptive names (e.g. `patterns/identity/north_star_pattern.md`), which
+    # matches neither the directory nor the `PATTERN_*` prefix. Both were
+    # therefore reported as "no pattern hits" while the governing pattern
+    # document existed. Recurse both roots and drop the prefix requirement.
+    pattern_roots = [agent_root / 'docs' / 'patterns', agent_root / 'patterns']
 
     results = []
-    if not patterns_path.exists():
-        return results
-
-    for file in patterns_path.glob('PATTERN_*.md'):
-        match = search_file_for_topic(file, topic, domain_keywords=domain_keywords)
-        if match:
-            results.append({
-                'pattern': file.stem,
-                'file': match['file'],
-                'match_count': match['match_count'],
-                'score': match.get('score', 0.0)
-            })
+    seen = set()
+    for patterns_path in pattern_roots:
+        if not patterns_path.exists():
+            continue
+        for file in sorted(patterns_path.rglob('*.md')):
+            resolved = file.resolve()
+            if resolved in seen:
+                continue
+            seen.add(resolved)
+            match = search_file_for_topic(file, topic, domain_keywords=domain_keywords)
+            if match:
+                results.append({
+                    'pattern': file.stem,
+                    'file': match['file'],
+                    'match_count': match['match_count'],
+                    'score': match.get('score', 0.0)
+                })
 
     results.sort(key=lambda x: x['score'], reverse=True)
     return results
@@ -509,6 +552,120 @@ def find_knowledge(topic: str, domain_keywords: list = None) -> list:
                     'score': match.get('score', 0.0)
                 })
     results.sort(key=lambda x: x['score'], reverse=True)
+    return results
+
+
+def find_sessions(topic: str, domain_keywords: list = None, days: int = 90) -> list:
+    """Find session records related to topic — OPT-IN only (--include-sessions).
+
+    Scope revisit (2026-07-26), on the evidence the 2026-07-04 decision asked for.
+    That decision excluded sessions/ as "noise at study-time (revisit on evidence)"
+    and the exclusion is CORRECT for the common case: 4,935 session files fleet-wide,
+    and a generic topic hits hundreds of them with no research value.
+
+    But the exclusion is total, and that made the skill unable to answer a whole
+    QUESTION CLASS — the one where sessions ARE the subject. Field failure, this
+    session: the principal asked for an analysis of "language, syntax, structure,
+    semantics in session and lessons and project files", and /aget-study-topic
+    printed "NOT searched: sessions/" for the largest surface in the request. The
+    whole analysis had to be done outside the skill.
+
+    So: opt-in, not default-on. Default behaviour is unchanged (the 2026-07-04
+    rationale survives); a caller who says sessions are the subject gets them.
+
+    Bounded two ways, because unbounded is what made them noise in the first place:
+      - recency window (default 90 days) — old sessions are superseded by their
+        own successors far more often than L-docs are
+      - filename date, not mtime — a git checkout rewrites mtime for the whole
+        tree, which would put every session "in window" (this exact artifact was
+        observed in the parallel 2026-07-26 corpus study)
+    """
+    import datetime as _dt
+    agent_root = get_agent_root()
+    base = agent_root / 'sessions'
+    if not base.exists():
+        return []
+    cutoff = (_dt.date.today() - _dt.timedelta(days=days)).isoformat()
+    results = []
+    for file in base.glob('*.md'):
+        m = re.search(r'(\d{4})-(\d{2})-(\d{2})', file.name)
+        if m:
+            if '-'.join(m.groups()) < cutoff:
+                continue
+        else:
+            # Undated filename: include rather than silently drop. An absence of
+            # a date is not evidence of age (L1220 §Absence).
+            pass
+        match = search_file_for_topic(file, topic, domain_keywords=domain_keywords)
+        if match:
+            results.append({
+                'doc': file.stem,
+                'file': match['file'],
+                'match_count': match['match_count'],
+                'score': match.get('score', 0.0)
+            })
+    results.sort(key=lambda x: x['score'], reverse=True)
+    return results
+
+
+def find_specs(topic: str, domain_keywords: list = None) -> list:
+    """Find specifications related to topic — the spec tier (gh#1580).
+
+    THE DEFECT THIS CLOSES, stated precisely because it is subtle:
+    `SURFACES_SEARCHED` has advertised "specs/** + .aget/specs/** (gh#1580 —
+    instance-local spec tier)" while no finder ever populated a `specs` key. The
+    surface was CLAIMED and not SEARCHED, so every study reported zero specs, and
+    a reader trusting the banner reads "0 specs" as "no spec exists".
+
+    That is worse than an omission. An unlisted surface is a known gap; a listed
+    one that returns nothing is *manufactured absence* — the tool actively
+    supplies false evidence of non-existence, which is the exact failure mode
+    gh#1580 is named for and which this fleet's own L1220 §Absence warns about
+    ("search for the behavior, not the identifier").
+
+    Searches both tiers: canonical `../aget/specs/` (contract authority, read-only
+    cross-repo) and instance-local `specs/` + `.aget/specs/`.
+
+    Args:
+        topic: Topic to search for
+        domain_keywords: Optional domain keywords for boosting
+
+    Returns:
+        List of matching spec info
+    """
+    agent_root = get_agent_root()
+    results = []
+    seen = set()
+
+    # Instance-local tiers, then the canonical contract tier one level up.
+    # AGENTS.md §Canonical Path Resolution: canonical specs live at ../aget/,
+    # NOT at aget/ — a cwd-scoped search produces silent false-negatives.
+    roots = [
+        agent_root / 'specs',
+        agent_root / '.aget' / 'specs',
+        agent_root.parent / 'aget' / 'specs',
+    ]
+
+    for root in roots:
+        if not root.exists():
+            continue
+        for file in sorted(root.rglob('*.md')) + sorted(root.rglob('*.yaml')):
+            if file.name in seen:
+                continue
+            match = search_file_for_topic(file, topic, domain_keywords=domain_keywords)
+            if match:
+                seen.add(file.name)
+                results.append({
+                    'spec': file.stem,
+                    'doc': file.name,
+                    'file': (str(file.relative_to(agent_root))
+                             if agent_root in file.parents else str(file)),
+                    'matches': match.get('match_count', 0),
+                    'keyword_coverage': match.get('keyword_coverage', 0.0),
+                    'score': match.get('score', 0.0),
+                })
+
+    results.sort(key=lambda r: r.get('score', 0.0), reverse=True)
     return results
 
 
@@ -758,6 +915,11 @@ Examples:
                         help='Disable the relevance floor (v3.26 C-26-11; useful for exhaustive ID lookups)')
     parser.add_argument('--verify', action='store_true', help='Verification mode for migration')
     parser.add_argument('--quiet', '-q', action='store_true', help='Minimal output')
+    parser.add_argument('--include-sessions', action='store_true',
+                        help='Also search sessions/ (OFF by default — 2026-07-04 scope '
+                             'decision). Use when sessions are the SUBJECT of the study.')
+    parser.add_argument('--session-days', type=int, default=90, metavar='N',
+                        help='Recency window for --include-sessions (default 90)')
 
     args = parser.parse_args()
 
@@ -788,9 +950,22 @@ Examples:
         'project_plans': find_project_plans(args.topic, domain_keywords=domain_keywords),
         'sops': find_sops(args.topic, domain_keywords=domain_keywords),
         'governance': find_governance(args.topic, domain_keywords=domain_keywords),
+        'specs': find_specs(args.topic, domain_keywords=domain_keywords),
         'knowledge': find_knowledge(args.topic, domain_keywords=domain_keywords),
         'inbox': find_inbox(args.topic, domain_keywords=domain_keywords)
     }
+    # Opt-in surface (2026-07-26 scope revisit). Added only when asked for, so the
+    # default surface list and its rationale are unchanged.
+    if args.include_sessions:
+        findings['sessions'] = find_sessions(
+            args.topic, domain_keywords=domain_keywords, days=args.session_days)
+        SURFACES_SEARCHED.append(
+            f'sessions/*.md, last {args.session_days}d (OPT-IN via --include-sessions)')
+        for i, s in enumerate(SURFACES_EXCLUDED):
+            if s.startswith('sessions/'):
+                SURFACES_EXCLUDED[i] = (
+                    'workspace/, data/ (deliberate — 2026-07-04 scope decision, noise at '
+                    'study-time). sessions/ is INCLUDED this run via --include-sessions')
 
     # Relevance floor (v3.26 C-26-11; audit R3, gh#1560): suppress items whose
     # composite score sits below the floor. Configurable; --no-floor escapes.
