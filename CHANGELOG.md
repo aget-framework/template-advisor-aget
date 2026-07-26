@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.28.0] - 2026-07-26 - "Make the gates fire"
+
+**Release class**: governance-hardening — inward-facing. Expect changed *gate behaviour*, not new features.
+
+### Changed
+- Theme: enforcement that fires without being invoked. The release-gate battery gains a forced firing point at the irreversible act (tag / `push --tags` / `push --follow-tags`), and the Phase 7.1.5 release-quality score must carry a resolvable **independent** verification leg — a producer-run score no longer settles its own gate. Triage freshness becomes a measured SLO whose rollup detects *rollup-without-triage*, so measuring the queue cannot substitute for working it.
+
+### Fixed
+- Release metadata dates were never bumped: `version_bump.py` moved version strings but left `codemeta.json:dateModified` and `CITATION.cff:date-released` stale (3.27.0 shipped 07-18 carrying 07-11 dates).
+- `study_topic.py` advertised the specification tier in its printed search contract while never searching it — every study reported zero specs (*manufactured absence*, not omission).
+- Release-metric issue counts saturated at a page cap and recorded `0` on API failure, making a failed count indistinguishable from zero.
+- The contract suite could not pass its own 60s pre-release timeout (528s, with 81% of runtime in three tests that re-ran the whole battery).
+
+### Governance
+- Test-requirement traceability: the 80% figure was a never-met pilot aspiration; replaced by a ratified floor at the measured **39%**, rising +5pp per minor release — a bar that blocks regression rather than blocking everything.
+- Release-gate scope made explicit: **release-integrity** failures block a tag absolutely; **codebase-quality** debt is reported with a named owner and does not block.
+
 ## [3.27.0] - 2026-07-18 - "Finish & Verify"
 
 ### Changed
