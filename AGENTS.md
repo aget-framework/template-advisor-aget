@@ -1,7 +1,7 @@
 # Agent Configuration - Advisor AGET Template
 
-@aget-version: 3.28.0
-@aget-canonical-specs: https://github.com/aget-framework/aget/tree/v3.25.0/specs — reliance-only conformance (D-1, 2026-07-04): this template runs the version's features; specs are canonical-referenced, not copied locally
+@aget-version: 3.29.0
+@aget-canonical-specs: https://github.com/aget-framework/aget/tree/v3.29.0/specs — reliance-only conformance (D-1, 2026-07-04): this template runs the version's features; specs are canonical-referenced, not copied locally
 
 ## Agent Compatibility
 This configuration follows the AGENTS.md open-source standard for universal agent configuration.

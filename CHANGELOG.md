@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+
+## [3.29.0] - 2026-08-01 - "Repair release truth and reduce principal decision work"
+
+### Added
+- Added Codex-native discovery for wake-up, study-topic, and save-state with explicit recovery.
+- Added exact Claude Code and Codex CLI control-conformance evidence plus a one-view release decision contract.
+
+### Changed
+- Changed study-topic ranking so purpose weighting is effective and recency, searched surfaces, and external omissions are disclosed.
+
+### Fixed
+- Fixed distribution evidence so producer, distribution point, received state, and downstream behavior remain independent predicates.
+
 ## [3.28.0] - 2026-07-26 - "Make the gates fire"
 
 **Release class**: governance-hardening — inward-facing. Expect changed *gate behaviour*, not new features.

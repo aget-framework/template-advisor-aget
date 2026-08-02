@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.28.0",
+  "aget_version": "3.29.0",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2026-07-26",
+  "updated": "2026-08-01",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -78,6 +78,7 @@
     "v3.23.1 -> v3.24.0: 2026-06-28",
     "v3.24.0 -> v3.25.0: 2026-07-04 (payload-verified reliance-only conformance bump; public window 2026-07-11)",
     "v3.26.0 -> v3.27.0: 2026-07-18",
-    "v3.27.0 -> v3.28.0: 2026-07-26"
+    "v3.27.0 -> v3.28.0: 2026-07-26",
+    "v3.28.0 -> v3.29.0: 2026-08-01"
   ]
 }
