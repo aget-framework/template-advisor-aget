@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.30.0",
+  "aget_version": "3.31.0",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2026-08-08",
+  "updated": "2026-08-15",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -80,6 +80,7 @@
     "v3.26.0 -> v3.27.0: 2026-07-18",
     "v3.27.0 -> v3.28.0: 2026-07-26",
     "v3.28.0 -> v3.29.0: 2026-08-01",
-    "v3.29.0 -> v3.30.0: 2026-08-08"
+    "v3.29.0 -> v3.30.0: 2026-08-08",
+    "v3.30.0 -> v3.31.0: 2026-08-15"
   ]
 }

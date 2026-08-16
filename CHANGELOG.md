@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [3.31.0] - 2026-08-15 - "Ship What Was Already Built"
+
+### Changed
+- Version coherence bump to framework v3.31.0. See the canonical
+  [aget CHANGELOG](https://github.com/aget-framework/aget/blob/v3.31.0/CHANGELOG.md)
+  for the release contents: five verification instruments promoted to canonical,
+  routable skill descriptions, and the accumulated fixes.
+
+---
+
 ## [3.30.0] - 2026-08-09 - "Portable Skills, Continuous Cadence"
 
 ### Added
