@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [3.31.1] - 2026-08-18 - "Receiver-Safe Close Gates"
+
+### Changed
+- Version coherence bump to framework v3.31.1. The receiver-safe close-gate correction remains a
+  core package and is not propagated into this template by this patch.
+
+---
+
 ## [3.31.0] - 2026-08-15 - "Ship What Was Already Built"
 
 ### Changed
