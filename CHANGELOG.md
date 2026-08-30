@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [3.33.0] - 2026-08-30
+
+### Changed
+- Payload converged with canonical; version surfaces aligned. This bump crosses two releases: v3.32.0 never reached the template tier.
+
 ## [3.31.1] - 2026-08-18 - "Receiver-Safe Close Gates"
 
 ### Changed

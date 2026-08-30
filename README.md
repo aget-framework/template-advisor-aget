@@ -2,7 +2,7 @@
 
 > Assess risks and provide recommendations with evidence-based guidance
 
-**Version**: v3.31.1 | **Archetype**: Advisor | **Skills**: 2 specialized + 15 universal
+**Version**: v3.33.0 | **Archetype**: Advisor | **Skills**: 2 specialized + 15 universal
 
 ---
 
