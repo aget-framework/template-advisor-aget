@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.33.1] - 2026-08-30 - "Receiver-visible integrity"
+
+### Changed
+- Advanced the template's framework identity and migration history to v3.33.1.
+- Preserved the v3.33.0 payload; this package carries release-coherence metadata only.
+
 All notable changes to AGET will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
