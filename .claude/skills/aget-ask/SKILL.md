@@ -1,3 +1,8 @@
+---
+name: aget-ask
+description: "Ask clarifying questions as a measurement instrument for next-action prediction, scored by pre/post confidence delta on the top-1 interpretation of principal intent rather than UX politeness. Supports --clarification (default), --followup, and an --altitude={requirement|verification} filter."
+---
+
 # aget-ask
 
 Ask clarifying questions as a measurement instrument for next-action prediction. Default: `--clarification`.

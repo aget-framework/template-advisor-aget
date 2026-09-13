@@ -1,3 +1,8 @@
+---
+name: aget-release-build
+description: "Execute release gate deliverables with the Builder perspective of the Release Delivery Triad (L818) — speed-optimized execution asking whether the work is done, fast, and functional. Superseded by /aget-create-release."
+---
+
 # /aget-release-build
 
 Execute gate deliverables with the Builder perspective of the Release Delivery Triad (L818). Speed-optimized execution mode.

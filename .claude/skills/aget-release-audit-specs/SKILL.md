@@ -1,3 +1,8 @@
+---
+name: aget-release-audit-specs
+description: "Audit specifications with the Spec Auditor perspective of the Release Delivery Triad (L818) — coverage and consistency mode, asking whether a spec covers all behaviors and where gaps or contradictions remain. Superseded by /aget-check-release."
+---
+
 # /aget-release-audit-specs
 
 Audit specifications with the Spec Auditor perspective of the Release Delivery Triad (L818). Coverage and consistency mode.

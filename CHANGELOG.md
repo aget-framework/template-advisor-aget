@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.34.0] - 2026-09-13
+
+### Changed
+- Synchronized canonical payload scripts with the v3.34.0 candidate.
+- Repaired shipped-skill frontmatter so every SKILL.md carries a strictly-parseable description (C-34-01).
+
 ## [3.33.1] - 2026-08-30 - "Receiver-visible integrity"
 
 ### Changed

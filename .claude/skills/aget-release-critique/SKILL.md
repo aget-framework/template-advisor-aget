@@ -1,3 +1,8 @@
+---
+name: aget-release-critique
+description: "Adversarial review with the Critic perspective of the Release Delivery Triad (L818). Dual mandate — spec coverage audit plus deep bug finding, asking what breaks in the field and which assumptions are wrong. Superseded by /aget-check-release."
+---
+
 # /aget-release-critique
 
 Adversarial review with the Critic perspective of the Release Delivery Triad (L818). Dual-mandate: spec coverage audit + deep bug finding.
