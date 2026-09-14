@@ -36,7 +36,7 @@ If no topic provided, prompt user:
 ### Step 2: Run Study Up Script
 
 ```bash
-python3 scripts/study_up.py --topic "$ARGUMENTS"
+python3 scripts/study_topic.py --topic "$ARGUMENTS"
 ```
 
 The script searches 5 KB areas:
@@ -84,17 +84,17 @@ Based on findings, suggest:
 
 ### Human-Readable (default)
 ```bash
-python3 scripts/study_up.py --topic "$ARGUMENTS"
+python3 scripts/study_topic.py --topic "$ARGUMENTS"
 ```
 
 ### JSON (programmatic)
 ```bash
-python3 scripts/study_up.py --topic "$ARGUMENTS" --json
+python3 scripts/study_topic.py --topic "$ARGUMENTS" --json
 ```
 
 ### Quiet (minimal)
 ```bash
-python3 scripts/study_up.py --topic "$ARGUMENTS" --quiet
+python3 scripts/study_topic.py --topic "$ARGUMENTS" --quiet
 ```
 
 ## Constraints
@@ -124,7 +124,7 @@ python3 scripts/study_up.py --topic "$ARGUMENTS" --quiet
 
 | Link | Reference |
 |------|-----------|
-| Script | `scripts/study_up.py` |
+| Script | `scripts/study_topic.py` |
 | Spec | AGET_SESSION_SPEC.md (CAP-SESSION-007) |
 | Pattern | PATTERN_step_back_review_kb.md |
 | L-docs | L335 (Memory Architecture), L187 (Silent Execution) |
