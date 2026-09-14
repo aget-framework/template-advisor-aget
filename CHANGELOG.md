@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.34.0] - 2026-09-13
+## [3.34.0] - 2026-09-13 - "Evidence that reaches its subject."
 
 ### Changed
 - Synchronized canonical payload scripts with the v3.34.0 candidate.
