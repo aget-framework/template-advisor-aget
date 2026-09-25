@@ -1,8 +1,8 @@
 {
-  "aget_version": "3.34.0",
+  "aget_version": "3.35.0",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2026-08-30",
+  "updated": "2026-09-26",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -84,6 +84,7 @@
     "v3.30.0 -> v3.31.0: 2026-08-15",
     "v3.31.0 -> v3.31.1: 2026-08-18 (version coherence; receiver-safe close-gate patch remains core-only)",
     "v3.31.1 -> v3.33.0: 2026-08-30 (version sync; v3.32.0 was never applied at the template tier, so this bump crosses two releases - recorded rather than smoothed)",
-    "v3.33.0 -> v3.33.1: 2026-08-30"
+    "v3.33.0 -> v3.33.1: 2026-08-30",
+    "v3.34.0 -> v3.35.0: 2026-09-26"
   ]
 }

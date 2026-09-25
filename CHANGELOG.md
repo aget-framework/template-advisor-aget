@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.35.0] - 2026-09-26 - "Receiver correctness"
+
+### Fixed
+- The strict close gate runs: `scripts/close_gate_lifecycle.py` and `specs/AGET_PROJECT_PLAN_SPEC.md` now ship with `scripts/close_gate_check.py`, and `/aget-close-project` passes the phase and disposition the gate requires. It does not yet catch every unfinished-row wording.
+
+### Changed
+- `/aget-propose-actions` v1.9.0 with `scripts/propose_actions_handoff_scan.py` and the updated `scripts/propose_actions_classify.py` (outcome gating; on-disk deferral scan; configurable handoff locations).
+
 ## [3.34.0] - 2026-09-13 - "Evidence that reaches its subject."
 
 ### Changed
