@@ -2,7 +2,7 @@
 
 > Assess risks and provide recommendations with evidence-based guidance
 
-**Version**: v3.35.0 | **Archetype**: Advisor | **Skills**: 40 installed; 29 required universal
+**Version**: v3.35.1 | **Archetype**: Advisor | **Skills**: 40 installed; 29 required universal
 
 ---
 
@@ -114,7 +114,7 @@ Skills are provided by the template. Agents and rules directories are scaffolded
 
 | Attribute | Value |
 |-----------|-------|
-| **Framework** | [AGET v3.35.0](https://github.com/aget-framework/aget) |
+| **Framework** | [AGET v3.35.1](https://github.com/aget-framework/aget) |
 | **Archetype** | Advisor |
 | **Skills** | 40 installed (29 required universal + 11 additional); see `.claude/skills/` |
 | **Ontology** | 6 concepts, 2 clusters |
@@ -142,4 +142,4 @@ Skills are provided by the template. Agents and rules directories are scaffolded
 
 **AGET Framework** | Apache 2.0 | [Issues](https://github.com/aget-framework/aget/issues)
 
-AGET version: 3.35.0
+AGET version: 3.35.1

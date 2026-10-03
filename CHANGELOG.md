@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.35.1] - 2026-10-04 - "Weekly train"
+
+### Fixed
+- `scripts/study_topic.py`: when the relevance floor suppresses every hit, the zero-result branch reports the suppressed count and `--no-floor` instead of "novel topic".
+
+### Changed
+- Advanced the template's framework identity and migration history to v3.35.1.
+
 ## [3.35.0] - 2026-09-26 - "Receiver correctness"
 
 ### Fixed
