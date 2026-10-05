@@ -12,7 +12,7 @@
 ## Report
 
 - Prerequisites check passed
-- Backup created at: /Users/gabormelli/github/aget-framework/template-advisor-aget/.aget/backups/2026-04-12_v3.12.0
+- Backup created at: <framework-root>/template-advisor-aget/.aget/backups/2026-04-12_v3.12.0
 - Applying version changes...
 - Updated version.json: 3.12.0 -> 3.13.0
 - Updated AGENTS.md @aget-version to 3.13.0
