@@ -418,13 +418,13 @@ Emit terminal block:
 |------|-----------|
 | Skill ID | SKILL-052 (`.aget/specs/skills/SKILL-052_aget-close-project.yaml`) |
 | Proposal | `planning/skill-proposals/PROPOSAL_aget-close-project.md` (APPROVED 2026-05-21) |
-| Owning Initiative | INIT-PROJECT-MATURATION (Stream 4 — Lifecycle Symmetry; highest-WSJF per PP-020 D4) |
+| Owning Initiative | INIT-PROJECT-MATURATION (Stream 4 — Lifecycle Symmetry; highest-WSJF per prior authoring project D4) |
 | Sibling verb-pair | `/aget-create-project` (Strict) |
 | Spec (governing) | AGET_PROJECT_PLAN_SPEC.md (DRAFT — #1180) |
 | L-docs | L001 (gate discipline), L617 (gate ordering), L649 (closure-time structural gap — originating), L675 (consequence gap), L908 (apply-to-others-not-self), L913 (plan-close→create handoff), L131 (stopping-point bypass), L178 (Human Override), L735 (push window) |
 | CAPs | CAP-PRJ-001 (verifiable assertion), CAP-PRJ-002 (closure handoff scan), CAP-PRJ-004 (symmetric close-side gate), CAP-PRJ-007 (Loading Dock detection — consumer) |
 | V-tests (pending spec landing) | V-PRJ-001, V-PRJ-002, V-PRJ-004 |
-| Cross-fleet evidence | FLEET-UPG-013 + FLEET-UPG-014 D4 root cause (status-field text-edit) |
+| Cross-fleet evidence | Prior fleet upgrade evidence, including the status-field text-edit root cause |
 | Verb registry | `close` (Active, row 29, Common, added v3.13.0; paired with `open`) |
 | Architecture | SKILL.md-driven (mirrors `/aget-create-project`); no companion script per 2026-05-21 proposal revision |
 

@@ -3,7 +3,7 @@
 **Version**: 0.1.0
 **Status**: Stub
 **Created**: 2026-02-15
-**Author**: private-aget-framework-AGET
+**Author**: aget-framework
 
 ---
 

@@ -65,5 +65,5 @@ ONTOLOGY_<domain>_v<major>.<minor>.yaml
 
 ---
 
-*Per PROJECT_PLAN_ontology_directory_standard_v1.0*
+*Per prior internal authoring plan*
 *Format: YAML + SKOS + EARS (L482)*

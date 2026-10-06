@@ -178,7 +178,7 @@ If body contains `private-work-supervisor-AGET noticed an issue...`:
 |------|-----------|
 | Spec | SKILL-040_aget-file-issue.yaml |
 | L-doc | L520 (Issue Governance Gap) |
-| Project | PROJECT_PLAN_archetype_customization_v3.5_v1.0.md Gate 6 |
+| Project | prior internal authoring plan Gate 6 |
 
 ---
 

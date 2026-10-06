@@ -2,7 +2,7 @@
   "aget_version": "3.36.0",
   "manifest_version": "3.0",
   "created": "2025-10-10",
-  "updated": "2026-10-03",
+  "updated": "2026-10-10",
   "template": "advisor",
   "agent_name": "template-advisor-aget",
   "instance_type": "template",
@@ -87,6 +87,6 @@
     "v3.33.0 -> v3.33.1: 2026-08-30",
     "v3.34.0 -> v3.35.0: 2026-09-26",
     "v3.35.0 -> v3.35.1: 2026-10-04",
-    "v3.35.1 -> v3.36.0: 2026-10-03"
+    "v3.35.1 -> v3.36.0: 2026-10-10"
   ]
 }

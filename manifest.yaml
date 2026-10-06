@@ -10,7 +10,7 @@ template:
   description: Advisory template for read-only guidance and recommendations
   version: 3.36.0
   created: "2025-12-27"
-  author: private-aget-framework-AGET
+  author: aget-framework
   inherits_from: template-worker-aget
 
 composition:

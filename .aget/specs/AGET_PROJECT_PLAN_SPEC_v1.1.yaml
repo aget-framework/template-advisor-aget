@@ -442,7 +442,7 @@ capabilities:
       - "Speculative V-tests (writing commands without executing them)"
     evidence:
       trigger: "L558: 11 factual gaps in plan that passed 8/8 compliance"
-      source: "PROJECT_PLAN_fleet_ci_remediation_wave2 v1.0 self-audit"
+      source: "prior internal authoring plan v1.0 self-audit"
 
   # CAP-PP-015: Rollback Strategy (L554)
   CAP-PP-015:

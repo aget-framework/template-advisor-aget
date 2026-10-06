@@ -3,7 +3,7 @@
 #
 # Archetype: advisor
 # Created: 2026-02-14
-# Author: private-aget-framework-AGET
+# Author: aget-framework
 # Format: SKOS-inspired YAML (aget-framework convention)
 # Concepts: 6
 # Project: ARC-001 (Archetype Customization v3.5)
@@ -14,7 +14,7 @@ metadata:
   name: advisor-archetype-ontology
   version: 1.0.0
   created: 2026-02-14
-  author: private-aget-framework-AGET
+  author: aget-framework
   archetype: advisor
   description: >
     Formal vocabulary for advisor archetype agents. Defines concepts for
@@ -238,7 +238,7 @@ relationships:
 provenance:
   project: ARC-001
   created: 2026-02-14
-  author: private-aget-framework-AGET
+  author: aget-framework
   methodology: Derived from advisor archetype ADVISOR_SPEC.md
 
 validation:
