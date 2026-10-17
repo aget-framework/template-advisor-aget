@@ -8,7 +8,7 @@ template:
   name: template-advisor-aget
   archetype: Advisor
   description: Advisory template for read-only guidance and recommendations
-  version: 3.36.0
+  version: 3.37.0
   created: "2025-12-27"
   author: aget-framework
   inherits_from: template-worker-aget

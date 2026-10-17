@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.37.0] - 2026-10-17
+
+### Changed
+- Wind-down health reports TIMEOUT separately from ERROR; set `AGET_WIND_DOWN_HEALTH_TIMEOUT` to an integer from 1 through 3600 seconds (default 120, with visible fallback for invalid values). TIMEOUT records an incomplete health observation and does not by itself fail session close.
+- CI runs on `ubuntu-24.04` with `actions/checkout` v7 and `actions/setup-python` v7.
+- Pip packages use `actions/cache` v6 with cache keys that include the runner image identity.
+- Coverage upload continues to use `codecov/codecov-action` v3, unchanged in this release.
+- Tests clear inherited Git repository-location variables, including `GIT_CONFIG`, before collection and stop Git repository discovery at the temporary directory root. Regression tests cover both behaviors.
+- Advanced the template's framework identity, canonical-specification reference, README version mentions and migration history to v3.37.0.
+- Aligned governance document and 5D configuration version headers to v3.37.0.
+- The knowledge README now identifies this template as part of AGET v3.37.0.
+
+For framework changes, see the [core v3.37.0 release notes](https://github.com/aget-framework/aget/blob/v3.37.0/release-notes/v3.37.0.md).
+
+Not in this release: The repaired close-authorization guard deferred from v3.36.0 is deferred again; see the core v3.37.0 release notes.
+
 ## [3.36.0] - 2026-10-10 - "Fleet migration kit for supervisors"
 
 ### Changed

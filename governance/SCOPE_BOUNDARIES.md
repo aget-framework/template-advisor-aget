@@ -1,7 +1,7 @@
 # Advisor Template Scope Boundaries
 
 **Template**: template-advisor-aget
-**Version**: 3.1.0
+**Version**: 3.37.0
 **Date**: 2025-12-27
 
 ---
